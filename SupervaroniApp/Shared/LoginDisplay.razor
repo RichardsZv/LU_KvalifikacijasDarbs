@@ -1,0 +1,13 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <a href="Identity/Account/Manage">Sveiks, @context.User.Identity?.Name!</a>
+        <form method="post" action="Identity/Account/LogOut">
+            <button type="submit" class="nav-link btn btn-link">Iziet</button>
+        </form>
+    </Authorized>
+    <NotAuthorized>
+        <a href="Identity/Account/Register">Reģistrēties</a>
+        <a href="Identity/Account/Login">Ienākt</a>
+    </NotAuthorized>
+</AuthorizeView>
+
