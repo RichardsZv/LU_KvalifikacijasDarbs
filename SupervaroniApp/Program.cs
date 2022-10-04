@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using SupervaroniApp.Areas.Identity;
 using SupervaroniApp.Data;
 using MudBlazor.Services;
+using SupervaroniApp.IService;
+using SupervaroniApp.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,14 +32,14 @@ builder.Services.AddAuthentication()
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddMudServices();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
