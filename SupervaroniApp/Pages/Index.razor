@@ -1,8 +1,20 @@
 ﻿@page "/"
 @attribute [Microsoft.AspNetCore.Authorization.Authorize]
 @using MudBlazor
+
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
 <PageTitle>Landing</PageTitle>
 
-<h1>Sveicināts Supervaroņu Sistēmā!</h1>
+<h1>Sveicināts Supervaroņu Sistēmā! @runner_name</h1>
 
-
+@code{
+    //string runner = GetCurrentRunner();
+    string runner_name = ""; 
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        var name = user.Name; 
+        runner_name = name; 
+    }
+}

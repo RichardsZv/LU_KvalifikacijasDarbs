@@ -1,0 +1,42 @@
+﻿using Dapper;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DataAccessLibrary
+{
+    public class SqlDataAccess : ISqlDataAccess
+    {
+        private readonly IConfiguration _config;
+        public string ConnectionStringName { get; set; } = "DefaultConnection";
+        public SqlDataAccess(IConfiguration config)
+        {
+            _config = config;
+        }
+
+        public List<T> LoadData<T, U>(string sql, U parameters)
+        {
+            string connectionString = _config.GetConnectionString(ConnectionStringName);
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                List<T> data = connection.Query<T>(sql, parameters).ToList();
+                return data;
+                
+            }
+        }
+
+        public void SaveData<T>(string sql, T parameters)
+        {
+            string connectionString = _config.GetConnectionString(ConnectionStringName);
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                var data = connection.Execute(sql, parameters);
+            }
+        }
+    }
+}

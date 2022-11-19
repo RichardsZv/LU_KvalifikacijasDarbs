@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SupervaroniApp", "SupervaroniApp\SupervaroniApp.csproj", "{AE06DDBD-20A1-4B12-B2C3-C8AAD6DA4604}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{B7FF768D-F44C-4D55-9A1B-ED9F023ABB4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{AE06DDBD-20A1-4B12-B2C3-C8AAD6DA4604}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE06DDBD-20A1-4B12-B2C3-C8AAD6DA4604}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE06DDBD-20A1-4B12-B2C3-C8AAD6DA4604}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7FF768D-F44C-4D55-9A1B-ED9F023ABB4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7FF768D-F44C-4D55-9A1B-ED9F023ABB4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7FF768D-F44C-4D55-9A1B-ED9F023ABB4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7FF768D-F44C-4D55-9A1B-ED9F023ABB4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
