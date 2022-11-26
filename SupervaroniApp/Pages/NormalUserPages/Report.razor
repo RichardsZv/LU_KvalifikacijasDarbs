@@ -1,0 +1,27 @@
+﻿@page "/atskaite"
+
+<MudButton Variant="Variant.Filled" Disabled="@_processing" Color="Color.Primary" OnClick="CreateReport">
+    @if (_processing)
+    {
+        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+        <MudText>Izveidot Atskaiti</MudText>
+    }
+    else
+    {
+        <MudText>Izveidot Atskaiti</MudText>
+    }
+</MudButton>
+<MudCard>
+   
+   
+
+</MudCard>
+
+@code {
+    private bool _processing = false;
+    async Task CreateReport(){
+        _processing = true;
+        await Task.Delay(2000);
+        _processing = false;
+    }
+}

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace DataAccessLibrary.Models
 {
-    internal class ReportWeekModel
+    public class ReportWeekModel
     {
+        public int Id { get; set; }
+        public int ReportId{ get; set; }
+        public DateOnly DatS { get; set; }
+        public DateOnly DatB { get; set; }
     }
 }

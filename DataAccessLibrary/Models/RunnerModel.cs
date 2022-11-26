@@ -11,9 +11,8 @@ namespace DataAccessLibrary.Models
 {
     public class RunnerModel
     {
-      
+        [Key]
         public int Id { get; set; }
-    
         public string Email { get; set; } 
         public DateTime? Birthdate { get; set; }
         public int Height { get; set; } 
