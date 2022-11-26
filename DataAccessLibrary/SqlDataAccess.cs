@@ -19,7 +19,7 @@ namespace DataAccessLibrary
             _config = config;
         }
 
-        public List<T> LoadData<T, U>(string sql, U parameters)
+        public List<T> LoadDataSP<T, U>(string sql, U parameters)
         {
             string connectionString = _config.GetConnectionString(ConnectionStringName);
             using (IDbConnection connection = new SqlConnection(connectionString))
@@ -30,7 +30,7 @@ namespace DataAccessLibrary
             }
         }
 
-        public void SaveData<T>(string sql, T parameters)
+        public void SaveDataSP<T>(string sql, T parameters)
         {
             string connectionString = _config.GetConnectionString(ConnectionStringName);
             using (IDbConnection connection = new SqlConnection(connectionString))
@@ -38,5 +38,15 @@ namespace DataAccessLibrary
                 var data = connection.Execute(sql, parameters);
             }
         }
+
+        public List<T> Query<T>(string sqlQuery, string connString = "DefaultConnection") where T : class
+        {
+            string connectionString = _config.GetConnectionString(connString);
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                return connection.Query<T>(sqlQuery).ToList();
+            }
+        }
+
     }
 }

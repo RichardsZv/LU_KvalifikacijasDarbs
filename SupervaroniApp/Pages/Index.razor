@@ -1,7 +1,9 @@
 ﻿@page "/"
 @attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
 @using MudBlazor
-
+@inject IRunnerData runnerData
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 <PageTitle>Landing</PageTitle>
 
@@ -12,9 +14,18 @@
     string runner_name = ""; 
     protected async override Task OnInitializedAsync()
     {
+        RunnerModel runner = new RunnerModel();
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var user = authstate.User.Identity;
         var name = user.Name; 
-        runner_name = name; 
+        runner = runnerData.GetCurrentRunner(user.Name);
+        if (runner == null)
+        {
+            runner = new RunnerModel();
+            runner.Email = user.Name;
+            runner.Username = user.Name;
+            runnerData.SaveRunner(runner);
+            runner_name = runner.Firstname; 
+        }
     }
 }

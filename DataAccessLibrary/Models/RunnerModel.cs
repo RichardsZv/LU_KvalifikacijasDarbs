@@ -1,22 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static DataAccessLibrary.Models.RunnerModel;
 
 namespace DataAccessLibrary.Models
 {
     public class RunnerModel
     {
+      
         public int Id { get; set; }
-        public string firstname { get; set; }
-        public string lastname { get; set; }
-        public string weight { get; set; }
-        public string height { get; set; }
-        public string max_hr { get; set; }
-        public string rest_hr { get; set; }
-        public int aspnuserid{ get; set; }
-        public bool gender { get; set; }
-        public int age { get; set; }
+    
+        public string Email { get; set; } 
+        public DateTime? Birthdate { get; set; }
+        public int Height { get; set; } 
+        public int Weight { get; set; } 
+        public int Hr{ get; set; } 
+        public int Hr_max { get; set; } 
+        public enum Gender 
+        {
+            Vīrietis,
+            Sievietie,
+            Cits,
+        }
+        public Gender enumValue { get; set; }
+        public string Start_info { get; set; }
+        public string Username{ get; set; }
+        //public string AspUserId{ get; set; }    
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
     }
+    
 }

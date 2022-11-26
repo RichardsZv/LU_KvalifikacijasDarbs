@@ -11,6 +11,8 @@ using MudBlazor.Services;
 
 
 using DataAccessLibrary;
+using DataAccessLibrary.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +45,7 @@ builder.Services.AddMudServices();
 
 
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
-
+builder.Services.AddSingleton<IRunnerData, RunnerData>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllersWithViews();
 
