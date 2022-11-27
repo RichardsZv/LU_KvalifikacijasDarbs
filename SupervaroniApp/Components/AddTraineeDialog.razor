@@ -1,0 +1,42 @@
+﻿@using DataAccessLibrary.Models
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@using SupervaroniApp.Pages
+@inject IRunnerData runnerData
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+<MudDialog>
+    <DialogContent>
+       <MudList Clickable="true">
+            @foreach (RunnerModel runner in @runners)
+            {
+            <MudListItem @onclick="() => AddToCoach(runner.Id)" Icon="@Icons.Material.Filled.Add" IconColor="Color.Success">@runner.Firstname @runner.Lastname</MudListItem>
+            }
+       </MudList>
+       
+    </DialogContent>
+    <DialogActions>
+        @*<MudButton OnClick="Cancel">Atcelt</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Saglabāt</MudButton>*@
+    </DialogActions>
+</MudDialog>
+
+@code {
+    List<RunnerModel> runners = new List<RunnerModel>();
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    string uname = "";
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        runners = runnerData.GetRunners();
+        uname = user.Name; 
+    }
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog.Cancel();
+    void S() => MudDialog.ForceRender();
+
+    public void AddToCoach(int Id){
+        runnerData.SaveRunnerToCoach(Id, uname);
+        S(); 
+    }
+}

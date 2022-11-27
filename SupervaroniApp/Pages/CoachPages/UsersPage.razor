@@ -1,6 +1,88 @@
 ﻿@page "/supervaroni"
-<h3>UsersPage</h3>
+@using System.ComponentModel.DataAnnotations
+@using DataAccessLibrary
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@using SupervaroniApp.Components
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject IRunnerData runnerData
+@inject IDialogService DialogService
+<link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
 
-@code {
+
+<MudButton Color="Color.Primary" @onclick="OpenDialog">Pievienot jaunu audzēkni</MudButton>
+<MudGrid Justify="Justify.FlexStart">
+    @foreach (var runner in CoachRunners)
+    {
+
+        <MudItem xs="12" sm="12" md="6" lg="3" xl="2" xxl="1" onclick="#" Class="d-flex flex-column">
+            <MudBadge Dot="true" Color="@color" Overlap="true" Origin="Origin.TopRight">
+                <MudCard Class="d-flex flex-column justify-center mud-width-full pt-8" Style="min-width:fit-content; background-color:aliceblue">
+
+                    <MudCardHeader Class="d-flex justify-content-center">
+                        <CardHeaderAvatar>
+                            <MudAvatar>T</MudAvatar>
+                        </CardHeaderAvatar>
+
+                    </MudCardHeader>
+                    <MudDivider />
+                    <MudCardContent>
+
+                        <MudText> <b>Vārds:</b> @runner.Firstname</MudText>
+                        <MudText> <b>Uzvārds:</b> @runner.Lastname</MudText>
+                        <MudText> <b>Epasts:</b> @runner.Email</MudText>
+                    </MudCardContent>
+                    <MudCardActions Class="d-flex justify-content-center">
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" />
+
+                        <MudIconButton Icon="fa-brands fa-strava" Color="Color.Warning" Href="#" />
+                        <MudPopover Open="@_isOpen" Fixed="true" Class="px-4 pt-4">
+                            <div class="d-flex flex-column">
+                                <MudText>Content of the popover can be anything.</MudText>
+                                <MudButton OnClick="@ToggleOpen" Class="ml-auto mr-n3 mb-1" Color="Color.Error">Close</MudButton>
+                            </div>
+                        </MudPopover>
+                    </MudCardActions>
+
+                </MudCard>
+            </MudBadge>
+
+
+        </MudItem>
+    }
+</MudGrid>
+
+ @code {
+    List<RunnerModel> runners = new List<RunnerModel>();
+    List<RunnerModel> CoachRunners = new List<RunnerModel>();
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        runners = runnerData.GetRunners();
+        CoachRunners = runnerData.GetCoachRunners(user.Name);
+    }
+
+    private void OpenDialog()
+    {
+        var options = new DialogOptions() {
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true,
+        };
+        DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
+    }
+
+    public Color color {get; set;} = Color.Info;
+
+    public bool _isOpen;
+
+    public void ToggleOpen()
+    {
+        if (_isOpen)
+            _isOpen = false;
+        else
+            _isOpen = true;
+    }
 
 }
