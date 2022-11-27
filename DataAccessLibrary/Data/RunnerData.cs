@@ -44,10 +44,7 @@ namespace DataAccessLibrary.Data
             {
                 sql = @"UPDATE dbo.Users SET email = @Email, birthdate = @Birthdate, height = @Height, weight = @Weight, hr = @Hr, hr_max = @HrMax, gender = @Gender, username = @Username, firstname = @Firstname, lastname = @Lastname where username = @Username";
             }
-
             _db.SaveDataSP(sql, new { Email = runner.Email, Birthdate = runner.Birthdate, Height = runner.Height, Weight = runner.Weight, Hr = runner.Hr, HrMax = runner.Hr_max, Gender = runner.enumValue, Username = runner.Username, Firstname = runner.Firstname, Lastname = runner.Lastname });
-
-
         }
         /// <summary>
         /// Iegūst visus skrējējus, kas ir aizpildījuši savu informāciju
@@ -77,7 +74,10 @@ namespace DataAccessLibrary.Data
 
             _db.SaveDataSP(sql, new { RunnerId = Id, CoachId = runner.Id});
         }
-
+        /// <summary>
+        /// Funkcija treneru skatam
+        /// </summary>
+        /// <returns>Trenera audzēkņi</returns>
         public List<RunnerModel> GetCoachRunners(string uname)
         {
             RunnerModel runner = new RunnerModel();

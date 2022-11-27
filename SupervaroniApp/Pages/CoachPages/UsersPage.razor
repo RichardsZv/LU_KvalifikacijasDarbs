@@ -3,7 +3,9 @@
 @using DataAccessLibrary
 @using DataAccessLibrary.Data
 @using DataAccessLibrary.Models
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using SupervaroniApp.Components
+@inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
 @inject IDialogService DialogService
@@ -16,18 +18,18 @@
     {
 
         <MudItem xs="12" sm="12" md="6" lg="3" xl="2" xxl="1" onclick="#" Class="d-flex flex-column">
-            <MudBadge Dot="true" Color="@color" Overlap="true" Origin="Origin.TopRight">
-                <MudCard Class="d-flex flex-column justify-center mud-width-full pt-8" Style="min-width:fit-content; background-color:aliceblue">
 
+            <MudBadge Dot="true" Color="@color" Overlap="true" Origin="Origin.TopRight">
+
+
+                <MudCard Class="d-flex flex-column justify-center mud-width-full pt-8 " Style="min-width:fit-content; background-color:aliceblue;" @onclick="@(() => OpenRunner(@runner.Id))">
                     <MudCardHeader Class="d-flex justify-content-center">
                         <CardHeaderAvatar>
                             <MudAvatar>T</MudAvatar>
                         </CardHeaderAvatar>
-
                     </MudCardHeader>
                     <MudDivider />
                     <MudCardContent>
-
                         <MudText> <b>Vārds:</b> @runner.Firstname</MudText>
                         <MudText> <b>Uzvārds:</b> @runner.Lastname</MudText>
                         <MudText> <b>Epasts:</b> @runner.Email</MudText>
@@ -43,16 +45,18 @@
                             </div>
                         </MudPopover>
                     </MudCardActions>
-
                 </MudCard>
+
             </MudBadge>
 
-
         </MudItem>
+
     }
 </MudGrid>
 
- @code {
+
+@code {
+   
     List<RunnerModel> runners = new List<RunnerModel>();
     List<RunnerModel> CoachRunners = new List<RunnerModel>();
     protected async override Task OnInitializedAsync()
@@ -65,15 +69,16 @@
 
     private void OpenDialog()
     {
-        var options = new DialogOptions() {
+        var options = new DialogOptions()
+            {
                 CloseOnEscapeKey = true,
                 MaxWidth = MaxWidth.Medium,
                 FullWidth = true,
-        };
+            };
         DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
     }
 
-    public Color color {get; set;} = Color.Info;
+    public Color color { get; set; } = Color.Info;
 
     public bool _isOpen;
 
@@ -84,5 +89,8 @@
         else
             _isOpen = true;
     }
-
+    public void OpenRunner(int id)
+    {
+        NavigationManager.NavigateTo("supervaronis/" + id);
+    }
 }
