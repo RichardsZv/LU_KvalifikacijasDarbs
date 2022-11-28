@@ -1,4 +1,5 @@
 ﻿@page "/supervaronis/{id}"
+@attribute [Authorize(Roles = "Treneris")]
 @using DataAccessLibrary.Models
 @using System.ComponentModel.DataAnnotations
 @using DataAccessLibrary
@@ -12,6 +13,7 @@
 <h1>
     @id
 </h1>
+
 @code {
     [Parameter]
     public string id { get; set; }
