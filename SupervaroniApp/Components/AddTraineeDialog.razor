@@ -33,10 +33,11 @@
     }
     void Submit() => MudDialog.Close(DialogResult.Ok(true));
     void Cancel() => MudDialog.Cancel();
-    void S() => MudDialog.ForceRender();
+    
 
     public void AddToCoach(int Id){
         runnerData.SaveRunnerToCoach(Id, uname);
-        S(); 
+        StateHasChanged();
+        runners = runnerData.GetRunners();
     }
 }

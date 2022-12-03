@@ -9,11 +9,13 @@ namespace DataAccessLibrary.Models
     public class ReportModel
     {
         public int Id { get; set; }
-        public DateTime Datums { get; set; }
-        public string Ieplanots { get; set; }
-        public string Izpildits { get; set; }
-        public string Komentars { get; set; }
-        public string UserName { get; set; }
-        public string UserId { get; set; }
+       
+        public int RunnerId { get; set; }
+        public int CoachId { get; set; }
+        public string Title { get; set; }
+        public DateTime DatS { get; set; }
+        public DateTime DatB { get; set; }
+
     }
+
 }

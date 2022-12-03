@@ -1,27 +1,165 @@
 ﻿@page "/atskaite"
+@using System.ComponentModel.DataAnnotations
+@using DataAccessLibrary
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using SupervaroniApp.Components
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject IRunnerData runnerData
+@inject IReportData reportData
+@inject IDialogService DialogService
 
-<MudButton Variant="Variant.Filled" Disabled="@_processing" Color="Color.Primary" OnClick="CreateReport">
-    @if (_processing)
-    {
-        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-        <MudText>Izveidot Atskaiti</MudText>
-    }
-    else
-    {
-        <MudText>Izveidot Atskaiti</MudText>
-    }
-</MudButton>
+
 <MudCard>
-   
-   
+    
 
+   
+     <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6" Align="Align.Center">Dienasgrāmatas datumi</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+  
+    <MudCardContent>
+         <MudGrid>
+            <MudItem xs="6">
+                <MudDatePicker Label="Sākuma datums" DateFormat="dd.MM.yyyy" @bind-Date="@DatS" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudDatePicker Label="Beigu datums" DateFormat="dd.MM.yyyy" @bind-Date="@DatB" />
+            </MudItem>
+         </MudGrid>
+      
+    </MudCardContent>
+    <MudCardActions>
+  
+            <MudButton Variant="Variant.Filled" Disabled="@_processing" Color="Color.Primary" OnClick="HandleDateFilterClick">
+            @if (_processing)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                @*<MudText>Izveidot Atskaiti</MudText>*@
+            }
+            else
+            {
+                <MudText>Atlasīt Datumus</MudText>
+            }
+        </MudButton>
+
+        
+    </MudCardActions>
+    
 </MudCard>
 
+
+<MudTable Items="@reportList"  Hover="true" CanCancelEdit="true" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
+          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Treniņu dienasgrāmata</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Planned)">Ieplānots</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Completed)">Izpildīts</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Datums">@context.Dat</MudTd>
+        <MudTd DataLabel="Ieplānots">@context.Planned</MudTd>
+        <MudTd DataLabel="Izpildīts">@context.Completed</MudTd>
+    </RowTemplate>
+
+    <RowEditingTemplate>
+        <MudTd DataLabel="Datums">@context.Dat</MudTd>
+        <MudTd DataLabel="Ieplānots">
+            <MudTextField @bind-Value="@context.Planned"  />
+        </MudTd>
+        <MudTd DataLabel="Izpildīts">
+            <MudTextField @bind-Value="@context.Completed" />
+        </MudTd>
+        
+    </RowEditingTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+   
+
+    
+  @*  <MudIconButton Size="@Size.Small" Icon="@Icons.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />*@
+    
+</MudTable>
+<MudText>Selected: @selectedItem?.Dat</MudText>
+<MudText>Selected: @selectedItem?.Completed</MudText>
+<MudText>Selected: @selectedItem?.Planned</MudText>
+@*@foreach(var rep in reportList){
+    <MudText>@rep.Dat</MudText>
+    <MudText>@rep.Planned</MudText>
+}*@
 @code {
+    private RunnerModel runner = new RunnerModel();
+    DateTime? DatS = DateTime.Today.AddDays(-7);
+    DateTime? DatB = DateTime.Today;
+    private List<string> editEvents = new();
+    private string searchString = "";
+    private ReportDataModel selectedItem = null;
+    private ReportDataModel reportBeforeEdit;
+    private HashSet<ReportDataModel> selectedItems = new HashSet<ReportDataModel>(); //??
+    List<ReportDataModel> reportList = new List<ReportDataModel>(); 
+
+    //Ielādējot lapu ielasam datus
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        runner = runnerData.GetCurrentRunner(user.Name);
+        reportList = reportData.GetReportData(runner.Id, DatS, DatB);
+    }
+    //Pogas ielādes animācija
     private bool _processing = false;
-    async Task CreateReport(){
+    async Task CreateReport()
+    {
         _processing = true;
         await Task.Delay(2000);
         _processing = false;
     }
+
+    //Tabulas funkcijas
+    private void ClearEventLog()
+    {
+        editEvents.Clear();
+    }
+
+    private void AddEditionEvent(string message)
+    {
+        editEvents.Add(message);
+        StateHasChanged();
+    }
+
+    private void BackupItem(object report)
+    {
+        reportBeforeEdit = new()
+        {
+
+        };
+        //AddEditionEvent($"RowEditPreview event: made a backup of Element {((Element)element).Name}");
+    }
+    private void ItemHasBeenCommitted(object report)
+    {
+        //AddEditionEvent($"RowEditCommit event: Changes to Element {((Element)element).Name} committed");
+    }
+
+    private void HandleRowCommit(ReportDataModel report){
+       reportData.UpdateReportData(report, runner.Id);
+        StateHasChanged();
+    }
+
+    private void HandleDateFilterClick(){
+        reportList = reportData.GetReportData(runner.Id, DatS, DatB);
+        StateHasChanged();
+    }
+
+
+
 }

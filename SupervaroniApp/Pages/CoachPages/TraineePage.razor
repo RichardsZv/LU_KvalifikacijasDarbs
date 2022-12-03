@@ -17,14 +17,9 @@
 @code {
     [Parameter]
     public string id { get; set; }
-
-    
-
-
     protected async override Task OnInitializedAsync()
     {
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var user = authstate.User.Identity;
-        
     }
 }

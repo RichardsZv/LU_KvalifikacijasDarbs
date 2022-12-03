@@ -10,7 +10,7 @@ namespace DataAccessLibrary.Models
     {
         public int Id { get; set; }
         public int ReportId{ get; set; }
-        public DateOnly DatS { get; set; }
-        public DateOnly DatB { get; set; }
+        public DateTime DatS { get; set; }
+        public DateTime DatB { get; set; }
     }
 }

@@ -24,7 +24,6 @@ namespace DataAccessLibrary.Data
         {
             RunnerModel runner = new RunnerModel();
             string sql = @"SELECT Id, email, birthdate, height, weight, hr, hr_max, gender, start_info, username, firstname, lastname from dbo.Users where username = '"+uname+"'";
-
             //runner = _db.LoadData<RunnerModel, dynamic>(sql, new { })[0];
             var a = _db.Query<RunnerModel>(sql, "DefaultConnection");
             runner = a.FirstOrDefault();

@@ -18,12 +18,8 @@
 <MudGrid Justify="Justify.FlexStart">
     @foreach (var runner in CoachRunners)
     {
-
         <MudItem xs="12" sm="12" md="6" lg="3" xl="2" xxl="1" onclick="#" Class="d-flex flex-column">
-
             <MudBadge Dot="true" Color="@color" Overlap="true" Origin="Origin.TopRight">
-
-
                 <MudCard Class="d-flex flex-column justify-center mud-width-full pt-8 " Style="min-width:fit-content; background-color:aliceblue;" @onclick="@(() => OpenRunner(@runner.Id))">
                     <MudCardHeader Class="d-flex justify-content-center">
                         <CardHeaderAvatar>
@@ -48,17 +44,14 @@
                         </MudPopover>
                     </MudCardActions>
                 </MudCard>
-
             </MudBadge>
-
         </MudItem>
-
     }
 </MudGrid>
 
 
 @code {
-   
+
     List<RunnerModel> runners = new List<RunnerModel>();
     List<RunnerModel> CoachRunners = new List<RunnerModel>();
     protected async override Task OnInitializedAsync()
@@ -66,7 +59,10 @@
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var user = authstate.User.Identity;
         runners = runnerData.GetRunners();
-        CoachRunners = runnerData.GetCoachRunners(user.Name);
+        if(user != null){
+            CoachRunners = runnerData.GetCoachRunners(user.Name);
+        }
+
     }
 
     private void OpenDialog()
@@ -77,7 +73,11 @@
                 MaxWidth = MaxWidth.Medium,
                 FullWidth = true,
             };
-        DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
+        if(runners != null)
+        {
+            DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
+        }
+       
     }
 
     public Color color { get; set; } = Color.Info;
