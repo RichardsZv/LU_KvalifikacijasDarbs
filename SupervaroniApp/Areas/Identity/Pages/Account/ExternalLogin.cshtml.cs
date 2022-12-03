@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication;
 
 namespace SupervaroniApp.Areas.Identity.Pages.Account
 {
@@ -88,7 +89,14 @@ namespace SupervaroniApp.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
         }
-        
+
+        private readonly IReadOnlyDictionary<string, string> _claimsToSync =
+     new Dictionary<string, string>()
+     {
+             { "urn:google:picture", "https://localhost:5001/headshot.png" },
+             { "urn:google:given_name", "user" },
+     };
+
         public IActionResult OnGet() => RedirectToPage("./Login");
 
         public IActionResult OnPost(string provider, string returnUrl = null)
@@ -120,6 +128,50 @@ namespace SupervaroniApp.Areas.Identity.Pages.Account
             if (result.Succeeded)
             {
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
+
+                if (_claimsToSync.Count > 0)
+                {
+                    var user = await _userManager.FindByLoginAsync(info.LoginProvider,
+                        info.ProviderKey);
+                    var userClaims = await _userManager.GetClaimsAsync(user);
+                    bool refreshSignIn = false;
+
+                    foreach (var addedClaim in _claimsToSync)
+                    {
+                        var userClaim = userClaims
+                            .FirstOrDefault(c => c.Type == addedClaim.Key);
+
+                        if (info.Principal.HasClaim(c => c.Type == addedClaim.Key))
+                        {
+                            var externalClaim = info.Principal.FindFirst(addedClaim.Key);
+
+                            if (userClaim == null)
+                            {
+                                await _userManager.AddClaimAsync(user,
+                                    new Claim(addedClaim.Key, externalClaim.Value));
+                                refreshSignIn = true;
+                            }
+                            else if (userClaim.Value != externalClaim.Value)
+                            {
+                                await _userManager
+                                    .ReplaceClaimAsync(user, userClaim, externalClaim);
+                                refreshSignIn = true;
+                            }
+                        }
+                        else if (userClaim == null)
+                        {
+                            // Fill with a default value
+                            await _userManager.AddClaimAsync(user, new Claim(addedClaim.Key,
+                                addedClaim.Value));
+                            refreshSignIn = true;
+                        }
+                    }
+
+                    if (refreshSignIn)
+                    {
+                        await _signInManager.RefreshSignInAsync(user);
+                    }
+                }
                 return LocalRedirect(returnUrl);
             }
             if (result.IsLockedOut)
@@ -168,6 +220,38 @@ namespace SupervaroniApp.Areas.Identity.Pages.Account
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
+                        // If they exist, add claims to the user for:
+                        //    Given (first) name
+                        //    Locale
+                        //    Picture
+                        if (info.Principal.HasClaim(c => c.Type == ClaimTypes.GivenName))
+                        {
+                            await _userManager.AddClaimAsync(user,
+                                info.Principal.FindFirst(ClaimTypes.GivenName));
+                        }
+
+                        if (info.Principal.HasClaim(c => c.Type == "urn:google:locale"))
+                        {
+                            await _userManager.AddClaimAsync(user,
+                                info.Principal.FindFirst("urn:google:locale"));
+                        }
+
+                        if (info.Principal.HasClaim(c => c.Type == "urn:google:picture"))
+                        {
+                            await _userManager.AddClaimAsync(user,
+                                info.Principal.FindFirst("urn:google:picture"));
+                        }
+                        if (info.Principal.HasClaim(c => c.Type == "urn:google:given_name"))
+                        {
+                            await _userManager.AddClaimAsync(user,
+                                info.Principal.FindFirst("urn:google:given_name"));
+                        }
+                        // Include the access token in the properties
+                        // using Microsoft.AspNetCore.Authentication;
+                        var props = new AuthenticationProperties();
+                        props.StoreTokens(info.AuthenticationTokens);
+                        props.IsPersistent = false;
+
                         var defaultrole = _roleManager.FindByNameAsync("Lietotajs").Result;
                         if (defaultrole != null)
                         {
@@ -191,7 +275,7 @@ namespace SupervaroniApp.Areas.Identity.Pages.Account
                             return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
                         }
 
-                        await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
+                        await _signInManager.SignInAsync(user, props, info.LoginProvider);
                         return LocalRedirect(returnUrl);
                     }
                 }

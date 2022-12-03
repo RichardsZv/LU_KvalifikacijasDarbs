@@ -10,32 +10,29 @@
 @inject IRunnerData runnerData
 @inject IReportData reportData
 @inject IDialogService DialogService
+@inject ISnackbar SnackbarService
 
-
-<MudCard>
-    
-
-   
-     <MudCardHeader>
+<MudCard Class="my-6 py-2 py-4" Elevation="2" Style="@($"background:{Colors.Grey.Lighten5}")">
+    <MudCardHeader>
         <CardHeaderContent>
             <MudText Typo="Typo.h6" Align="Align.Center">Dienasgrāmatas datumi</MudText>
         </CardHeaderContent>
     </MudCardHeader>
-  
+
     <MudCardContent>
-         <MudGrid>
+        <MudGrid>
             <MudItem xs="6">
                 <MudDatePicker Label="Sākuma datums" DateFormat="dd.MM.yyyy" @bind-Date="@DatS" />
             </MudItem>
             <MudItem xs="6">
                 <MudDatePicker Label="Beigu datums" DateFormat="dd.MM.yyyy" @bind-Date="@DatB" />
             </MudItem>
-         </MudGrid>
-      
+        </MudGrid>
+
     </MudCardContent>
     <MudCardActions>
-  
-            <MudButton Variant="Variant.Filled" Disabled="@_processing" Color="Color.Primary" OnClick="HandleDateFilterClick">
+
+        <MudButton Variant="Variant.Filled" Disabled="@_processing" Color="Color.Primary" OnClick="HandleDateFilterClick">
             @if (_processing)
             {
                 <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
@@ -46,15 +43,13 @@
                 <MudText>Atlasīt Datumus</MudText>
             }
         </MudButton>
-
-        
     </MudCardActions>
-    
+
 </MudCard>
 
 
-<MudTable Items="@reportList"  Hover="true" CanCancelEdit="true" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
-          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem">
+<MudTable Items="@reportList" Hover="true" CanCancelEdit="true" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
+          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4" Style="@($"background:{Colors.Grey.Lighten5}")">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Treniņu dienasgrāmata</MudText>
         <MudSpacer />
@@ -66,37 +61,34 @@
         <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Completed)">Izpildīts</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Datums">@context.Dat</MudTd>
+        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
         <MudTd DataLabel="Ieplānots">@context.Planned</MudTd>
         <MudTd DataLabel="Izpildīts">@context.Completed</MudTd>
     </RowTemplate>
 
     <RowEditingTemplate>
-        <MudTd DataLabel="Datums">@context.Dat</MudTd>
+        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
         <MudTd DataLabel="Ieplānots">
-            <MudTextField @bind-Value="@context.Planned"  />
+            <MudTextField @bind-Value="@context.Planned" />
         </MudTd>
         <MudTd DataLabel="Izpildīts">
             <MudTextField @bind-Value="@context.Completed" />
         </MudTd>
-        
+
     </RowEditingTemplate>
     <PagerContent>
         <MudTablePager />
     </PagerContent>
-   
 
-    
-  @*  <MudIconButton Size="@Size.Small" Icon="@Icons.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />*@
-    
+
+
+    @*  <MudIconButton Size="@Size.Small" Icon="@Icons.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />*@
+
 </MudTable>
 <MudText>Selected: @selectedItem?.Dat</MudText>
 <MudText>Selected: @selectedItem?.Completed</MudText>
 <MudText>Selected: @selectedItem?.Planned</MudText>
-@*@foreach(var rep in reportList){
-    <MudText>@rep.Dat</MudText>
-    <MudText>@rep.Planned</MudText>
-}*@
+
 @code {
     private RunnerModel runner = new RunnerModel();
     DateTime? DatS = DateTime.Today.AddDays(-7);
@@ -105,8 +97,8 @@
     private string searchString = "";
     private ReportDataModel selectedItem = null;
     private ReportDataModel reportBeforeEdit;
-    private HashSet<ReportDataModel> selectedItems = new HashSet<ReportDataModel>(); //??
-    List<ReportDataModel> reportList = new List<ReportDataModel>(); 
+    //private HashSet<ReportDataModel> selectedItems = new HashSet<ReportDataModel>();
+    List<ReportDataModel> reportList = new List<ReportDataModel>();
 
     //Ielādējot lapu ielasam datus
     protected async override Task OnInitializedAsync()
@@ -150,14 +142,33 @@
         //AddEditionEvent($"RowEditCommit event: Changes to Element {((Element)element).Name} committed");
     }
 
-    private void HandleRowCommit(ReportDataModel report){
-       reportData.UpdateReportData(report, runner.Id);
+    private void HandleRowCommit(ReportDataModel report)
+    {
+        reportData.UpdateReportData(report, runner.Id);
         StateHasChanged();
     }
 
-    private void HandleDateFilterClick(){
-        reportList = reportData.GetReportData(runner.Id, DatS, DatB);
-        StateHasChanged();
+    private void HandleDateFilterClick()
+    {
+        //Lai nesaģenerētu pārāk daudz tukšus ierakstus nosaka 30 dienu intervālu datumu stratpībai.
+        var CheckDat = DatB.Value.Date - DatS.Value.Date;
+        var CheckDatDays = CheckDat.Days;
+        if (CheckDatDays > 30)
+        {
+            SnackbarService.Add("Izvēlētais periods nedrīkst būt lielāks par 30 dienām", Severity.Warning, config =>
+              {
+                  config.Onclick = snackbar =>
+                  {
+                      return Task.CompletedTask;
+                  };
+              });
+        }
+        else
+        {
+            reportList = reportData.GetReportData(runner.Id, DatS, DatB);
+            StateHasChanged();
+        }
+
     }
 
 

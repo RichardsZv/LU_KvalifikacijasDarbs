@@ -13,6 +13,9 @@ using MudBlazor.Services;
 using DataAccessLibrary;
 using DataAccessLibrary.Data;
 using MudBlazor;
+using Microsoft.Extensions.Options;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,25 @@ builder.Services.AddAuthentication()
 {
     googleOptions.ClientId = builder.Configuration["Google:ClientId"];
     googleOptions.ClientSecret = builder.Configuration["Google:ClientSecret"];
+    googleOptions.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+    googleOptions.ClaimActions.MapJsonKey("urn:google:locale", "locale", "string");
+    googleOptions.ClaimActions.MapJsonKey("urn:google:given_name", "given_name", "string");
+    googleOptions.SaveTokens = true;
+
+    googleOptions.Events.OnCreatingTicket = ctx =>
+    {
+        List<AuthenticationToken> tokens = ctx.Properties.GetTokens().ToList();
+
+        tokens.Add(new AuthenticationToken()
+        {
+            Name = "TicketCreated",
+            Value = DateTime.UtcNow.ToString()
+        });
+
+        ctx.Properties.StoreTokens(tokens);
+
+        return Task.CompletedTask;
+    };
 })
 .AddFacebook(facebookOptions =>
 {
@@ -47,7 +69,17 @@ builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuth
 
 //Mudblazor UI framework
 builder.Services.AddMudServices();
-
+builder.Services.AddMudServices(config =>
+{
+    config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.TopRight;
+    config.SnackbarConfiguration.PreventDuplicates = false;
+    config.SnackbarConfiguration.NewestOnTop = false;
+    config.SnackbarConfiguration.ShowCloseIcon = true;
+    config.SnackbarConfiguration.VisibleStateDuration = 10000;
+    config.SnackbarConfiguration.HideTransitionDuration = 500;
+    config.SnackbarConfiguration.ShowTransitionDuration = 500;
+    config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
+});
 //Interfeisi 
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IRunnerData, RunnerData>();

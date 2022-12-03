@@ -3,16 +3,23 @@
 @using DataAccessLibrary
 @using DataAccessLibrary.Data
 @using DataAccessLibrary.Models
+@using System.Security.Claims
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
 
-<EditForm Model="@runner" OnValidSubmit="OnValidSubmit">
-<DataAnnotationsValidator/>
-    <MudGrid>
 
+
+
+<EditForm Model="@runner" OnValidSubmit="OnValidSubmit" >
+    <DataAnnotationsValidator/>
         <MudItem xs="12" sm="7">
             <MudCard>
                 <MudText Typo="Typo.h6" Align="Align.Center">Informācija par mani</MudText>
+                <MudCardHeader Class="d-flex justify-content-center">
+
+                    <MudAvatar Image="@Avatar" Size="Size.Large" Icon="@Icons.Custom.Uncategorized.Radioactive"></MudAvatar>
+                </MudCardHeader>
+                
                 <MudCardContent>
                     <MudTextField Label="Vārds" @bind-Value="runner.Firstname"/>
                     <MudTextField Label="Uzvārds" @bind-Value="runner.Lastname"  />
@@ -35,19 +42,28 @@
                 </MudCardActions>
             </MudCard>
         </MudItem>
-   
-    </MudGrid>
-</EditForm>
+    </EditForm>
+
 
 
 @code {
     RunnerModel runner = new RunnerModel(); 
+    public IDictionary<string, string> AuthProperties { get; set; }
+
+    private string Avatar;
+    private string Firstname; 
 
     protected async override Task OnInitializedAsync()
     {
+        base.OnInitialized();
+        //var authResult = await HttpContext.AuthenticateAsync();
+        
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var user = authstate.User.Identity;
         runner = runnerData.GetCurrentRunner(user.Name);
+        var avatar = authstate.User.Claims.FirstOrDefault(c => c.Type == "urn:google:picture");
+        Avatar = avatar?.Value;
+
     }
 
     private void OnValidSubmit(EditContext context)
