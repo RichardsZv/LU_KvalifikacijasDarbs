@@ -9,41 +9,47 @@
 
 
 
+<div class="col d-flex justify-content-center">
 
-<EditForm Model="@runner" OnValidSubmit="OnValidSubmit" >
-    <DataAnnotationsValidator/>
-        <MudItem xs="12" sm="7">
-            <MudCard>
-                <MudText Typo="Typo.h6" Align="Align.Center">Informācija par mani</MudText>
-                <MudCardHeader Class="d-flex justify-content-center">
+  <MudItem xs="12" sm="10" md="8" lg="6" xl="6" >
+    <MudCard Class="align-center py-5">
+    <EditForm Model="@runner" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator/>
+      
+           
+                    <MudText Typo="Typo.h6" Align="Align.Center">Informācija par mani</MudText>
+                    <MudCardHeader Class="d-flex justify-content-center">
 
-                    <MudAvatar Image="@Avatar" Size="Size.Large" Icon="@Icons.Custom.Uncategorized.Radioactive"></MudAvatar>
-                </MudCardHeader>
+                        <MudAvatar Image="@Avatar" Size="Size.Large" Icon="@Icons.Custom.Uncategorized.Radioactive"></MudAvatar>
+                    </MudCardHeader>
                 
-                <MudCardContent>
-                    <MudTextField Label="Vārds" @bind-Value="runner.Firstname"/>
-                    <MudTextField Label="Uzvārds" @bind-Value="runner.Lastname"  />
-                    <MudTextField Label="E-pasts" @bind-Value="runner.Email"  />
-                    <MudDatePicker Label="Dzimšanas datums" @bind-Date="runner.Birthdate" />
-                    <MudSelect T="RunnerModel.Gender" Label="Dzimums" @bind-Value="runner.enumValue">
-                         @foreach (RunnerModel.Gender item in Enum.GetValues(typeof(RunnerModel.Gender)))
-                            {
-                                <MudSelectItem Value="@item">@item</MudSelectItem>
-                            }
-                    </MudSelect>
-                    <MudNumericField Label="Augums" @bind-Value="runner.Height" />
-                    <MudNumericField Label="Svars" @bind-Value="runner.Weight"  />
-                    <MudNumericField Label="Miera pulss" @bind-Value="runner.Hr"  />
-                    <MudNumericField Label="Maksimālais pulss" @bind-Value="runner.Hr_max"  />
+                    <MudCardContent>
+                        <MudTextField Label="Vārds" @bind-Value="runner.Firstname"/>
+                        <MudTextField Label="Uzvārds" @bind-Value="runner.Lastname"  />
+                        <MudTextField Label="E-pasts" @bind-Value="runner.Email"  />
+                        <MudDatePicker Label="Dzimšanas datums" @bind-Date="runner.Birthdate" />
+                        <MudSelect T="RunnerModel.Gender" Label="Dzimums" @bind-Value="runner.enumValue">
+                             @foreach (RunnerModel.Gender item in Enum.GetValues(typeof(RunnerModel.Gender)))
+                                {
+                                    <MudSelectItem Value="@item">@item</MudSelectItem>
+                                }
+                        </MudSelect>
+                        <MudNumericField Label="Augums" @bind-Value="runner.Height" />
+                        <MudNumericField Label="Svars" @bind-Value="runner.Weight"  />
+                        <MudNumericField Label="Miera pulss" @bind-Value="runner.Hr"  />
+                        <MudNumericField Label="Maksimālais pulss" @bind-Value="runner.Hr_max"  />
                     
-                </MudCardContent>
-                <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto ">Saglabāt</MudButton>
-                </MudCardActions>
-            </MudCard>
-        </MudItem>
-    </EditForm>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto ">Saglabāt</MudButton>
+                    </MudCardActions>
+            
+        
+        </EditForm>
+    </MudCard>
+</MudItem>
 
+</div>
 
 
 @code {

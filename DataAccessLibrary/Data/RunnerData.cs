@@ -81,11 +81,22 @@ namespace DataAccessLibrary.Data
         {
             RunnerModel runner = new RunnerModel();
             runner = GetCurrentRunner(uname);
-            string sql = @"SELECT * from dbo.Users a 
-                                left join dbo.CoachRunnerDisplay b on a.Id = b.runner_id
-                                where b.coach_id = " + runner.Id; 
+            string sql = @"SELECT * FROM dbo.Users a 
+                                LEFT JOIN dbo.CoachRunnerDisplay b ON a.Id = b.runner_id
+                                WHERE b.coach_id = " + runner.Id; 
             var a = _db.Query<RunnerModel>(sql, "DefaultConnection").ToList();
             return a;
+        }
+        /// <summary>
+        /// Funkcija skrējēja atlasīšanai pēc lietotāja id, priekš skrējēja informācijas attēlošanas trenerim
+        /// </summary>
+        /// <returns>Trenera audzēkņa info</returns>
+        public RunnerModel GetRunnerById(string id)
+        {
+            RunnerModel runner = new RunnerModel();
+            string sql = @"SELECT * FROM dbo.Users WHERE Id =" + id;
+            var a = _db.Query<RunnerModel>(sql, "DefaultConnection");
+            return a.FirstOrDefault();
         }
 
     }

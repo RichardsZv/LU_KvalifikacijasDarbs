@@ -10,24 +10,55 @@
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
 
-<h1>
-    @id
-</h1>
-<MudGrid>
-    <MudItem xs="4"> 
-        <MudCard>
-            <MudCardHeader>
 
+
+
+<MudGrid>  
+    <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4" >
+        <MudCard Elevation="2">
+            <MudCardHeader Class="d-flex justify-center">
+                <MudText>Audzēkņa informācija</MudText>
+                
             </MudCardHeader>
+            <MudDivider></MudDivider>
             <MudCardContent>
-
+                <MudText>Vārds: @runner.Firstname @runner.Lastname</MudText>
+                <MudText>E-pasts: @runner.Email</MudText>
+                <MudText>Dzimums: @runner.enumValue</MudText>
+                <MudText>Vecums: @Age</MudText>
             </MudCardContent>
            
         </MudCard>
     </MudItem>
-    <MudItem xs="8">
-        <MudCard>
 
+    <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8">
+        <MudCard>
+            <MudCardHeader>
+                <MudText>Šobrīdējā atskatite</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+        <MudCard>
+            <MudCardHeader>
+                <MudText>Treniņu cikli</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+        <MudCard>
+            <MudCardHeader>
+                <MudText>Nez kas vel </MudText>
+            </MudCardHeader>
+            <MudCardContent>
+
+            </MudCardContent>
         </MudCard>
     </MudItem>
 </MudGrid>
@@ -36,11 +67,20 @@
 @code {
     [Parameter]
     public string id { get; set; }
+
+    RunnerModel runner = new RunnerModel();
+    int Age = 0; 
+ 
+    string x = ""; 
     protected async override Task OnInitializedAsync()
     {
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var user = authstate.User.Identity;
-        var picture = authstate.User.FindFirst("urn:google:image");
-        var c = picture; 
+        var runnerInfo = runnerData.GetRunnerById(id); 
+        runner = runnerInfo; 
+        Age = DateTime.Today.Year - runner.Birthdate.Value.Year; 
     }
+
+
+
 }

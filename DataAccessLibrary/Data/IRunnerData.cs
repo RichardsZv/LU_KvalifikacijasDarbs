@@ -9,5 +9,6 @@ namespace DataAccessLibrary.Data
         public List<RunnerModel> GetRunners();
         public void SaveRunnerToCoach(int Id, string uname);
         public List<RunnerModel> GetCoachRunners(string uname);
+        public RunnerModel GetRunnerById(string id);
     }
 }
