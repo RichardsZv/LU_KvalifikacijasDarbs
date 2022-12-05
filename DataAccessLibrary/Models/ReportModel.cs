@@ -13,8 +13,8 @@ namespace DataAccessLibrary.Models
         public int RunnerId { get; set; }
         public int CoachId { get; set; }
         public string Title { get; set; }
-        public DateTime DatS { get; set; }
-        public DateTime DatB { get; set; }
+        public DateTime? DatS { get; set; }
+        public DateTime? DatB { get; set; }
 
     }
 

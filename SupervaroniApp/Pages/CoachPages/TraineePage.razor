@@ -6,17 +6,18 @@
 @using DataAccessLibrary.Data
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using SupervaroniApp.Components
+@using SupervaroniApp.Pages
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
-
-
+@inject IDialogService DialogService
 
 
 <MudGrid>  
+    @*Audzēkņa informācija*@
     <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4" >
         <MudCard Elevation="2">
-            <MudCardHeader Class="d-flex justify-center">
+            <MudCardHeader Class="d-flex justify-center" Style="background-color:lightgray;">
                 <MudText>Audzēkņa informācija</MudText>
                 
             </MudCardHeader>
@@ -26,21 +27,31 @@
                 <MudText>E-pasts: @runner.Email</MudText>
                 <MudText>Dzimums: @runner.enumValue</MudText>
                 <MudText>Vecums: @Age</MudText>
+                <MudText>Augums: @runner.Height</MudText>
+                <MudText>Svars: @runner.Weight</MudText>
+                <br />
+                <MudDivider></MudDivider>
+                <MudTextField Format="yyyy/MM/dd" Margin="Margin.Dense" Label="Pirmais Treniņš: " @bind-Value="@x" Variant="Variant.Text" DisableUnderLine="true"></MudTextField>
             </MudCardContent>
            
         </MudCard>
     </MudItem>
-
+    @*Treniņu cikli*@
     <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8">
-        <MudCard>
-            <MudCardHeader>
-                <MudText>Šobrīdējā atskatite</MudText>
+        <MudCard Elevation="2">
+            <MudCardHeader Style="background-color:lightgray;" Class="d-flex justify-center">
+                <MudText>Treniņu cikli</MudText>
+                
             </MudCardHeader>
+            <MudDivider></MudDivider>
             <MudCardContent>
-
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="OnCreateCycleClick">Izveidot treniņu ciklu</MudButton>
+                <br />
+                <MudText>Treniņu cikli</MudText>
             </MudCardContent>
         </MudCard>
     </MudItem>
+    @*Atskaite Izpildīta*@
     <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
         <MudCard>
             <MudCardHeader>
@@ -51,6 +62,7 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
+    @*Atskaite Plāns*@
     <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
         <MudCard>
             <MudCardHeader>
@@ -70,8 +82,8 @@
 
     RunnerModel runner = new RunnerModel();
     int Age = 0; 
- 
-    string x = ""; 
+    DateTime x = DateTime.Today; 
+
     protected async override Task OnInitializedAsync()
     {
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
@@ -81,6 +93,21 @@
         Age = DateTime.Today.Year - runner.Birthdate.Value.Year; 
     }
 
+    public void OnCreateCycleClick(){
+        var parameters = new DialogParameters();
+        parameters.Add("runnerid", runner.Id); 
+        var options = new DialogOptions()
+        {
+            
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true,
+            };
+        if (runner != null)
+        {
+            DialogService.Show<CreateTrainingCycleDialog>("Izveidot jaunu treniņu ciklu", parameters, options);
+        }
+    }
 
 
 }

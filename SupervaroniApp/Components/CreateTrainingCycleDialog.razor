@@ -1,0 +1,58 @@
+﻿@using DataAccessLibrary.Models
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@using SupervaroniApp.Pages
+@using System.ComponentModel.DataAnnotations
+@inject IRunnerData runnerData
+@inject IReportData reportData
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+
+
+<MudDialog>
+    <DialogContent>
+        <EditForm Model="@report">
+            <DataAnnotationsValidator/>
+            <MudGrid>
+                <MudItem xs="12" sm="12">
+        <MudCard>
+            <MudCardContent>
+                <MudTextField Label="Nosaukums" @bind-Value="@report.Title" ></MudTextField>
+                <MudDatePicker Label="Sākuma datums" @bind-Date="@report.DatS"></MudDatePicker>
+                <MudDatePicker Label="Beigu datums" @bind-Date="@report.DatB"></MudDatePicker>
+            </MudCardContent>
+        </MudCard>
+        </MudItem>
+            </MudGrid>
+
+        </EditForm>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Atcelt</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Saglabāt</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    ReportModel report = new ReportModel(); 
+    RunnerModel coach = new RunnerModel();
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public int runnerid {get; set; }
+    string uname = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        uname = user.Name;
+        coach = runnerData.GetCurrentRunner(uname);
+    }
+    void Submit(){
+        report.CoachId = coach.Id; 
+        report.RunnerId = runnerid;  
+        reportData.CreateTrainingCycle(report);
+        StateHasChanged();
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+    void Cancel() => MudDialog.Cancel();
+    
+}
