@@ -1,4 +1,5 @@
 ﻿@page "/supervaronis/{id}"
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
 @attribute [Authorize(Roles = "Treneris")]
 @using DataAccessLibrary.Models
 @using System.ComponentModel.DataAnnotations
@@ -186,7 +187,10 @@
         var runnerInfo = runnerData.GetRunnerById(id); 
         runner = runnerInfo; 
         Age = DateTime.Today.Year - runner.Birthdate.Value.Year; 
+       
         tests = runnerData.GetTests(id); 
+        races = runnerData.GetRaces(id); 
+        Task.Delay(400); 
         _loading = false; 
     }
     public void OnCreateCycleClick(){
@@ -239,16 +243,16 @@
    
     }
     void Reload(int i){
+         _loading = true;
         if(i == 1){
-            _loading = true;
             tests = runnerData.GetTests(id);
-            _loading = false;
         }
+        Task.Delay(1000); 
         if(i == 2){
-             _loading = true;
             races = runnerData.GetRaces(id);
-            _loading = false;
+         
         }
+        _loading = false;
         
     }
 

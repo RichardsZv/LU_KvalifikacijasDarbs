@@ -2,12 +2,12 @@
 @inject NavigationManager NavigationManager
 @using MudBlazor
 @attribute [Microsoft.AspNetCore.Authorization.Authorize]
-<PageTitle>SupervaroniApp</PageTitle>
+<PageTitle>Supervaroni</PageTitle>
 
 <MudThemeProvider/>
 <MudDialogProvider />
 <MudSnackbarProvider />
-    <div class="page">
+    @*<div class="page">
         <div class="sidebar">
             <NavMenu />
         </div>
@@ -21,11 +21,52 @@
                 @Body
             </article>
         </main>
+    </div>*@
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
+        <MudSpacer />
+        <AuthorizeView>
+            <Authorized>
+                <a href="Identity/Account/Manage">Sveiks, @context.User.Identity?.Name!</a>
+                <form method="post" action="Identity/Account/LogOut">
+                    <button type="submit" class="nav-link btn btn-link">Iziet</button>
+                </form>
+            </Authorized>
+            <NotAuthorized>
+                <a href="Identity/Account/Register">Reģistrēties</a>
+                <a href="Identity/Account/Login">Ienākt</a>
+            </NotAuthorized>
+        </AuthorizeView>
+
+        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+    </MudAppBar>
+    <div class="drawer-container">
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <NavMenuNew/>
+    </MudDrawer>
     </div>
-    @code{ 
+    <MudMainContent Style="padding: 10vh 5vh 10vh 5vh">
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+
+
+
+
+
+@code{ 
 
     [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
 
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
     protected async override Task OnInitializedAsync()
     {
         base.OnInitialized();
