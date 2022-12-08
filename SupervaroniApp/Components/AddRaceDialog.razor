@@ -1,0 +1,60 @@
+﻿@using DataAccessLibrary.Models
+@using DataAccessLibrary.Data
+@using SupervaroniApp.Pages
+@using System.ComponentModel.DataAnnotations
+@inject IRunnerData runnerData
+@inject IReportData reportData
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+
+
+<MudDialog>
+    <DialogContent>
+        <EditForm Model="@race">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs="12" sm="12">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudDatePicker Label="Datums" @bind-Date="@race.Dat" DateFormat="dd.MM.yyyy"></MudDatePicker>
+                            <MudTextField Label="Nosaukums" @bind-Value="@race.Title"> </MudTextField>
+                            <MudTimePicker Label="Rezultāts" @bind-Time="@race.Result"> </MudTimePicker>
+                            <MudTextField Label="Vieta" @bind-Value="@race.Place"> </MudTextField>
+                            <MudTextField Label="Grupa" @bind-Value="@race.Group"> </MudTextField>
+                            <MudTextField Label="Piezīmes" @bind-Value="@race.Notes"> </MudTextField>
+                            <MudNumericField Label="Novērtējums" @bind-Value="@race.Notes"> </MudNumericField>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Atcelt</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Saglabāt</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    RaceModel race = new RaceModel();
+    TestsModel test = new TestsModel();
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public int runnerid { get; set; }
+    string uname = "";
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        uname = user.Name;
+    }
+    void Submit()
+    {
+        race.RunnerId = runnerid;
+        //runnerData.AddRace(race);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+}

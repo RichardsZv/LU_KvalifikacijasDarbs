@@ -11,12 +11,14 @@
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
 @inject IDialogService DialogService
-
+<link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
 
 <MudGrid>  
-    @*Audzēkņa informācija*@
-    <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4" >
-        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-8" Color="Color.Primary">
+    @*Informācija par audzēkni*@
+    <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5" >
+       
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-8" Color="Color.Primary" Style="min-height: 25vh;">
+             @*Pamatinformācija*@
               <MudTabPanel Text="Audzēkņa informācija">           
                 <MudText>Vārds: @runner.Firstname @runner.Lastname</MudText>
                 <MudText>E-pasts: @runner.Email</MudText>
@@ -26,26 +28,97 @@
                 <MudText>Svars: @runner.Weight</MudText>
                 <br />
                 <MudDivider></MudDivider>
-                <MudTextField Format="yyyy/MM/dd" Margin="Margin.Dense" Label="Pirmais Treniņš: " @bind-Value="@x" Variant="Variant.Text" DisableUnderLine="true"></MudTextField>
+                <br />
+                <div class="d-flex justify-space-evenly">
+                  @if(@runner.Strava_Link != null)  {                  
+                    <MudIconButton Icon="fa-brands fa-strava" Color="Color.Warning" Href="@runner.Strava_Link" />
+                    
+                  }
+                  @if(@runner.Garmin_link != null){
+                        <MudIconButton Icon="fa-solid fa-g" Color="Color.Primary" Href="@runner.Garmin_link" />
+                  }
+                </div> 
+                @*<MudTextField Format="yyyy/MM/dd" Margin="Margin.Dense" Label="Pirmais Treniņš: " @bind-Value="@x" Variant="Variant.Text" DisableUnderLine="true"></MudTextField>*@
             </MudTabPanel>
-            <MudTabPanel Text="Sacensības">
-                 
-            </MudTabPanel>
+            @*Testu saraksts*@
             <MudTabPanel Text="Testi">
-                <MudText>Content Three</MudText>
+                <MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
+                <MudIconButton OnClick="@Reload" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
+                <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
+                     <HeaderContent>
+                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Km)">Km</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Pace)">Pace</MudTableSortLabel></MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
+                        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
+                        <MudTd DataLabel="Pace">@context.Pace</MudTd>
+                      
+                    </RowTemplate>
+                </MudTable>
             </MudTabPanel>
+            @*Sacensību saraksts*@
+            <MudTabPanel Text="Sacensības">
+                <MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
+                <MudIconButton OnClick="@Reload" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
+                <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
+                     <HeaderContent>
+                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Km)">Km</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Pace)">Pace</MudTableSortLabel></MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
+                        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
+                        <MudTd DataLabel="Pace">@context.Pace</MudTd>
+                      
+                    </RowTemplate>
+                </MudTable>
+            </MudTabPanel>
+            @*Traumu saraksts*@
             <MudTabPanel Text="Traumas">
-                <MudText>Content Three</MudText>
+                <MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
+                <MudIconButton OnClick="@Reload" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
+                <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
+                     <HeaderContent>
+                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Km)">Km</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Pace)">Pace</MudTableSortLabel></MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
+                        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
+                        <MudTd DataLabel="Pace">@context.Pace</MudTd>
+                      
+                    </RowTemplate>
+                </MudTable>
             </MudTabPanel>
+            @*Personīgo rekordu saraksts*@
             <MudTabPanel Text="Personīgie rekordi">
-                <MudText>Content Three</MudText>
+                <MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
+                <MudIconButton OnClick="@Reload" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
+                <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
+                    <HeaderContent>
+                        <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Km)">Km</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Pace)">Pace</MudTableSortLabel></MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
+                        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
+                        <MudTd DataLabel="Pace">@context.Pace</MudTd>
+
+                    </RowTemplate>
+                </MudTable>
             </MudTabPanel>
+            <MudIconButton></MudIconButton>
            
         </MudTabs>
     </MudItem>
     @*Treniņu cikli*@
-    <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8">
-        <MudCard Elevation="2">
+    <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7">
+        <MudCard Elevation="2" Style="min-height: 25vh;">
             <MudCardHeader Style="background-color:lightgray;" Class="d-flex justify-center">
                 <MudText>Treniņu cikli</MudText>
                 
@@ -87,25 +160,29 @@
     [Parameter]
     public string id { get; set; }
 
+    private bool _loading = true;
+    List<TestsModel> tests = new List<TestsModel>();
     RunnerModel runner = new RunnerModel();
     int Age = 0; 
     DateTime x = DateTime.Today; 
 
     protected async override Task OnInitializedAsync()
     {
+        Thread.Sleep(200); 
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var user = authstate.User.Identity;
         var runnerInfo = runnerData.GetRunnerById(id); 
         runner = runnerInfo; 
         Age = DateTime.Today.Year - runner.Birthdate.Value.Year; 
+        tests = runnerData.GetTests(id); 
+        _loading = false; 
     }
-
     public void OnCreateCycleClick(){
         var parameters = new DialogParameters();
         parameters.Add("runnerid", runner.Id); 
         var options = new DialogOptions()
         {
-            
+
                 CloseOnEscapeKey = true,
                 MaxWidth = MaxWidth.Medium,
                 FullWidth = true,
@@ -115,6 +192,55 @@
             DialogService.Show<CreateTrainingCycleDialog>("Izveidot jaunu treniņu ciklu", parameters, options);
         }
     }
+
+
+    void AddTest()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("runnerid", runner.Id);
+        var options = new DialogOptions()
+            {
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true,
+            };
+        if (runner != null)
+        {
+            DialogService.Show<AddTestDialog>("Pievienot testu", parameters, options);
+        }
+    }
+
+    void AddRace()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("runnerid", runner.Id);
+        var options = new DialogOptions()
+            {
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true,
+            };
+        if (runner != null)
+        {
+            DialogService.Show<AddRaceDialog>("Pievienot sacensības", parameters, options);
+        }
+   
+    }
+
+
+
+    void Reload(){
+        _loading = true;
+        tests = runnerData.GetTests(id);
+        _loading = false;
+    }
+
+   
+
+    //void RemoveItem()
+    //{
+    //    tests.RemoveAt(0);
+    //}
 
 
 }

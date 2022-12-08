@@ -5,9 +5,14 @@
 @using MudBlazor
 @inject IRunnerData runnerData
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
-<PageTitle>Landing</PageTitle>
+<PageTitle>Sākums</PageTitle>
+
+
 
 <h1>Sveicināts Supervaroņu Sistēmā! @runner_name</h1>
+ 
+
+
 
 @code{
     //string runner = GetCurrentRunner();
@@ -27,5 +32,7 @@
             runnerData.SaveRunner(runner);
             runner_name = runner.Firstname; 
         }
+
     }
+
 }

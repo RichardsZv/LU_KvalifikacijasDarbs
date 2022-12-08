@@ -10,5 +10,7 @@ namespace DataAccessLibrary.Data
         public void SaveRunnerToCoach(int Id, string uname);
         public List<RunnerModel> GetCoachRunners(string uname);
         public RunnerModel GetRunnerById(string id);
+        public void AddTest(TestsModel test); 
+        public List<TestsModel> GetTests(string runner_id); 
     }
 }

@@ -23,7 +23,7 @@ namespace DataAccessLibrary.Data
         public RunnerModel GetCurrentRunner(string uname)
         {
             RunnerModel runner = new RunnerModel();
-            string sql = @"SELECT Id, email, birthdate, height, weight, hr, hr_max, gender, start_info, username, firstname, lastname from dbo.Users where username = '"+uname+"'";
+            string sql = @"SELECT Id, email, birthdate, height, weight, hr, hr_max, gender, start_info, username, firstname, lastname, strava_link from dbo.Users where username = '" + uname+"'";
             //runner = _db.LoadData<RunnerModel, dynamic>(sql, new { })[0];
             var a = _db.Query<RunnerModel>(sql, "DefaultConnection");
             runner = a.FirstOrDefault();
@@ -37,13 +37,13 @@ namespace DataAccessLibrary.Data
             string sql = "";
             if (runner.Id == 0)
             {
-                sql = @"INSERT INTO dbo.Users (email, birthdate, height, weight, hr, hr_max, gender, username, firstname, lastname) values (@Email, @Birthdate, @Height, @Weight, @Hr, @HrMax, @Gender, @Username, @Firstname, @Lastname );";
+                sql = @"INSERT INTO dbo.Users (email, birthdate, height, weight, hr, hr_max, gender, username, firstname, lastname, strava_link) values (@Email, @Birthdate, @Height, @Weight, @Hr, @HrMax, @Gender, @Username, @Firstname, @Lastname , @StravaLink);";
             }
             else
             {
-                sql = @"UPDATE dbo.Users SET email = @Email, birthdate = @Birthdate, height = @Height, weight = @Weight, hr = @Hr, hr_max = @HrMax, gender = @Gender, username = @Username, firstname = @Firstname, lastname = @Lastname where username = @Username";
+                sql = @"UPDATE dbo.Users SET email = @Email, birthdate = @Birthdate, height = @Height, weight = @Weight, hr = @Hr, hr_max = @HrMax, gender = @Gender, username = @Username, firstname = @Firstname, lastname = @Lastname, strava_link = @StravaLink where username = @Username";
             }
-            _db.SaveDataSP(sql, new { Email = runner.Email, Birthdate = runner.Birthdate, Height = runner.Height, Weight = runner.Weight, Hr = runner.Hr, HrMax = runner.Hr_max, Gender = runner.enumValue, Username = runner.Username, Firstname = runner.Firstname, Lastname = runner.Lastname });
+            _db.SaveDataSP(sql, new { Email = runner.Email, Birthdate = runner.Birthdate, Height = runner.Height, Weight = runner.Weight, Hr = runner.Hr, HrMax = runner.Hr_max, Gender = runner.enumValue, Username = runner.Username, Firstname = runner.Firstname, Lastname = runner.Lastname, StravaLink = runner.Strava_Link });
         }
         /// <summary>
         /// Iegūst visus skrējējus, kas ir aizpildījuši savu informāciju
@@ -98,6 +98,26 @@ namespace DataAccessLibrary.Data
             var a = _db.Query<RunnerModel>(sql, "DefaultConnection");
             return a.FirstOrDefault();
         }
+
+        /// <summary>
+        /// Funkcija testu pievienošanai audzēknim
+        /// </summary>
+        public void AddTest(TestsModel test)
+        {
+            string sql = @"INSERT INTO dbo.Tests (runner_id, coach_id, dat, km, pace) VALUES (@RunnerId, @CoachId, @Dat, @Km, @Pace)";
+            _db.SaveDataSP(sql, new { RunnerId = test.RunnerId, CoachId = test.CoachId, Dat = test.Dat, Km = test.Km, Pace = test.Pace });
+         
+        }
+
+        public List<TestsModel> GetTests(string runner_id)
+        {
+
+            string sql = @"SELECT * FROM dbo.Tests 
+                                WHERE runner_id = " + runner_id;
+            var a = _db.Query<TestsModel>(sql, "DefaultConnection").ToList();
+            return a;
+        }
+   
 
     }
 }

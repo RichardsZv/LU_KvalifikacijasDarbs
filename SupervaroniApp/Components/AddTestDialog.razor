@@ -9,20 +9,19 @@
 
 <MudDialog>
     <DialogContent>
-        <EditForm Model="@report">
-            <DataAnnotationsValidator/>
+        <EditForm Model="@test">
+            <DataAnnotationsValidator />
             <MudGrid>
                 <MudItem xs="12" sm="12">
-        <MudCard>
-            <MudCardContent>
-                <MudTextField Label="Nosaukums" @bind-Value="@report.Title" ></MudTextField>
-                <MudDatePicker Label="Sākuma datums" @bind-Date="@report.DatS"></MudDatePicker>
-                <MudDatePicker Label="Beigu datums" @bind-Date="@report.DatB"></MudDatePicker>
-            </MudCardContent>
-        </MudCard>
-        </MudItem>
+                    <MudCard>
+                        <MudCardContent>      
+                            <MudDatePicker Label="Datums" @bind-Date="@test.Dat" DateFormat="dd.MM.yyyy"></MudDatePicker>
+                            <MudNumericField Label = "Kilometri" @bind-Value="@test.Km"> </MudNumericField>
+                            <MudNumericField Label="Pace" @bind-Value="@test.Pace"> </MudNumericField>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
             </MudGrid>
-
         </EditForm>
 
     </DialogContent>
@@ -32,11 +31,12 @@
     </DialogActions>
 </MudDialog>
 @code {
-    ReportModel report = new ReportModel(); 
+    TestsModel test = new TestsModel();
     RunnerModel coach = new RunnerModel();
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    [Parameter] public int runnerid {get; set; }
+    [Parameter] public int runnerid { get; set; }
     string uname = "";
+
 
     protected async override Task OnInitializedAsync()
     {
@@ -45,13 +45,14 @@
         uname = user.Name;
         coach = runnerData.GetCurrentRunner(uname);
     }
-    void Submit(){
-        report.CoachId = coach.Id; 
-        report.RunnerId = runnerid;  
-        reportData.CreateTrainingCycle(report);
-        StateHasChanged();
+    void Submit()
+    {
+        test.CoachId = coach.Id;
+        test.RunnerId = runnerid;
+        runnerData.AddTest(test);
         MudDialog.Close(DialogResult.Ok(true));
     }
+
     void Cancel() => MudDialog.Cancel();
-    
+
 }

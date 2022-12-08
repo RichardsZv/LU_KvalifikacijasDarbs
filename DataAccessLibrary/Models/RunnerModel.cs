@@ -31,6 +31,8 @@ namespace DataAccessLibrary.Models
         //public string AspUserId{ get; set; }    
         public string Firstname { get; set; }
         public string Lastname { get; set; }
+        public string Strava_Link { get; set; }
+        public string Garmin_link { get; set; }
     }
     
 }

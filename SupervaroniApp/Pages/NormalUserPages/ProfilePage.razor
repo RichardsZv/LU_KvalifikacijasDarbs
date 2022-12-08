@@ -38,6 +38,9 @@
                         <MudNumericField Label="Svars" @bind-Value="runner.Weight"  />
                         <MudNumericField Label="Miera pulss" @bind-Value="runner.Hr"  />
                         <MudNumericField Label="Maksimālais pulss" @bind-Value="runner.Hr_max"  />
+                        <MudTextField Label="Strava links" @bind-Value="runner.Strava_Link" />
+                        <MudTextField Label="Garmin links" @bind-Value="runner.Garmin_link" />
+                    
                     
                     </MudCardContent>
                     <MudCardActions>
@@ -75,6 +78,7 @@
     private void OnValidSubmit(EditContext context)
     {
         runnerData.SaveRunner(runner); 
+        StateHasChanged(); 
 
     }
 }
