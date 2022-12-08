@@ -108,7 +108,9 @@ namespace DataAccessLibrary.Data
             _db.SaveDataSP(sql, new { RunnerId = test.RunnerId, CoachId = test.CoachId, Dat = test.Dat, Km = test.Km, Pace = test.Pace });
          
         }
-
+        /// <summary>
+        /// Funkcija audzēķņa testu iegūšanai
+        /// </summary>
         public List<TestsModel> GetTests(string runner_id)
         {
 
@@ -117,7 +119,29 @@ namespace DataAccessLibrary.Data
             var a = _db.Query<TestsModel>(sql, "DefaultConnection").ToList();
             return a;
         }
-   
+
+        /// <summary>
+        /// Funkcija sacensību pievienošanai audzēknim
+        /// </summary>
+        public void AddRace(RaceModel race)
+        {
+            string sql = @"INSERT INTO dbo.Races (runner_id, dat, title, result, place, [group], notes, evaluation) VALUES (@RunnerId, @Dat, @Title, @Result, @Place, @Group, @Notes, @Evaluation)";
+            _db.SaveDataSP(sql, new { RunnerId = race.RunnerId, Dat = race.Dat, Title = race.Title, Result = race.Result, Place = race.Place, Group = race.Group, Notes = race.Notes, Evaluation = race.Evaluation });
+
+        }
+        /// <summary>
+        /// Funkcija audzēķņa sacensību iegūšanai
+        /// </summary>
+        public List<RaceModel> GetRaces(string runner_id)
+        {
+
+            string sql = @"SELECT * FROM dbo.Races
+                                WHERE runner_id = " + runner_id;
+            var a = _db.Query<RaceModel>(sql, "DefaultConnection").ToList();
+            return a;
+        }
+
+
 
     }
 }

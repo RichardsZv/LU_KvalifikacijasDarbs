@@ -43,7 +43,7 @@
             @*Testu saraksts*@
             <MudTabPanel Text="Testi">
                 <MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
-                <MudIconButton OnClick="@Reload" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
+                <MudIconButton OnClick="@(() => Reload(1))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
                 <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
                      <HeaderContent>
                             <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
@@ -60,18 +60,29 @@
             </MudTabPanel>
             @*Sacensību saraksts*@
             <MudTabPanel Text="Sacensības">
-                <MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
-                <MudIconButton OnClick="@Reload" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
-                <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
+                <MudButton OnClick="@AddRace" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
+                <MudIconButton OnClick="@(() => Reload(2))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
+                <MudTable Items="@races" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By" Dense="true">
                      <HeaderContent>
-                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Km)">Km</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Pace)">Pace</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Title)">Nosaukums</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Result)">Rezultāts</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Place)">Vieta</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Group)">Grupa</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Notes)">Piezīmes</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Evaluation)">Novērtējums</MudTableSortLabel></MudTh>
+                           
+                     
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
-                        <MudTd DataLabel="Pace">@context.Pace</MudTd>
+                        <MudTd DataLabel="Nosaukums">@context.Title</MudTd>
+                        <MudTd DataLabel="Rezultāts">@context.Result</MudTd>
+                        <MudTd DataLabel="Vieta">@context.Place</MudTd>
+                        <MudTd DataLabel="Grupa">@context.Group</MudTd>
+                        <MudTd DataLabel="Piezīmes">@context.Notes</MudTd>
+                        <MudTd DataLabel="Novērtējums">@context.Evaluation</MudTd>
+             
                       
                     </RowTemplate>
                 </MudTable>
@@ -79,7 +90,7 @@
             @*Traumu saraksts*@
             <MudTabPanel Text="Traumas">
                 <MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
-                <MudIconButton OnClick="@Reload" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
+                <MudIconButton OnClick="@(() => Reload(3))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
                 <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
                      <HeaderContent>
                             <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
@@ -97,7 +108,7 @@
             @*Personīgo rekordu saraksts*@
             <MudTabPanel Text="Personīgie rekordi">
                 <MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
-                <MudIconButton OnClick="@Reload" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
+                <MudIconButton OnClick="@(() => Reload(4))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
                 <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
                     <HeaderContent>
                         <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
@@ -162,6 +173,7 @@
 
     private bool _loading = true;
     List<TestsModel> tests = new List<TestsModel>();
+    List<RaceModel> races = new List<RaceModel>();
     RunnerModel runner = new RunnerModel();
     int Age = 0; 
     DateTime x = DateTime.Today; 
@@ -226,13 +238,18 @@
         }
    
     }
-
-
-
-    void Reload(){
-        _loading = true;
-        tests = runnerData.GetTests(id);
-        _loading = false;
+    void Reload(int i){
+        if(i == 1){
+            _loading = true;
+            tests = runnerData.GetTests(id);
+            _loading = false;
+        }
+        if(i == 2){
+             _loading = true;
+            races = runnerData.GetRaces(id);
+            _loading = false;
+        }
+        
     }
 
    

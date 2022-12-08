@@ -11,6 +11,10 @@ namespace DataAccessLibrary.Data
         public List<RunnerModel> GetCoachRunners(string uname);
         public RunnerModel GetRunnerById(string id);
         public void AddTest(TestsModel test); 
-        public List<TestsModel> GetTests(string runner_id); 
+        public List<TestsModel> GetTests(string runner_id);
+        public void AddRace(RaceModel race);
+        public List<RaceModel> GetRaces(string runner_id); 
+      
+
     }
 }
