@@ -13,8 +13,11 @@ namespace DataAccessLibrary.Data
         public void AddTest(TestsModel test); 
         public List<TestsModel> GetTests(string runner_id);
         public void AddRace(RaceModel race);
-        public List<RaceModel> GetRaces(string runner_id); 
-      
+        public List<RaceModel> GetRaces(string runner_id);
+        public void AddInjury(InjuryModel injury);
+        public List<InjuryModel> GetInjuries(string runner_id);
+        public void AddPersonalBest(PersonalBestsModel pb);
+        public List<PersonalBestsModel> GetPersonalBests(string runner_id); 
 
     }
 }

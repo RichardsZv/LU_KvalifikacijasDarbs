@@ -4,7 +4,7 @@
 @attribute [Microsoft.AspNetCore.Authorization.Authorize]
 <PageTitle>Supervaroni</PageTitle>
 
-<MudThemeProvider/>
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
     @*<div class="page">
@@ -29,6 +29,7 @@
         <MudSpacer />
         <AuthorizeView>
             <Authorized>
+                <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Toggle Light/Dark Mode" />
                 <a href="Identity/Account/Manage">Sveiks, @context.User.Identity?.Name!</a>
                 <form method="post" action="Identity/Account/LogOut">
                     <button type="submit" class="nav-link btn btn-link">Iziet</button>
@@ -76,4 +77,16 @@
             NavigationManager.NavigateTo($"/Identity/Account/Login?"); //returnUrl={NavigationManager.ToBaseRelativePath(NavigationManager.Uri)}
         }
     }
+    private MudTheme _theme = new();
+    private bool _isDarkMode;
+    private MudThemeProvider _mudThemeProvider;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            StateHasChanged();
+        }
+    }
+
 }

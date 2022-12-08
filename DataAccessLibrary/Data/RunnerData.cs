@@ -141,6 +141,49 @@ namespace DataAccessLibrary.Data
             return a;
         }
 
+        /// <summary>
+        /// Funkcija audzēkņa traumu pievienošanai
+        /// </summary>
+        public void AddInjury(InjuryModel injury)
+        {
+            string sql = @"INSERT INTO dbo.Injuries (runner_id, dat, description) VALUES (@RunnerId, @Dat, @Description)";
+            _db.SaveDataSP(sql, new { RunnerId = injury.RunnerId, Dat = injury.Dat, Description = injury.Description});
+
+        }
+        /// <summary>
+        /// Funkcija audzēķņa traumu iegūšanai
+        /// </summary>
+        public List<InjuryModel> GetInjuries(string runner_id)
+        {
+
+            string sql = @"SELECT * FROM dbo.Injuries
+                                WHERE runner_id = " + runner_id;
+            var a = _db.Query<InjuryModel>(sql, "DefaultConnection").ToList();
+            return a;
+        }
+
+
+        /// <summary>
+        /// Funkcija audzēkņa personīgo rekordu pievienošanai
+        /// </summary>
+        public void AddPersonalBest(PersonalBestsModel pb)
+        {
+            string sql = @"INSERT INTO dbo.Records (runner_id, dat, time, title, description) VALUES (@RunnerId, @Dat, @Time, @Title, @Description)";
+            _db.SaveDataSP(sql, new { RunnerId = pb.RunnerId, Dat = pb.Dat, TIme = pb.Time, Title = pb.Title, Description = pb.Description });
+
+        }
+        /// <summary>
+        /// Funkcija personīgo rekordu iegūšanai
+        /// </summary>
+        public List<PersonalBestsModel> GetPersonalBests(string runner_id)
+        {
+
+            string sql = @"SELECT * FROM dbo.Records
+                                WHERE runner_id = " + runner_id;
+            var a = _db.Query<PersonalBestsModel>(sql, "DefaultConnection").ToList();
+            return a;
+        }
+
 
 
     }

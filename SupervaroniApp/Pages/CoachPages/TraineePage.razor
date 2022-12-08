@@ -12,13 +12,12 @@
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
 @inject IDialogService DialogService
-<link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
 
 <MudGrid>  
     @*Informācija par audzēkni*@
     <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5" >
        
-        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-8" Color="Color.Primary" Style="min-height: 25vh;">
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-8" Color="Color.Tertiary" Style="min-height:25vh; opacity:0.8">
              @*Pamatinformācija*@
               <MudTabPanel Text="Audzēkņa informācija">           
                 <MudText>Vārds: @runner.Firstname @runner.Lastname</MudText>
@@ -90,7 +89,7 @@
             </MudTabPanel>
             @*Traumu saraksts*@
             <MudTabPanel Text="Traumas">
-                <MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
+                <MudButton OnClick="@AddInjury" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
                 <MudIconButton OnClick="@(() => Reload(3))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
                 <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
                      <HeaderContent>
@@ -108,7 +107,7 @@
             </MudTabPanel>
             @*Personīgo rekordu saraksts*@
             <MudTabPanel Text="Personīgie rekordi">
-                <MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
+                <MudButton OnClick="@AddPersonalBest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
                 <MudIconButton OnClick="@(() => Reload(4))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
                 <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
                     <HeaderContent>
@@ -171,13 +170,16 @@
 @code {
     [Parameter]
     public string id { get; set; }
-
+    
     private bool _loading = true;
+
     List<TestsModel> tests = new List<TestsModel>();
     List<RaceModel> races = new List<RaceModel>();
+    List<InjuryModel> injuries = new List<InjuryModel>();
+    List<PersonalBestsModel> pbs = new List<PersonalBestsModel>();
     RunnerModel runner = new RunnerModel();
+    
     int Age = 0; 
-    DateTime x = DateTime.Today; 
 
     protected async override Task OnInitializedAsync()
     {
@@ -190,7 +192,6 @@
        
         tests = runnerData.GetTests(id); 
         races = runnerData.GetRaces(id); 
-        Task.Delay(400); 
         _loading = false; 
     }
     public void OnCreateCycleClick(){
@@ -208,7 +209,6 @@
             DialogService.Show<CreateTrainingCycleDialog>("Izveidot jaunu treniņu ciklu", parameters, options);
         }
     }
-
 
     void AddTest()
     {
@@ -242,6 +242,38 @@
         }
    
     }
+
+    void AddInjury()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("runnerid", runner.Id);
+        var options = new DialogOptions()
+            {
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true,
+            };
+        if (runner != null)
+        {
+            DialogService.Show<AddInjuryDialog>("Pievienot traumu", parameters, options);
+        }
+    }
+    void AddPersonalBest()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("runnerid", runner.Id);
+        var options = new DialogOptions()
+            {
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true,
+            };
+        if (runner != null)
+        {
+            DialogService.Show<AddPersonalBestDialog>("Pievienot Personīgo rekordu", parameters, options);
+        }
+    }
+
     void Reload(int i){
          _loading = true;
         if(i == 1){
@@ -250,7 +282,6 @@
         Task.Delay(1000); 
         if(i == 2){
             races = runnerData.GetRaces(id);
-         
         }
         _loading = false;
         

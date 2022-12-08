@@ -1,0 +1,54 @@
+﻿@using DataAccessLibrary.Models
+@using DataAccessLibrary.Data
+@using SupervaroniApp.Pages
+@using System.ComponentModel.DataAnnotations
+@inject IRunnerData runnerData
+@inject IReportData reportData
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+
+
+<MudDialog>
+    <DialogContent>
+        <EditForm Model="@injury">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs="12" sm="12">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudDatePicker Label="Datums" @bind-Date="@injury.Dat" DateFormat="dd.MM.yyyy"></MudDatePicker>
+                            <MudTextField Label="Apraksts" @bind-Value="@injury.Description"> </MudTextField>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Atcelt</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Saglabāt</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    InjuryModel injury = new InjuryModel(); 
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public int runnerid { get; set; }
+    string uname = "";
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        uname = user.Name;
+    }
+    void Submit()
+    {
+        injury.RunnerId = runnerid;
+        runnerData.AddInjury(injury);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+}
