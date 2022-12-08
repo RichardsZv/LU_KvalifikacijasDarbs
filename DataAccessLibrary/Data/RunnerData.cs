@@ -169,7 +169,7 @@ namespace DataAccessLibrary.Data
         public void AddPersonalBest(PersonalBestsModel pb)
         {
             string sql = @"INSERT INTO dbo.Records (runner_id, dat, time, title, description) VALUES (@RunnerId, @Dat, @Time, @Title, @Description)";
-            _db.SaveDataSP(sql, new { RunnerId = pb.RunnerId, Dat = pb.Dat, TIme = pb.Time, Title = pb.Title, Description = pb.Description });
+            _db.SaveDataSP(sql, new { RunnerId = pb.RunnerId, Dat = pb.Dat, Time = pb.Time, Title = pb.Title, Description = pb.Description });
 
         }
         /// <summary>

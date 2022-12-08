@@ -1,5 +1,57 @@
-﻿<h3>AddPersonalBestDialog</h3>
+﻿@using DataAccessLibrary.Models
+@using DataAccessLibrary.Data
+@using SupervaroniApp.Pages
+@using System.ComponentModel.DataAnnotations
+@inject IRunnerData runnerData
+@inject IReportData reportData
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
 
+
+<MudDialog>
+    <DialogContent>
+        <EditForm Model="@pb">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs="12" sm="12">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudDatePicker Label="Datums" @bind-Date="@pb.Dat" DateFormat="dd.MM.yyyy"></MudDatePicker>
+                            <MudTextField Label="Distance" @bind-Value="@pb.Title"> </MudTextField>
+                            <MudTextField T="TimeSpan?" Label="Laiks" @bind-Value="@pb.Time"> </MudTextField>
+                            <MudTextField Label="Apraskts" @bind-Value="@pb.Description"> </MudTextField>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Atcelt</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Saglabāt</MudButton>
+    </DialogActions>
+</MudDialog>
 @code {
+    PersonalBestsModel pb = new PersonalBestsModel();
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public int runnerid { get; set; }
+    string uname = "";
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        uname = user.Name;
+    }
+    void Submit()
+    {
+        pb.RunnerId = runnerid;
+        runnerData.AddPersonalBest(pb);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    void Cancel() => MudDialog.Cancel();
 
 }

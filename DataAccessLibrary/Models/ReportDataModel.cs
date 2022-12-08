@@ -13,8 +13,9 @@ namespace DataAccessLibrary.Models
         public DateTime Dat { get; set; } 
         public float Km { get; set; }
         public int Hr { get; set; }
-        public int TimeRun { get; set; }
-        public int TimeOther { get; set; }
+        public TimeSpan? Time { get; set; }  = TimeSpan.Zero;
+        public int TimeRunC { get; set; }
+        public int TimeOtherC { get; set; }
         public int Vert { get; set; }
         public float E { get; set; }
         public float S { get; set; }

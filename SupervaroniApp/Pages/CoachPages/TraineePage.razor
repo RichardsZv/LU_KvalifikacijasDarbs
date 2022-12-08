@@ -91,17 +91,15 @@
             <MudTabPanel Text="Traumas">
                 <MudButton OnClick="@AddInjury" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
                 <MudIconButton OnClick="@(() => Reload(3))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
-                <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
+                <MudTable Items="@injuries" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
                      <HeaderContent>
-                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Km)">Km</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Pace)">Pace</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<InjuryModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
+                            <MudTh><MudTableSortLabel SortBy="new Func<InjuryModel, object>(x=>x.Description)">Apraksts</MudTableSortLabel></MudTh>
+              
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
-                        <MudTd DataLabel="Pace">@context.Pace</MudTd>
-                      
+                        <MudTd DataLabel="Apraksts">@context.Description</MudTd>
                     </RowTemplate>
                 </MudTable>
             </MudTabPanel>
@@ -109,22 +107,22 @@
             <MudTabPanel Text="Personīgie rekordi">
                 <MudButton OnClick="@AddPersonalBest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
                 <MudIconButton OnClick="@(() => Reload(4))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
-                <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
+                <MudTable Items="@pbs" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
                     <HeaderContent>
-                        <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Km)">Km</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Pace)">Pace</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<PersonalBestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<PersonalBestsModel, object>(x=>x.Title)">Distance</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<PersonalBestsModel, object>(x=>x.Time.Value)">Laiks</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<PersonalBestsModel, object>(x=>x.Description)">Apraksts</MudTableSortLabel></MudTh>
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
-                        <MudTd DataLabel="Pace">@context.Pace</MudTd>
-
+                        <MudTd DataLabel="Distance">@context.Title</MudTd>
+                        <MudTd DataLabel="Laiks">@context.Time.Value</MudTd>
+                        <MudTd DataLabel="Apraksts">@context.Description</MudTd>
                     </RowTemplate>
                 </MudTable>
             </MudTabPanel>
             <MudIconButton></MudIconButton>
-           
         </MudTabs>
     </MudItem>
     @*Treniņu cikli*@
@@ -183,7 +181,6 @@
 
     protected async override Task OnInitializedAsync()
     {
-        Thread.Sleep(200); 
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var user = authstate.User.Identity;
         var runnerInfo = runnerData.GetRunnerById(id); 
@@ -192,7 +189,10 @@
        
         tests = runnerData.GetTests(id); 
         races = runnerData.GetRaces(id); 
+        injuries = runnerData.GetInjuries(id); 
+        pbs = runnerData.GetPersonalBests(id); 
         _loading = false; 
+ 
     }
     public void OnCreateCycleClick(){
         var parameters = new DialogParameters();
@@ -274,16 +274,23 @@
         }
     }
 
-    void Reload(int i){
+    async void Reload(int i){
          _loading = true;
         if(i == 1){
             tests = runnerData.GetTests(id);
         }
-        Task.Delay(1000); 
         if(i == 2){
             races = runnerData.GetRaces(id);
         }
+        if(i == 3){
+            injuries = runnerData.GetInjuries(id); 
+        }
+        if (i == 4)
+        {
+            pbs = runnerData.GetPersonalBests(id);
+        }
         _loading = false;
+        
         
     }
 

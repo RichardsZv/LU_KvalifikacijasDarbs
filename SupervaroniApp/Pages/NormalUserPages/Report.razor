@@ -60,11 +60,17 @@
         <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Planned)">Ieplānots</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Completed)">Izpildīts</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Time)">Laiks</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Km)">Distance (KM)</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Notes)">Piezīmes</MudTableSortLabel></MudTh>
     </HeaderContent>
-    <RowTemplate>
+    <RowTemplate >
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
         <MudTd DataLabel="Ieplānots">@context.Planned</MudTd>
         <MudTd DataLabel="Izpildīts">@context.Completed</MudTd>
+        <MudTd DataLabel="Laiks">@context.Time.Value</MudTd>
+        <MudTd DataLabel="Distance">@context.Km</MudTd>
+        <MudTd DataLabel="Piezīmes">@context.Notes.</MudTd>
     </RowTemplate>
 
     <RowEditingTemplate>
@@ -75,7 +81,15 @@
         <MudTd DataLabel="Izpildīts">
             <MudTextField @bind-Value="@context.Completed" />
         </MudTd>
-
+        <MudTd DataLabel="Laiks">
+            <MudTextField @bind-Value="@context.Time" />
+        </MudTd>
+        <MudTd DataLabel="Distance">
+            <MudNumericField @bind-Value="@context.Km" Format="N2" />
+        </MudTd>
+        <MudTd Style="overflow-wrap: break-word;" DataLabel="Peizīmes">
+            <MudTextField T="string" Lines="3"  @bind-Value="@context.Notes" Adornment="Adornment.Start" />
+        </MudTd>
     </RowEditingTemplate>
     <PagerContent>
         <MudTablePager />
@@ -92,7 +106,7 @@
 
 @code {
     private RunnerModel runner = new RunnerModel();
-    DateTime? DatS = DateTime.Today.AddDays(-7);
+    DateTime? DatS = DateTime.Today.AddDays(-6);
     DateTime? DatB = DateTime.Today;
     private List<string> editEvents = new();
     private string searchString = "";
