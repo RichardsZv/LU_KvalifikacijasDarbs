@@ -62,6 +62,7 @@
         <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Completed)">Izpildīts</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Time)">Laiks</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Km)">Distance (KM)</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Hr)">Pulss</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<ReportDataModel, object>(x=>x.Notes)">Piezīmes</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate >
@@ -70,6 +71,7 @@
         <MudTd DataLabel="Izpildīts">@context.Completed</MudTd>
         <MudTd DataLabel="Laiks">@context.Time.Value</MudTd>
         <MudTd DataLabel="Distance">@context.Km</MudTd>
+        <MudTd DataLabel="Pulss">@context.Hr</MudTd>
         <MudTd DataLabel="Piezīmes">@context.Notes.</MudTd>
     </RowTemplate>
 
@@ -86,6 +88,9 @@
         </MudTd>
         <MudTd DataLabel="Distance">
             <MudNumericField @bind-Value="@context.Km" Format="N2" />
+        </MudTd>
+        <MudTd DataLabel="Pulss">
+            <MudNumericField @bind-Value="@context.Hr"/>
         </MudTd>
         <MudTd Style="overflow-wrap: break-word;" DataLabel="Peizīmes">
             <MudTextField T="string" Lines="3"  @bind-Value="@context.Notes" Adornment="Adornment.Start" />

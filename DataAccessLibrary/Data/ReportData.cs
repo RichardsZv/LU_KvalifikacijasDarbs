@@ -35,15 +35,15 @@ namespace DataAccessLibrary.Data
         public void UpdateReportData(ReportDataModel reportdata, int runnerId)
         {
             string myDate = reportdata.Dat.ToString("yyyy-MM-dd");
-            string sql = @"UPDATE dbo.ReportData SET planned = @Planned, completed = @Completed WHERE dat = @Date AND runner_id = @RunnerId";
-            _db.SaveDataSP(sql, new { Planned = reportdata.Planned, Completed = reportdata.Completed, Date = myDate, RunnerId = runnerId });
+            string sql = @"UPDATE dbo.ReportData SET planned = @Planned, completed = @Completed, [time] = @Time, km = @Km, pulse = @Hr, notes = @Notes WHERE dat = @Date AND runner_id = @RunnerId";
+            _db.SaveDataSP(sql, new { Planned = reportdata.Planned, Completed = reportdata.Completed, Date = myDate, RunnerId = runnerId, Time = reportdata.Time, Km = reportdata.Km, Hr = reportdata.Hr, Notes = reportdata.Notes });
 
         }
 
         public void CreateTrainingCycle(ReportModel reportcycle)
         {
             string sql = @"INSERT INTO dbo.Reports (runner_id, coach_id, title, dat_s, dat_b) VALUES (@RunnerId, @CoachId, @Title, @DatS, @DatB)";
-            _db.SaveDataSP(sql, new { RunnerId = reportcycle.RunnerId, CoachId = reportcycle.CoachId, Title = reportcycle.Title, DatS = reportcycle.DatS, DatB = reportcycle.DatB,  });
+            _db.SaveDataSP(sql, new { RunnerId = reportcycle.RunnerId, CoachId = reportcycle.CoachId, Title = reportcycle.Title, DatS = reportcycle.DatS, DatB = reportcycle.DatB  });
              
         }
 

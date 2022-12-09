@@ -128,7 +128,7 @@
     @*Treniņu cikli*@
     <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7">
         <MudCard Elevation="2" Style="min-height: 25vh;">
-            <MudCardHeader Style="background-color:lightgray;" Class="d-flex justify-center">
+            <MudCardHeader Style="background-color: teal;" Class="d-flex justify-center">
                 <MudText>Treniņu cikli</MudText>
                 
             </MudCardHeader>
@@ -155,7 +155,7 @@
     <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
         <MudCard>
             <MudCardHeader>
-                <MudText>Realitātē</MudText>
+                <MudText>@x</MudText>
             </MudCardHeader>
             <MudCardContent>
 
@@ -170,7 +170,7 @@
     public string id { get; set; }
     
     private bool _loading = true;
-
+    string x = DateTime.Now.DayOfWeek.ToString();
     List<TestsModel> tests = new List<TestsModel>();
     List<RaceModel> races = new List<RaceModel>();
     List<InjuryModel> injuries = new List<InjuryModel>();
