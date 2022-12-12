@@ -1,0 +1,69 @@
+﻿@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject IRunnerData runnerData
+@inject IDialogService DialogService
+
+<MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
+<MudIconButton OnClick="@(() => Reload(1))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
+<MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Km)">Km</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Pace)">Pace</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
+        <MudTd DataLabel="Pace">@context.Pace</MudTd>
+
+    </RowTemplate>
+</MudTable>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+    List<TestsModel> tests = new List<TestsModel>();
+    private bool _loading = true;
+    RunnerModel runner = new RunnerModel();
+    int Age = 0;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        var runnerInfo = runnerData.GetRunnerById(id);
+        runner = runnerInfo;
+        tests = runnerData.GetTests(id);
+        Age = DateTime.Today.Year - runner.Birthdate.Value.Year;
+        _loading = false; 
+    }
+    void AddTest()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("runnerid", runner.Id);
+        var options = new DialogOptions()
+            {
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true,
+            };
+        if (runner != null)
+        {
+            DialogService.Show<AddTestDialog>("Pievienot testu", parameters, options);
+        }
+    }
+    async void Reload(int i)
+    {
+        _loading = true;
+        if (i == 1)
+        {
+            tests = runnerData.GetTests(id);
+        }
+     
+        _loading = false;
+
+
+    }
+
+}

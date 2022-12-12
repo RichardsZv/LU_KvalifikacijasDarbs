@@ -11,116 +11,32 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
+@inject IReportData reportData
 @inject IDialogService DialogService
 
 <MudGrid>  
     @*Informācija par audzēkni*@
-    <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5" >
-       
-        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-8" Color="Color.Tertiary" Style="min-height:25vh; opacity:0.8">
-             @*Pamatinformācija*@
-              <MudTabPanel Text="Audzēkņa informācija">           
-                <MudText>Vārds: @runner.Firstname @runner.Lastname</MudText>
-                <MudText>E-pasts: @runner.Email</MudText>
-                <MudText>Dzimums: @runner.enumValue</MudText>
-                <MudText>Vecums: @Age</MudText>
-                <MudText>Augums: @runner.Height</MudText>
-                <MudText>Svars: @runner.Weight</MudText>
-                <br />
-                <MudDivider></MudDivider>
-                <br />
-                <div class="d-flex justify-space-evenly">
-                  @if(@runner.Strava_Link != null)  {                  
-                    <MudIconButton Icon="fa-brands fa-strava" Color="Color.Warning" Href="@runner.Strava_Link" />
-                    
-                  }
-                  @if(@runner.Garmin_link != null){
-                        <MudIconButton Icon="fa-solid fa-g" Color="Color.Primary" Href="@runner.Garmin_link" />
-                  }
-                </div> 
-                @*<MudTextField Format="yyyy/MM/dd" Margin="Margin.Dense" Label="Pirmais Treniņš: " @bind-Value="@x" Variant="Variant.Text" DisableUnderLine="true"></MudTextField>*@
+    <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5">
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-8" Color="Color.Tertiary" Style="min-height:25vh; ">
+            @*Pamatinformācija*@
+            <MudTabPanel Text="Audzēkņa informācija">
+                <TraineeInfo id="@id"></TraineeInfo>
             </MudTabPanel>
             @*Testu saraksts*@
             <MudTabPanel Text="Testi">
-                <MudButton OnClick="@AddTest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
-                <MudIconButton OnClick="@(() => Reload(1))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
-                <MudTable Items="@tests" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
-                     <HeaderContent>
-                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Km)">Km</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Pace)">Pace</MudTableSortLabel></MudTh>
-                    </HeaderContent>
-                    <RowTemplate>
-                        <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
-                        <MudTd DataLabel="Pace">@context.Pace</MudTd>
-                      
-                    </RowTemplate>
-                </MudTable>
+                <TraineeTests id="@id"></TraineeTests>
             </MudTabPanel>
             @*Sacensību saraksts*@
             <MudTabPanel Text="Sacensības">
-                <MudButton OnClick="@AddRace" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
-                <MudIconButton OnClick="@(() => Reload(2))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
-                <MudTable Items="@races" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By" Dense="true">
-                     <HeaderContent>
-                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Title)">Nosaukums</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Result)">Rezultāts</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Place)">Vieta</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Group)">Grupa</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Notes)">Piezīmes</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Evaluation)">Novērtējums</MudTableSortLabel></MudTh>
-                           
-                     
-                    </HeaderContent>
-                    <RowTemplate>
-                        <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Nosaukums">@context.Title</MudTd>
-                        <MudTd DataLabel="Rezultāts">@context.Result</MudTd>
-                        <MudTd DataLabel="Vieta">@context.Place</MudTd>
-                        <MudTd DataLabel="Grupa">@context.Group</MudTd>
-                        <MudTd DataLabel="Piezīmes">@context.Notes</MudTd>
-                        <MudTd DataLabel="Novērtējums">@context.Evaluation</MudTd>
-             
-                      
-                    </RowTemplate>
-                </MudTable>
+                <TraineeRaces id="@id"></TraineeRaces>
             </MudTabPanel>
             @*Traumu saraksts*@
             <MudTabPanel Text="Traumas">
-                <MudButton OnClick="@AddInjury" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
-                <MudIconButton OnClick="@(() => Reload(3))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
-                <MudTable Items="@injuries" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
-                     <HeaderContent>
-                            <MudTh><MudTableSortLabel SortBy="new Func<InjuryModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
-                            <MudTh><MudTableSortLabel SortBy="new Func<InjuryModel, object>(x=>x.Description)">Apraksts</MudTableSortLabel></MudTh>
-              
-                    </HeaderContent>
-                    <RowTemplate>
-                        <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Apraksts">@context.Description</MudTd>
-                    </RowTemplate>
-                </MudTable>
+                <TraineeInjuries id="@id"></TraineeInjuries>
             </MudTabPanel>
             @*Personīgo rekordu saraksts*@
             <MudTabPanel Text="Personīgie rekordi">
-                <MudButton OnClick="@AddPersonalBest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
-                <MudIconButton OnClick="@(() => Reload(4))" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
-                <MudTable Items="@pbs" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
-                    <HeaderContent>
-                        <MudTh><MudTableSortLabel SortBy="new Func<PersonalBestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<PersonalBestsModel, object>(x=>x.Title)">Distance</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<PersonalBestsModel, object>(x=>x.Time.Value)">Laiks</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<PersonalBestsModel, object>(x=>x.Description)">Apraksts</MudTableSortLabel></MudTh>
-                    </HeaderContent>
-                    <RowTemplate>
-                        <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Distance">@context.Title</MudTd>
-                        <MudTd DataLabel="Laiks">@context.Time.Value</MudTd>
-                        <MudTd DataLabel="Apraksts">@context.Description</MudTd>
-                    </RowTemplate>
-                </MudTable>
+                <TraineePersonalBests id="@id"></TraineePersonalBests>
             </MudTabPanel>
             <MudIconButton></MudIconButton>
         </MudTabs>
@@ -128,18 +44,22 @@
     @*Treniņu cikli*@
     <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7">
         <MudCard Elevation="2" Style="min-height: 25vh;">
-            <MudCardHeader Style="background-color: teal;" Class="d-flex justify-center">
-                <MudText>Treniņu cikli</MudText>
-                
+            <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
+                <MudText Typo="Typo.h6" Color="Color.Default">Treniņu cikli</MudText>
             </MudCardHeader>
             <MudDivider></MudDivider>
             <MudCardContent>
-                <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="OnCreateCycleClick">Izveidot treniņu ciklu</MudButton>
+                <MudButton Variant="Variant.Outlined" Color="Color.Tertiary" OnClick="OnCreateCycleClick">Izveidot treniņu ciklu</MudButton>
                 <br />
-                <MudExpansionPanels Dense="true" DisableGutters="true" Class="mt-6">
-                  @*  @foreach(var a in var b){
-
-                    }*@
+                <MudExpansionPanels Class="mt-6">
+                  @foreach(var tc in trainingCycles){
+                        <MudExpansionPanel Text="@tc.Title">
+                        <MudText>Sākuma datums: @tc.Dat_S.Value.ToShortDateString()</MudText>
+                        <MudText>Beigu datums: @tc.Dat_B.Value.ToShortDateString()</MudText>
+                       @* Nedēļas nr.
+                        Nedēļu skaits*@
+                      </MudExpansionPanel>
+                  }
                 </MudExpansionPanels>
             </MudCardContent>
         </MudCard>
@@ -147,8 +67,8 @@
     @*Atskaite Izpildīta*@
     <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
         <MudCard>
-            <MudCardHeader>
-                <MudText>Ieplānots</MudText>
+            <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
+                <MudText Typo="Typo.h6" Color="Color.Default">Iepānots</MudText>
             </MudCardHeader>
             <MudCardContent>
 
@@ -158,14 +78,16 @@
     @*Atskaite Plāns*@
     <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
         <MudCard>
-            <MudCardHeader>
-                <MudText>@x</MudText>
+            <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
+                <MudText Typo="Typo.h6" Color="Color.Default">Realitātē</MudText>
             </MudCardHeader>
             <MudCardContent>
 
             </MudCardContent>
         </MudCard>
     </MudItem>
+     @*Tekošā atskaite*@
+     <Reprot></Reprot>
 </MudGrid>
 
 
@@ -174,13 +96,9 @@
     public string id { get; set; }
     
     private bool _loading = true;
-    string x = DateTime.Now.DayOfWeek.ToString();
-    List<TestsModel> tests = new List<TestsModel>();
-    List<RaceModel> races = new List<RaceModel>();
-    List<InjuryModel> injuries = new List<InjuryModel>();
-    List<PersonalBestsModel> pbs = new List<PersonalBestsModel>();
     RunnerModel runner = new RunnerModel();
-    
+    List<ReportModel> trainingCycles = new List<ReportModel>(); 
+
     int Age = 0; 
 
     protected async override Task OnInitializedAsync()
@@ -189,12 +107,7 @@
         var user = authstate.User.Identity;
         var runnerInfo = runnerData.GetRunnerById(id); 
         runner = runnerInfo; 
-        Age = DateTime.Today.Year - runner.Birthdate.Value.Year; 
-       
-        tests = runnerData.GetTests(id); 
-        races = runnerData.GetRaces(id); 
-        injuries = runnerData.GetInjuries(id); 
-        pbs = runnerData.GetPersonalBests(id); 
+        trainingCycles = reportData.GetTrainingCycles(id); 
         _loading = false; 
  
     }
@@ -213,97 +126,10 @@
             DialogService.Show<CreateTrainingCycleDialog>("Izveidot jaunu treniņu ciklu", parameters, options);
         }
     }
-
-    void AddTest()
-    {
-        var parameters = new DialogParameters();
-        parameters.Add("runnerid", runner.Id);
-        var options = new DialogOptions()
-            {
-                CloseOnEscapeKey = true,
-                MaxWidth = MaxWidth.Medium,
-                FullWidth = true,
-            };
-        if (runner != null)
-        {
-            DialogService.Show<AddTestDialog>("Pievienot testu", parameters, options);
-        }
-    }
-
-    void AddRace()
-    {
-        var parameters = new DialogParameters();
-        parameters.Add("runnerid", runner.Id);
-        var options = new DialogOptions()
-            {
-                CloseOnEscapeKey = true,
-                MaxWidth = MaxWidth.Medium,
-                FullWidth = true,
-            };
-        if (runner != null)
-        {
-            DialogService.Show<AddRaceDialog>("Pievienot sacensības", parameters, options);
-        }
-   
-    }
-
-    void AddInjury()
-    {
-        var parameters = new DialogParameters();
-        parameters.Add("runnerid", runner.Id);
-        var options = new DialogOptions()
-            {
-                CloseOnEscapeKey = true,
-                MaxWidth = MaxWidth.Medium,
-                FullWidth = true,
-            };
-        if (runner != null)
-        {
-            DialogService.Show<AddInjuryDialog>("Pievienot traumu", parameters, options);
-        }
-    }
-    void AddPersonalBest()
-    {
-        var parameters = new DialogParameters();
-        parameters.Add("runnerid", runner.Id);
-        var options = new DialogOptions()
-            {
-                CloseOnEscapeKey = true,
-                MaxWidth = MaxWidth.Medium,
-                FullWidth = true,
-            };
-        if (runner != null)
-        {
-            DialogService.Show<AddPersonalBestDialog>("Pievienot Personīgo rekordu", parameters, options);
-        }
-    }
-
-    async void Reload(int i){
-         _loading = true;
-        if(i == 1){
-            tests = runnerData.GetTests(id);
-        }
-        if(i == 2){
-            races = runnerData.GetRaces(id);
-        }
-        if(i == 3){
-            injuries = runnerData.GetInjuries(id); 
-        }
-        if (i == 4)
-        {
-            pbs = runnerData.GetPersonalBests(id);
-        }
-        _loading = false;
-        
-        
-    }
-
-   
-
+  
     //void RemoveItem()
     //{
     //    tests.RemoveAt(0);
     //}
-
 
 }

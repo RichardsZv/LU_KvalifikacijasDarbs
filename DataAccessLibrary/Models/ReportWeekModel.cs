@@ -12,5 +12,7 @@ namespace DataAccessLibrary.Models
         public int ReportId{ get; set; }
         public DateTime DatS { get; set; }
         public DateTime DatB { get; set; }
+        public int WeekCount { get; set; }
+        public int WeekNum { get; set; }
     }
 }

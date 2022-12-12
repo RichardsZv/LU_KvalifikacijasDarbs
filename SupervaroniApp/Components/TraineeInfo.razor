@@ -1,0 +1,46 @@
+﻿@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject IRunnerData runnerData
+
+    <MudText>Vārds: @runner.Firstname @runner.Lastname</MudText>
+    <MudText>E-pasts: @runner.Email</MudText>
+    <MudText>Dzimums: @runner.enumValue</MudText>
+    <MudText>Vecums: @Age</MudText>
+    <MudText>Augums: @runner.Height</MudText>
+    <MudText>Svars: @runner.Weight</MudText>
+    <br />
+    <MudDivider></MudDivider>
+    <br />
+
+    <div class="d-flex justify-space-evenly">
+        @if (@runner.Strava_Link != null)
+        {
+            <MudIconButton Icon="fa-brands fa-strava" Color="Color.Warning" Href="@runner.Strava_Link" />
+
+        }
+        @if (@runner.Garmin_link != null)
+        {
+            <MudIconButton Icon="fa-solid fa-g" Color="Color.Primary" Href="@runner.Garmin_link" />
+        }
+    </div>
+    @*<MudTextField Format="yyyy/MM/dd" Margin="Margin.Dense" Label="Pirmais Treniņš: " @bind-Value="@x" Variant="Variant.Text" DisableUnderLine="true"></MudTextField>*@
+
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    RunnerModel runner = new RunnerModel();
+    int Age = 0;
+
+    protected async override Task OnInitializedAsync()
+    { 
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        var runnerInfo = runnerData.GetRunnerById(id);
+        runner = runnerInfo;
+        Age = DateTime.Today.Year - runner.Birthdate.Value.Year;
+    }
+
+}

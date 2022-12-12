@@ -9,15 +9,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using System.ComponentModel;
+using Microsoft.Extensions.Configuration;
 
 namespace DataAccessLibrary.Data
 {
     public class ReportData : IReportData
     {
+        private readonly IConfiguration _config;
         private readonly ISqlDataAccess _db;
-        public ReportData(ISqlDataAccess db)
+        public ReportData(ISqlDataAccess db, IConfiguration config)
         {
             _db = db;
+            _config = config;
         }
 
         /// <summary>
@@ -52,15 +55,30 @@ namespace DataAccessLibrary.Data
         {
             var p = new DynamicParameters();
             p.Add("RunnerId", trainingCylce.RunnerId);
-            p.Add("Dat_s", trainingCylce.DatS);
-            p.Add("Dat_b", trainingCylce.DatB);
+            p.Add("Dat_s", trainingCylce.Dat_S);
+            p.Add("Dat_b", trainingCylce.Dat_B);
             p.Add("CoachId", trainingCylce.CoachId);
             p.Add("Title", trainingCylce.Title);
             var connstring = "DefaultConnection";
             return _db.LoadDataSP<ReportModel, dynamic>("spCreateTrainingCycle", p, connstring);
 
         }
+        public List<ReportModel> GetTrainingCycles(string id)
+        {
+            List<ReportModel> a = new List<ReportModel>();
+            string sql = @"SELECT runner_id, coach_id, title, dat_s, dat_b FROM dbo.Reports WHERE runner_id = " + id + " ORDER BY dat_s desc"; 
+            a = _db.Query<ReportModel>(sql, "DefaultConnection").ToList();
+            return a;
+        }
 
+        public ReportWeekModel GetCycleWeekCount(int report_id)
+        {
+            ReportWeekModel week = new ReportWeekModel();
+            string connectionString = _config.GetConnectionString("DefaultConnection");
+            string sql = @"SELECT dbo.getMaxWeekNum(report_id) week_num_max , week_num from ReportWeek WHERE  GETDATE()>=dat_s and GETDATE() <= dat_b and report_id = " + report_id;
+            week = _db.Query<ReportWeekModel>(sql, "DefaultConnection").ToList()[0];
+            return week; 
+        }
     }
 
 
