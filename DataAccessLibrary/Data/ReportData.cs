@@ -45,15 +45,17 @@ namespace DataAccessLibrary.Data
             _db.SaveDataSP(sql, new { Planned = reportdata.Planned, Completed = reportdata.Completed, Date = myDate, RunnerId = runnerId, Time = reportdata.Time, Km = reportdata.Km, Pulse = reportdata.Pulse, Notes = reportdata.Notes });
 
         }
-
-        public List<ReportModel> CreateTrainingCycle(int runnerId, int coachId, DateTime? dat_s, DateTime? dat_b, ReportModel trainingCycle)
+        /// <summary>
+        /// Funkcija, kas izveido treniņu ciklu, saģenerē plānoto nedēļu ierakstus un realitātē izpildīto nedēļu ierakstus pēc datumiem.
+        /// </summary>
+        public List<ReportModel> CreateTrainingCycle(ReportModel trainingCylce)
         {
             var p = new DynamicParameters();
-                p.Add("RunnerId", runnerId);
-                p.Add("Dat_s", dat_s);
-                p.Add("Dat_b", dat_b);
-                p.Add("CoachId", coachId);
-                p.Add("Title", trainingCycle.Title); 
+            p.Add("RunnerId", trainingCylce.RunnerId);
+            p.Add("Dat_s", trainingCylce.DatS);
+            p.Add("Dat_b", trainingCylce.DatB);
+            p.Add("CoachId", trainingCylce.CoachId);
+            p.Add("Title", trainingCylce.Title);
             var connstring = "DefaultConnection";
             return _db.LoadDataSP<ReportModel, dynamic>("spCreateTrainingCycle", p, connstring);
 

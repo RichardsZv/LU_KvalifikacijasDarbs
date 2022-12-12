@@ -6,6 +6,6 @@ namespace DataAccessLibrary.Data
     {
         List<RunnerReportDataModel> GetRunnerReportData(int runnerId, DateTime? dat_s, DateTime? dat_b);
         void UpdateRunnerReportData(RunnerReportDataModel reportdata, int runnerId);
-        public List<ReportModel> CreateTrainingCycle(int runnerId, int coachId, DateTime? dat_s, DateTime? dat_b, ReportModel trainingCycle);
+        public List<ReportModel> CreateTrainingCycle(ReportModel trainingCylce); 
     }
 }
