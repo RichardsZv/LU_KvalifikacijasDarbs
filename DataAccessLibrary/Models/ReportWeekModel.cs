@@ -13,6 +13,6 @@ namespace DataAccessLibrary.Models
         public DateTime DatS { get; set; }
         public DateTime DatB { get; set; }
         public int WeekCount { get; set; }
-        public int WeekNum { get; set; }
+        public int Week_Num { get; set; }
     }
 }

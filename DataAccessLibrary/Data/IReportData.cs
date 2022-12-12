@@ -8,7 +8,9 @@ namespace DataAccessLibrary.Data
         void UpdateRunnerReportData(RunnerReportDataModel reportdata, int runnerId);
         public List<ReportModel> CreateTrainingCycle(ReportModel trainingCylce);
         List<ReportModel> GetTrainingCycles(string id);
-
-        public ReportWeekModel GetCycleWeekCount(int report_id); 
+        ReportModel GetTrainingCycle(string id);
+        ReportWeekModel GetCurrentWeek(string id);
+        List<ReportDataPlannedModel> GetPlannedReportList(string runnerId, int weeknum);
+        void UpdatePlannedReports(ReportDataPlannedModel reportdata); 
     }
 }

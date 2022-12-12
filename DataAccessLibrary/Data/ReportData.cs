@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Dapper;
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace DataAccessLibrary.Data
 {
@@ -71,18 +72,52 @@ namespace DataAccessLibrary.Data
             return a;
         }
 
-        public ReportWeekModel GetCycleWeekCount(int report_id)
+        public ReportModel GetTrainingCycle(string id)
+        {
+            ReportModel a = new ReportModel();
+            string sql = @"SELECT top 1 * FROM dbo.Reports WHERE dat_s <= GETDATE() and dat_b>=GETDATE() and runner_id = " + id;
+            a = _db.Query<ReportModel>(sql, "DefaultConnection").ToList()[0]; 
+            
+                return a;
+           
+         
+        }
+
+
+        public ReportWeekModel GetCurrentWeek(string id)
         {
             ReportWeekModel week = new ReportWeekModel();
             string connectionString = _config.GetConnectionString("DefaultConnection");
-            string sql = @"SELECT dbo.getMaxWeekNum(report_id) week_num_max , week_num from ReportWeek WHERE  GETDATE()>=dat_s and GETDATE() <= dat_b and report_id = " + report_id;
+            string sql = @"SELECT *, dbo.getMaxWeekNum(b.report_id) week_num_max FROM dbo.Reports a inner join ReportWeek b on a.Id = b.report_id WHERE b.dat_s <= GETDATE() and b.dat_b >= GETDATE() and runner_id = " + id;
+
             week = _db.Query<ReportWeekModel>(sql, "DefaultConnection").ToList()[0];
             return week; 
         }
+
+
+
+
+        public List<ReportDataPlannedModel> GetPlannedReportList(string runnerId, int weeknum)
+        {
+            var p = new DynamicParameters();
+            p.Add("RunnerId", runnerId);
+            p.Add("Week", weeknum);
+            var connstring = "DefaultConnection";
+            return _db.LoadDataSP<ReportDataPlannedModel, dynamic>("spGetPlannedReportData", p, connstring);
+           
+        }
+        public void UpdatePlannedReports(ReportDataPlannedModel reportdata)
+        {
+            string sql = @"UPDATE dbo.ReportDataPlanned SET plan_description = @Planned WHERE dat = @Date and report_week_id = @ReportWeekId";
+            _db.SaveDataSP(sql, new { Planned = reportdata.Description, Date = reportdata.Dat, reportdata.Report_Week_Id });
+
+        }
+
+
     }
 
 
 
-    
+
 }
 

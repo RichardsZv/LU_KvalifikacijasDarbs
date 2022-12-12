@@ -9,8 +9,8 @@ namespace DataAccessLibrary.Models
     public class ReportDataPlannedModel
     {
         public int Id { get; set; }
-        public ReportWeekModel Week { get; set; }
+        public DateTime Dat { get; set; }
+        public int Report_Week_Id { get; set; }
         public string Description { get; set; }
-        public int Weekday { get; set; }
     }
 }
