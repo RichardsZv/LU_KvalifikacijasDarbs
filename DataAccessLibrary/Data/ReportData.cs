@@ -20,31 +20,43 @@ namespace DataAccessLibrary.Data
             _db = db;
         }
 
-        public List<ReportDataModel> GetReportData(int runnerId, DateTime? dat_s, DateTime? dat_b)
+        /// <summary>
+        /// Funkcija, kas izpilda SQL procedūru spGetReportData
+        /// </summary>
+        /// <returns>Saraksts ar skrējēja dienasgrāmatas datiem</returns>
+        public List<RunnerReportDataModel> GetRunnerReportData(int runnerId, DateTime? dat_s, DateTime? dat_b)
         {
-            //Izveidojam dinamiskos parametrus, ko padosim procedūrai
             var p = new DynamicParameters();
-            p.Add("RunnerId", runnerId);
-            p.Add("Dat_s", dat_s);
-            p.Add("Dat_b", dat_b);
+                p.Add("RunnerId", runnerId);
+                p.Add("Dat_s", dat_s);
+                p.Add("Dat_b", dat_b);
             var connstring = "DefaultConnection";
-            return _db.LoadDataSP<ReportDataModel, dynamic>("spGetReportData", p, connstring);
+            return _db.LoadDataSP<RunnerReportDataModel, dynamic>("spGetReportData", p, connstring);
         }
 
-
-        public void UpdateReportData(ReportDataModel reportdata, int runnerId)
+        /// <summary>
+        /// Funkcija, ļauj skrējējam ierakstīt datus savā dienasgrāmatā. Apstrādā tos pa rindiņām.
+        /// Tikai update, jo rindiņas pa datumiem tiek saģenerētas Get funkcijā.
+        /// </summary>
+        public void UpdateRunnerReportData(RunnerReportDataModel reportdata, int runnerId)
         {
             string myDate = reportdata.Dat.ToString("yyyy-MM-dd");
-            string sql = @"UPDATE dbo.ReportData SET planned = @Planned, completed = @Completed, [time] = @Time, km = @Km, pulse = @Hr, notes = @Notes WHERE dat = @Date AND runner_id = @RunnerId";
-            _db.SaveDataSP(sql, new { Planned = reportdata.Planned, Completed = reportdata.Completed, Date = myDate, RunnerId = runnerId, Time = reportdata.Time, Km = reportdata.Km, Hr = reportdata.Hr, Notes = reportdata.Notes });
+            string sql = @"UPDATE dbo.RunnerReportData SET planned = @Planned, completed = @Completed, [time] = @Time, km = @Km, pulse = @Pulse, notes = @Notes WHERE dat = @Date AND runner_id = @RunnerId";
+            _db.SaveDataSP(sql, new { Planned = reportdata.Planned, Completed = reportdata.Completed, Date = myDate, RunnerId = runnerId, Time = reportdata.Time, Km = reportdata.Km, Pulse = reportdata.Pulse, Notes = reportdata.Notes });
 
         }
 
-        public void CreateTrainingCycle(ReportModel reportcycle)
+        public List<ReportModel> CreateTrainingCycle(int runnerId, int coachId, DateTime? dat_s, DateTime? dat_b, ReportModel trainingCycle)
         {
-            string sql = @"INSERT INTO dbo.Reports (runner_id, coach_id, title, dat_s, dat_b) VALUES (@RunnerId, @CoachId, @Title, @DatS, @DatB)";
-            _db.SaveDataSP(sql, new { RunnerId = reportcycle.RunnerId, CoachId = reportcycle.CoachId, Title = reportcycle.Title, DatS = reportcycle.DatS, DatB = reportcycle.DatB  });
-             
+            var p = new DynamicParameters();
+                p.Add("RunnerId", runnerId);
+                p.Add("Dat_s", dat_s);
+                p.Add("Dat_b", dat_b);
+                p.Add("CoachId", coachId);
+                p.Add("Title", trainingCycle.Title); 
+            var connstring = "DefaultConnection";
+            return _db.LoadDataSP<ReportModel, dynamic>("spCreateTrainingCycle", p, connstring);
+
         }
 
     }

@@ -48,7 +48,7 @@ namespace DataAccessLibrary.Data
         /// <summary>
         /// Iegūst visus skrējējus, kas ir aizpildījuši savu informāciju
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Saraksts ar ar skrējējiem</returns>
         public List<RunnerModel> GetRunners()
         {
             List<RunnerModel> a = new List<RunnerModel>();
