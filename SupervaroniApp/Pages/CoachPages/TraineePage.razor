@@ -16,7 +16,7 @@
 
 <MudGrid>  
     @*Informācija par audzēkni*@
-    <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5">
+    <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
         <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-8" Color="Color.Tertiary" Style="min-height:25vh; ">
             @*Pamatinformācija*@
             <MudTabPanel Text="Audzēkņa informācija">
@@ -42,7 +42,7 @@
         </MudTabs>
     </MudItem>
     @*Treniņu cikli*@
-    <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7">
+    <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
         <MudCard Elevation="2" Style="min-height: 25vh;">
             <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
                 <MudText Typo="Typo.h6" Color="Color.Default">Treniņu cikli</MudText>
@@ -63,19 +63,19 @@
         </MudCard>
     </MudItem>
     @*Atskaite - Plāns*@
-    <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+    <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5">
         <MudCard>
             <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
-                <MudText Typo="Typo.h6" Color="Color.Default">Treniņu cikli</MudText>
+                <MudText Typo="Typo.h6" Color="Color.Default">Treniņu plāns</MudText>
             </MudCardHeader>
             <MudDivider></MudDivider>
             <MudCardContent>
                 <MudTable Items="@plannedList" Hover="true" CanCancelEdit="true" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
-                        OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4">
+                        OnCommitEditClick="@(() => HandleRowCommit(selectedItem1))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem1" Elevation="2" Class="my-6 py-2 py-4">
                     <ToolBarContent>
                         <MudText Typo="Typo.h6">Plāns</MudText>
                         <MudSpacer />
-                        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                     </ToolBarContent>
                     <HeaderContent>
                         <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
@@ -109,18 +109,48 @@
         </MudCard>
     </MudItem>
 
-
-
-
-
     @*Atskaite - Realitātē izpildīasi*@
-    <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+    <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7">
         <MudCard>
             <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
                 <MudText Typo="Typo.h6" Color="Color.Default">Realitātē</MudText>
             </MudCardHeader>
             <MudCardContent>
+                  <MudTable Items="@reportDataList" Hover="true" CanCancelEdit="true" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
+                        OnCommitEditClick="@(() => HandleRowCommit(selectedItem2))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem2" Elevation="2" Class="my-6 py-2 py-4">
+                    <ToolBarContent>
+                        <MudText Typo="Typo.h6">Plāns</MudText>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchString2" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
+                        <MudTh>Diena</MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Description)">Ieplānots</MudTableSortLabel></MudTh>
+                    </HeaderContent>
+                    <RowTemplate >
+                        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
+                        <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>
+                        <MudTd DataLabel="Ieplānots">@context.Description</MudTd>
 
+                    </RowTemplate>
+
+                    <RowEditingTemplate>
+                        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
+                        <MudTd DataLabel="Datums">@context.Dat.DayOfWeek</MudTd>
+                        <MudTd DataLabel="Ieplānots">
+                            <MudTextField @bind-Value="@context.Description" />
+                        </MudTd>
+                  
+                    </RowEditingTemplate>
+                   <PagerContent >
+                        <div class="d-flex justify-center">
+                            <MudIconButton OnClick="LastWeekClick" Icon="@Icons.Outlined.ArrowCircleLeft" Size="Size.Large"></MudIconButton>
+                            <MudIconButton OnClick="NextWeekClick" Icon="@Icons.Outlined.ArrowCircleRight" Size="Size.Large"></MudIconButton>  
+                       </div>
+                       
+                    </PagerContent>
+                </MudTable>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -128,7 +158,7 @@
     <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
         <MudCard>
             <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
-                <MudText Typo="Typo.h6" Color="Color.Default">Realitātē</MudText>
+                <MudText Typo="Typo.h6" Color="Color.Default">Audzēkņa dienasgrāmata</MudText>
             </MudCardHeader>
             <MudCardContent>
 
@@ -149,12 +179,20 @@
     ReportModel trainingCycle = new ReportModel(); 
     ReportWeekModel trainingWeek = new ReportWeekModel(); 
 
+    //Plāns
     List<ReportDataPlannedModel> plannedList = new List<ReportDataPlannedModel>();
-    private List<string> editEvents = new();
-    private string searchString = "";
-    private ReportDataPlannedModel selectedItem = null;
-    private ReportDataPlannedModel reportBeforeEdit;
-    public int weekNum = 0; 
+    private List<string> editEvents1 = new();
+    private string searchString1 = "";
+    private ReportDataPlannedModel selectedItem1 = null;
+    private ReportDataPlannedModel reportBeforeEdit1;
+    public int weekNumPl = 0; 
+    //Izpilde
+    List<CoachReportDataModel> reportDataList = new List<CoachReportDataModel>(); 
+    private List<string> editEvents2 = new();
+    private string searchString2 = "";
+    private CoachReportDataModel selectedItem2 = null;
+    private CoachReportDataModel reportBeforeEdit2;
+    public int weekNumCo = 0; 
 
     protected async override Task OnInitializedAsync()
     {
@@ -164,11 +202,14 @@
         runner = runnerInfo; 
         trainingCycles = reportData.GetTrainingCycles(id); 
         
-        //trainingCycle = reportData.GetTrainingCycle(id); //gan jau nav vajadzīgs
         if(trainingCycles.Count() != 0){
+            //Plāns
             trainingWeek = reportData.GetCurrentWeek(id);
-            weekNum = trainingWeek.Week_Num;
-            plannedList = reportData.GetPlannedReportList(id, weekNum);
+            weekNumPl = trainingWeek.Week_Num;
+            plannedList = reportData.GetPlannedReportList(id, weekNumPl );
+            //Izpilde
+            reportDataList = reprotData.GetCoachReportList(id, weekNumCo); 
+
         }
 
         _loading = false; 
@@ -192,19 +233,20 @@
     }
 
     public void NextWeekClick(){
-        weekNum = weekNum + 1; 
-        plannedList = reportData.GetPlannedReportList(id, weekNum);
+        weekNumPl = weekNumPl + 1; 
+        plannedList = reportData.GetPlannedReportList(id, weekNumPl);
     }
     public void LastWeekClick(){
-        weekNum = weekNum - 1;
-        if(weekNum>0){
-            plannedList = reportData.GetPlannedReportList(id, weekNum);
+        weekNumPl = weekNumPl - 1;
+        if (weekNumPl > 0)
+        {
+            plannedList = reportData.GetPlannedReportList(id, weekNumPl);
         }
     }
 
     private void AddEditionEvent(string message)
     {
-        editEvents.Add(message);
+        editEvents1.Add(message);
         StateHasChanged();
     }
     private void HandleRowCommit(ReportDataPlannedModel report)
@@ -215,7 +257,7 @@
     
     private void BackupItem(object report)
     {
-        reportBeforeEdit = new()
+        reportBeforeEdit1 = new()
         {
         };
         

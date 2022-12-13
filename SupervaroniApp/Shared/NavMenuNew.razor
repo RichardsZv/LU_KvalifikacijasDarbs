@@ -5,12 +5,17 @@
         <MudAvatar Image="images/logo.png" Alt="Logo" Size="Size.Large" Class="mb-4" Variant="Variant.Filled" Color="Color.Inherit" />
     </div>
    
-    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Rounded.Home">Sākums</MudNavLink>
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Rounded.Home" >Sākums</MudNavLink>
     <MudNavLink Href="/profils" Match="NavLinkMatch.Prefix" Icon="@Icons.Rounded.Person">Mana informācija</MudNavLink>
-    <MudNavLink Href="/atskaite" Match="NavLinkMatch.Prefix" Icon="@Icons.Rounded.LibraryBooks">Treniņu Atskaites</MudNavLink>
+    <MudNavLink Href="/atskaite" Match="NavLinkMatch.Prefix" Icon="@Icons.Rounded.LibraryBooks" >Treniņu Atskaites</MudNavLink>
     <AuthorizeView Roles="Treneris">
         <MudDivider></MudDivider>
         <MudNavLink Href="/supervaroni" Match="NavLinkMatch.Prefix" Icon="@Icons.Rounded.DirectionsRun">Supervaroņi</MudNavLink>
     </AuthorizeView>
+    @*<div class="d-flex justify-content-center position-relative bottom-0 mt-auto " >
+        <form method="post" action="Identity/Account/LogOut">
+            <button type="submit" class="nav-link btn btn-link btn-outline-danger" style="color:ghostwhite">Iziet</button>
+        </form>
+    </div>*@
 </MudNavMenu>
 

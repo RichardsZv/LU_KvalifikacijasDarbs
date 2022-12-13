@@ -15,10 +15,12 @@
         <MudSpacer />
         <AuthorizeView>
             <Authorized>
-                <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Toggle Light/Dark Mode" />
-                <a href="Identity/Account/Manage">Sveiks, @context.User.Identity?.Name!</a>
+                <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Tertiary" Class="ma-4" T="bool"/>
+                @*<MudLink Color="Color.Surface" Underline="Underline.None" Href="Identity/Account/Manage">Sveiks, @context.User.Identity?.Name!</MudLink>*@
+
+               
                 <form method="post" action="Identity/Account/LogOut">
-                    <button type="submit" class="nav-link btn btn-link">Iziet</button>
+                    <button type="submit" class="nav-link btn btn-link btn-outline-danger" style="color:white">Iziet</button>
                 </form>
             </Authorized>
             <NotAuthorized>
@@ -26,7 +28,6 @@
                 <a href="Identity/Account/Login">Ienākt</a>
             </NotAuthorized>
         </AuthorizeView>
-
         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
     <div class="drawer-container">
@@ -80,7 +81,9 @@
                 AppbarBackground = Colors.Teal.Darken1, 
                 DrawerBackground = Colors.Grey.Lighten2,
                 Background = Colors.Grey.Lighten3,
+                ActionDefault= Colors.Green.Default,
             },
+           
         };
           
     private bool _isDarkMode;
