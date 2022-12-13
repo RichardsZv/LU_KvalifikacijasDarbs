@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @using MudBlazor
 @attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
 <PageTitle>Supervaroni</PageTitle>
 
 <MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
@@ -63,8 +64,24 @@
             NavigationManager.NavigateTo($"/Identity/Account/Login?"); //returnUrl={NavigationManager.ToBaseRelativePath(NavigationManager.Uri)}
         }
     }
-    private MudTheme _theme = new (); 
-    
+    private MudTheme _theme = new MudTheme()
+        {
+            Typography = new Typography()
+            {
+                Default = new Default()
+                {
+                    FontFamily = new[] { "Poppins", "Montserrat", "sans-serif", "Helvetica", "Arial" }
+                },
+            },
+            Palette = new Palette()
+            {
+                Primary = Colors.Blue.Default,
+                Secondary = Colors.Green.Accent4,
+                AppbarBackground = Colors.Teal.Darken1, 
+                DrawerBackground = Colors.Grey.Lighten2,
+                Background = Colors.Grey.Lighten3,
+            },
+        };
           
     private bool _isDarkMode;
     private MudThemeProvider _mudThemeProvider;
