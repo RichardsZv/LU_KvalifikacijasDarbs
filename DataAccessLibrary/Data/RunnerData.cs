@@ -161,8 +161,6 @@ namespace DataAccessLibrary.Data
             var a = _db.Query<InjuryModel>(sql, "DefaultConnection").ToList();
             return a;
         }
-
-
         /// <summary>
         /// Funkcija audzēkņa personīgo rekordu pievienošanai
         /// </summary>
@@ -177,14 +175,10 @@ namespace DataAccessLibrary.Data
         /// </summary>
         public List<PersonalBestsModel> GetPersonalBests(string runner_id)
         {
-
             string sql = @"SELECT * FROM dbo.Records
                                 WHERE runner_id = " + runner_id;
             var a = _db.Query<PersonalBestsModel>(sql, "DefaultConnection").ToList();
             return a;
         }
-
-
-
     }
 }

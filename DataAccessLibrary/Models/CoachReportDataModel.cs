@@ -10,7 +10,8 @@ namespace DataAccessLibrary.Models
     {
         public int Id { get; set; }
         public float Km { get; set; }
-        public int Time { get; set; } //Laiks Minūtēs
+        public int Time_run_min { get; set; } //Laiks Minūtēs
+        public int Time_other_min { get; set; } //Laiks Minūtēs
         public string Completed { get; set; }
         public TimeSpan Pace { get; set; }
         public int Pulse { get; set; }
@@ -22,6 +23,7 @@ namespace DataAccessLibrary.Models
         public float T { get; set; }
         public float M { get; set; }
         public float VDOT { get; set; }
+        public DateTime Dat { get; set; }
      
     }
 }

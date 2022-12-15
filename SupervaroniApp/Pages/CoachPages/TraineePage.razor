@@ -8,6 +8,7 @@
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using SupervaroniApp.Components
 @using SupervaroniApp.Pages
+@using SupervaroniApp.Components.Dialogs
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
@@ -70,41 +71,7 @@
             </MudCardHeader>
             <MudDivider></MudDivider>
             <MudCardContent>
-                <MudTable Items="@plannedList" Hover="true" CanCancelEdit="true" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
-                        OnCommitEditClick="@(() => HandleRowCommit(selectedItem1))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem1" Elevation="2" Class="my-6 py-2 py-4">
-                    <ToolBarContent>
-                        <MudText Typo="Typo.h6">Plāns</MudText>
-                        <MudSpacer />
-                        <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                    </ToolBarContent>
-                    <HeaderContent>
-                        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
-                        <MudTh>Diena</MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Description)">Ieplānots</MudTableSortLabel></MudTh>
-                    </HeaderContent>
-                    <RowTemplate >
-                        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>
-                        <MudTd DataLabel="Ieplānots">@context.Description</MudTd>
-
-                    </RowTemplate>
-
-                    <RowEditingTemplate>
-                        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Datums">@context.Dat.DayOfWeek</MudTd>
-                        <MudTd DataLabel="Ieplānots">
-                            <MudTextField @bind-Value="@context.Description" />
-                        </MudTd>
-                  
-                    </RowEditingTemplate>
-                   <PagerContent >
-                        <div class="d-flex justify-center">
-                            <MudIconButton OnClick="LastWeekClick" Icon="@Icons.Outlined.ArrowCircleLeft" Size="Size.Large"></MudIconButton>
-                            <MudIconButton OnClick="NextWeekClick" Icon="@Icons.Outlined.ArrowCircleRight" Size="Size.Large"></MudIconButton>  
-                       </div>
-                       
-                    </PagerContent>
-                </MudTable>
+                <PlannedReportTable id="@id"/> 
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -116,41 +83,7 @@
                 <MudText Typo="Typo.h6" Color="Color.Default">Realitātē</MudText>
             </MudCardHeader>
             <MudCardContent>
-                  <MudTable Items="@reportDataList" Hover="true" CanCancelEdit="true" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
-                        OnCommitEditClick="@(() => HandleRowCommit(selectedItem2))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem2" Elevation="2" Class="my-6 py-2 py-4">
-                    <ToolBarContent>
-                        <MudText Typo="Typo.h6">Plāns</MudText>
-                        <MudSpacer />
-                        <MudTextField @bind-Value="searchString2" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                    </ToolBarContent>
-                    <HeaderContent>
-                        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
-                        <MudTh>Diena</MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Description)">Ieplānots</MudTableSortLabel></MudTh>
-                    </HeaderContent>
-                    <RowTemplate >
-                        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>
-                        <MudTd DataLabel="Ieplānots">@context.Description</MudTd>
-
-                    </RowTemplate>
-
-                    <RowEditingTemplate>
-                        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Datums">@context.Dat.DayOfWeek</MudTd>
-                        <MudTd DataLabel="Ieplānots">
-                            <MudTextField @bind-Value="@context.Description" />
-                        </MudTd>
-                  
-                    </RowEditingTemplate>
-                   <PagerContent >
-                        <div class="d-flex justify-center">
-                            <MudIconButton OnClick="LastWeekClick" Icon="@Icons.Outlined.ArrowCircleLeft" Size="Size.Large"></MudIconButton>
-                            <MudIconButton OnClick="NextWeekClick" Icon="@Icons.Outlined.ArrowCircleRight" Size="Size.Large"></MudIconButton>  
-                       </div>
-                       
-                    </PagerContent>
-                </MudTable>
+                <CoachReprotTable id="@id"/>
             </MudCardContent>
         </MudCard>
     </MudItem>
@@ -179,21 +112,6 @@
     ReportModel trainingCycle = new ReportModel(); 
     ReportWeekModel trainingWeek = new ReportWeekModel(); 
 
-    //Plāns
-    List<ReportDataPlannedModel> plannedList = new List<ReportDataPlannedModel>();
-    private List<string> editEvents1 = new();
-    private string searchString1 = "";
-    private ReportDataPlannedModel selectedItem1 = null;
-    private ReportDataPlannedModel reportBeforeEdit1;
-    public int weekNumPl = 0; 
-    //Izpilde
-    List<CoachReportDataModel> reportDataList = new List<CoachReportDataModel>(); 
-    private List<string> editEvents2 = new();
-    private string searchString2 = "";
-    private CoachReportDataModel selectedItem2 = null;
-    private CoachReportDataModel reportBeforeEdit2;
-    public int weekNumCo = 0; 
-
     protected async override Task OnInitializedAsync()
     {
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
@@ -201,19 +119,7 @@
         var runnerInfo = runnerData.GetRunnerById(id); 
         runner = runnerInfo; 
         trainingCycles = reportData.GetTrainingCycles(id); 
-        
-        if(trainingCycles.Count() != 0){
-            //Plāns
-            trainingWeek = reportData.GetCurrentWeek(id);
-            weekNumPl = trainingWeek.Week_Num;
-            plannedList = reportData.GetPlannedReportList(id, weekNumPl );
-            //Izpilde
-            reportDataList = reprotData.GetCoachReportList(id, weekNumCo); 
-
-        }
-
         _loading = false; 
-
     }
 
     public void OnCreateCycleClick(){
@@ -231,45 +137,4 @@
             DialogService.Show<CreateTrainingCycleDialog>("Izveidot jaunu treniņu ciklu", parameters, options);
         }
     }
-
-    public void NextWeekClick(){
-        weekNumPl = weekNumPl + 1; 
-        plannedList = reportData.GetPlannedReportList(id, weekNumPl);
-    }
-    public void LastWeekClick(){
-        weekNumPl = weekNumPl - 1;
-        if (weekNumPl > 0)
-        {
-            plannedList = reportData.GetPlannedReportList(id, weekNumPl);
-        }
-    }
-
-    private void AddEditionEvent(string message)
-    {
-        editEvents1.Add(message);
-        StateHasChanged();
-    }
-    private void HandleRowCommit(ReportDataPlannedModel report)
-    {
-        reportData.UpdatePlannedReports(report);
-        StateHasChanged();
-    }
-    
-    private void BackupItem(object report)
-    {
-        reportBeforeEdit1 = new()
-        {
-        };
-        
-    }
-    private void ItemHasBeenCommitted(object report)
-    {
-        AddEditionEvent("Izmaiņas saglabātas");
-    }
-
-    //void RemoveItem()
-    //{
-    //    tests.RemoveAt(0);
-    //}
-
 }

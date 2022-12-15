@@ -1,0 +1,133 @@
+﻿@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@inject IReportData reportData
+@inject IRunnerData runnerData
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+
+
+ <MudTable Items="@reportDataList" Hover="true" CanCancelEdit="true" SortLabel="Kārtot pēc" CommitEditTooltip="Commit Edit"
+                          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4">
+                    <ToolBarContent>
+                        <MudText Typo="Typo.h6">Izpilde</MudText>
+                        <MudSpacer />
+                        <MudTextField @bind-Value="searchString" Placeholder="Meklēt" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
+                        <MudTh>Diena</MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Km)">Kilometri</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Time_run_min)">Laiks</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Time_other_min)">Laiks (cits)</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Completed)">Izpilde</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Pace)">Temps</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Pulse)">Pulss</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Vert)">Vertikāli</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.E)">E</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.S)">S</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.R)">R</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.I)">I</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.T)">T</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.M)">M</MudTableSortLabel></MudTh>
+                    </HeaderContent>
+                    <RowTemplate >
+                        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
+                        <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>
+                        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
+                        <MudTd DataLabel="Laiks">@context.Time_run_min</MudTd>
+                        <MudTd DataLabel="Laiks (cits)">@context.Time_other_min</MudTd>
+                        <MudTd DataLabel="Izpilde">@context.Completed</MudTd>
+                        <MudTd DataLabel="Temps">@context.Pace</MudTd>
+                        <MudTd DataLabel="Pulss">@context.Pulse</MudTd>
+                        <MudTd DataLabel="E">@context.E</MudTd>
+                        <MudTd DataLabel="S">@context.S</MudTd>
+                        <MudTd DataLabel="R">@context.R</MudTd>
+                        <MudTd DataLabel="I">@context.I</MudTd>
+                        <MudTd DataLabel="T">@context.T</MudTd>
+                        <MudTd DataLabel="M">@context.M</MudTd>
+                    </RowTemplate>
+
+                    <RowEditingTemplate>
+                        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
+                        <MudTd DataLabel="Diena">@context.Dat.DayOfWeek</MudTd>
+                        <MudTd DataLabel="Kilometri">
+                            <MudNumericField Format="N2" @bind-Value="@context.Km" />
+                        </MudTd>
+                    </RowEditingTemplate>
+                   <PagerContent >
+                        <div class="d-flex justify-center">
+                            <MudIconButton OnClick="LastWeekClick" Icon="@Icons.Outlined.ArrowCircleLeft" Size="Size.Large"></MudIconButton>
+                            <MudIconButton OnClick="NextWeekClick" Icon="@Icons.Outlined.ArrowCircleRight" Size="Size.Large"></MudIconButton>
+                       </div>
+
+                    </PagerContent>
+                </MudTable>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+    RunnerModel runner = new RunnerModel();
+
+    List<ReportModel> trainingCycles = new List<ReportModel>();
+    ReportWeekModel trainingWeek = new ReportWeekModel();
+
+
+    List<CoachReportDataModel> reportDataList = new List<CoachReportDataModel>();
+    private List<string> editEvents = new();
+    private string searchString = "";
+    private CoachReportDataModel selectedItem = null;
+    private CoachReportDataModel reportBeforeEdit;
+    public int weekNum = 0;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        var runnerInfo = runnerData.GetRunnerById(id);
+        runner = runnerInfo;
+        trainingCycles = reportData.GetTrainingCycles(id);
+
+        if (trainingCycles.Count() != 0)
+        {
+            trainingWeek = reportData.GetCurrentWeek(id);
+            weekNum = trainingWeek.Week_Num;
+            reportDataList = reportData.GetCoachReportList(id, weekNum);
+        }
+    }
+
+    public void NextWeekClick()
+    {
+        weekNum = weekNum + 1;
+        reportDataList = reportData.GetCoachReportList(id, weekNum);
+    }
+    public void LastWeekClick()
+    {
+        weekNum = weekNum - 1;
+        if (weekNum > 0)
+        {
+            reportDataList = reportData.GetCoachReportList(id, weekNum);
+        }
+    }
+
+    private void AddEditionEvent(string message)
+    {
+        editEvents.Add(message);
+        StateHasChanged();
+    }
+    private void HandleRowCommit(CoachReportDataModel report)
+    {
+        //reportData.UpdatePlannedReports(report);
+        StateHasChanged();
+    }
+
+    private void BackupItem(object report)
+    {
+        reportBeforeEdit = new()
+        {
+        };
+
+    }
+    private void ItemHasBeenCommitted(object report)
+    {
+        AddEditionEvent("Izmaiņas saglabātas");
+    }
+}

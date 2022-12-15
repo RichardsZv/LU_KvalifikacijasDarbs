@@ -1,0 +1,109 @@
+﻿@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@inject IReportData reportData
+@inject IRunnerData runnerData
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+
+
+<MudTable Items="@plannedList" Hover="true" CanCancelEdit="true" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
+          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Plāns</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
+        <MudTh>Diena</MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Description)">Ieplānots</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>
+        <MudTd DataLabel="Ieplānots">@context.Description</MudTd>
+
+    </RowTemplate>
+
+    <RowEditingTemplate>
+        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Datums">@context.Dat.DayOfWeek</MudTd>
+        <MudTd DataLabel="Ieplānots">
+            <MudTextField @bind-Value="@context.Description" />
+        </MudTd>
+
+    </RowEditingTemplate>
+    <PagerContent>
+        <div class="d-flex justify-center">
+            <MudIconButton OnClick="LastWeekClick" Icon="@Icons.Outlined.ArrowCircleLeft" Size="Size.Large"></MudIconButton>
+            <MudIconButton OnClick="NextWeekClick" Icon="@Icons.Outlined.ArrowCircleRight" Size="Size.Large"></MudIconButton>
+        </div>
+    </PagerContent>
+</MudTable>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+    RunnerModel runner = new RunnerModel();
+
+    List<ReportModel> trainingCycles = new List<ReportModel>();
+    ReportWeekModel trainingWeek = new ReportWeekModel();
+    List<ReportDataPlannedModel> plannedList = new List<ReportDataPlannedModel>();
+    private List<string> editEvents = new();
+    private string searchString = "";
+    private ReportDataPlannedModel selectedItem = null;
+    private ReportDataPlannedModel reportBeforeEdit;
+    public int weekNum = 0;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        var runnerInfo = runnerData.GetRunnerById(id);
+        runner = runnerInfo;
+        trainingCycles = reportData.GetTrainingCycles(id);
+
+        if (trainingCycles.Count() != 0)
+        {
+            trainingWeek = reportData.GetCurrentWeek(id);
+            weekNum = trainingWeek.Week_Num;
+            plannedList = reportData.GetPlannedReportList(id, weekNum);
+        }
+    }
+
+    public void NextWeekClick()
+    {
+        weekNum = weekNum + 1;
+        plannedList = reportData.GetPlannedReportList(id, weekNum);
+    }
+    public void LastWeekClick()
+    {
+        weekNum = weekNum - 1;
+        if (weekNum > 0)
+        {
+            plannedList = reportData.GetPlannedReportList(id, weekNum);
+        }
+    }
+
+    private void AddEditionEvent(string message)
+    {
+        editEvents.Add(message);
+        StateHasChanged();
+    }
+    private void HandleRowCommit(ReportDataPlannedModel report)
+    {
+        reportData.UpdatePlannedReports(report);
+        StateHasChanged();
+    }
+
+    private void BackupItem(object report)
+    {
+        reportBeforeEdit = new()
+        {
+        };
+
+    }
+    private void ItemHasBeenCommitted(object report)
+    {
+        AddEditionEvent("Izmaiņas saglabātas");
+    }
+}

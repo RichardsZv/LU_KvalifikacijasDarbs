@@ -76,13 +76,9 @@ namespace DataAccessLibrary.Data
         {
             ReportModel a = new ReportModel();
             string sql = @"SELECT top 1 * FROM dbo.Reports WHERE dat_s <= GETDATE() and dat_b>=GETDATE() and runner_id = " + id;
-            a = _db.Query<ReportModel>(sql, "DefaultConnection").ToList()[0]; 
-            
-                return a;
-           
-         
+            a = _db.Query<ReportModel>(sql, "DefaultConnection").ToList()[0];
+            return a;         
         }
-
 
         public ReportWeekModel GetCurrentWeek(string id)
         {
@@ -93,9 +89,6 @@ namespace DataAccessLibrary.Data
             week = _db.Query<ReportWeekModel>(sql, "DefaultConnection").ToList()[0];
             return week; 
         }
-
-
-
 
         public List<ReportDataPlannedModel> GetPlannedReportList(string runnerId, int weeknum)
         {
@@ -113,7 +106,15 @@ namespace DataAccessLibrary.Data
 
         }
 
-
+        public List<CoachReportDataModel> GetCoachReportList(string runnerId, int weeknum)
+        {
+            var p = new DynamicParameters();
+            p.Add("RunnerId", runnerId);
+            p.Add("Week", weeknum);
+            var connstring = "DefaultConnection";
+            return _db.LoadDataSP<CoachReportDataModel, dynamic>("spGetCoachReportData", p, connstring);
+        
+        }
     }
 
 
