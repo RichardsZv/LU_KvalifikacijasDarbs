@@ -99,10 +99,10 @@ namespace DataAccessLibrary.Data
             return _db.LoadDataSP<ReportDataPlannedModel, dynamic>("spGetPlannedReportData", p, connstring);
            
         }
-        public void UpdatePlannedReports(ReportDataPlannedModel reportdata)
+        public void UpdatePlannedReports(ReportDataPlannedModel reportdata, string runnerId)
         {
-            string sql = @"UPDATE dbo.ReportDataPlanned SET plan_description = @Planned WHERE dat = @Date and report_week_id = @ReportWeekId";
-            _db.SaveDataSP(sql, new { Planned = reportdata.Description, Date = reportdata.Dat, reportdata.Report_Week_Id });
+            string sql = @"UPDATE ReportDataPlanned  SET plan_description = @Planned WHERE EXISTS( SELECT null FROM ReportWeek b inner join Reports c on c.Id = b.report_id WHERE b.Id = ReportDataPlanned.report_week_id  and c.runner_id = @RunnerId and ReportDataPlanned.dat = @Date)";
+            _db.SaveDataSP(sql, new { Planned = reportdata.Plan_Description, Date = reportdata.Dat, RunnerId = runnerId });
 
         }
 

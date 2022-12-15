@@ -15,12 +15,12 @@
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
         <MudTh>Diena</MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Description)">Ieplānots</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Plan_Description)">Ieplānots</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
         <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>
-        <MudTd DataLabel="Ieplānots">@context.Description</MudTd>
+        <MudTd DataLabel="Ieplānots">@context.Plan_Description</MudTd>
 
     </RowTemplate>
 
@@ -28,7 +28,7 @@
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
         <MudTd DataLabel="Datums">@context.Dat.DayOfWeek</MudTd>
         <MudTd DataLabel="Ieplānots">
-            <MudTextField @bind-Value="@context.Description" />
+            <MudTextField @bind-Value="@context.Plan_Description" />
         </MudTd>
 
     </RowEditingTemplate>
@@ -91,7 +91,7 @@
     }
     private void HandleRowCommit(ReportDataPlannedModel report)
     {
-        reportData.UpdatePlannedReports(report);
+        reportData.UpdatePlannedReports(report, id);
         StateHasChanged();
     }
 

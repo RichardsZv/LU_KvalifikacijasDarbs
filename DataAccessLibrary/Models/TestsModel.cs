@@ -12,10 +12,9 @@ namespace DataAccessLibrary.Models
         public int Id { get; set; }
         public int RunnerId { get; set; }
         public int CoachId { get; set; }
-        public DateTime? Dat { get; set; }
-        public int Km{ get; set; }
-        public float Pace { get; set; }
+        public DateTime? Dat { get; set; } = DateTime.Now; 
+        public float? Km { get; set; }
+        public TimeSpan? Pace { get; set; } = TimeSpan.Zero;
 
-       
     }
 }

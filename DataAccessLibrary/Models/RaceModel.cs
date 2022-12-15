@@ -10,9 +10,9 @@ namespace DataAccessLibrary.Models
     {
         public int Id { get; set; }
         public int RunnerId { get; set; }
-        public DateTime? Dat { get; set; }
+        public DateTime? Dat { get; set; } = DateTime.Now;
         public string Title { get; set; }
-        public TimeSpan? Result { get; set; }
+        public TimeSpan? Result { get; set; } = TimeSpan.Zero;
         public string Place { get; set; }
         public string Group { get; set; }
         public string Notes { get; set; }

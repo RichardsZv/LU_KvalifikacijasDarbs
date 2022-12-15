@@ -17,11 +17,11 @@
                         <MudCardContent>
                             <MudDatePicker Label="Datums" @bind-Date="@race.Dat" DateFormat="dd.MM.yyyy"></MudDatePicker>
                             <MudTextField Label="Nosaukums" @bind-Value="@race.Title"> </MudTextField>
-                            <MudTimePicker Label="Rezultāts" @bind-Time="@race.Result"> </MudTimePicker>
+                            <MudTextField T="TimeSpan?" Label="Rezultāts" @bind-Value="@race.Result"/> 
                             <MudTextField Label="Vieta" @bind-Value="@race.Place"> </MudTextField>
                             <MudTextField Label="Grupa" @bind-Value="@race.Group"> </MudTextField>
                             <MudTextField Label="Piezīmes" @bind-Value="@race.Notes"> </MudTextField>
-                            <MudNumericField Label="Novērtējums" @bind-Value="@race.Notes"> </MudNumericField>
+                            <MudNumericField Label="Novērtējums" @bind-Value="@race.Evaluation"> </MudNumericField>
                         </MudCardContent>
                     </MudCard>
                 </MudItem>

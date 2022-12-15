@@ -11,6 +11,6 @@ namespace DataAccessLibrary.Models
         public int Id { get; set; }
         public DateTime Dat { get; set; }
         public int Report_Week_Id { get; set; }
-        public string Description { get; set; }
+        public string Plan_Description { get; set; }
     }
 }

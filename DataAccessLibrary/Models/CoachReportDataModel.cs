@@ -13,7 +13,7 @@ namespace DataAccessLibrary.Models
         public int Time_run_min { get; set; } //Laiks Minūtēs
         public int Time_other_min { get; set; } //Laiks Minūtēs
         public string Completed { get; set; }
-        public TimeSpan Pace { get; set; }
+        public TimeSpan? Pace { get; set; } = TimeSpan.Zero;
         public int Pulse { get; set; }
         public int Vert { get; set; }
         public float E { get; set; }

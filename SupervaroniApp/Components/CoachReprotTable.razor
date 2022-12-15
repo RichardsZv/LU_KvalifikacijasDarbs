@@ -14,7 +14,7 @@
                     </ToolBarContent>
                     <HeaderContent>
                         <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
-                        <MudTh>Diena</MudTh>
+                     @*   <MudTh>Diena</MudTh>*@
                         <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Km)">Kilometri</MudTableSortLabel></MudTh>
                         <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Time_run_min)">Laiks</MudTableSortLabel></MudTh>
                         <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Time_other_min)">Laiks (cits)</MudTableSortLabel></MudTh>
@@ -31,13 +31,14 @@
                     </HeaderContent>
                     <RowTemplate >
                         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>
+                         @*   <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>*@
                         <MudTd DataLabel="Kilometri">@context.Km</MudTd>
                         <MudTd DataLabel="Laiks">@context.Time_run_min</MudTd>
                         <MudTd DataLabel="Laiks (cits)">@context.Time_other_min</MudTd>
                         <MudTd DataLabel="Izpilde">@context.Completed</MudTd>
-                        <MudTd DataLabel="Temps">@context.Pace</MudTd>
+                        <MudTd DataLabel="Temps">@context.Pace.Value.ToString("mm\\:ss")</MudTd>
                         <MudTd DataLabel="Pulss">@context.Pulse</MudTd>
+                        <MudTd DataLabel="Vertikāli">@context.Vert</MudTd>
                         <MudTd DataLabel="E">@context.E</MudTd>
                         <MudTd DataLabel="S">@context.S</MudTd>
                         <MudTd DataLabel="R">@context.R</MudTd>
@@ -48,11 +49,48 @@
 
                     <RowEditingTemplate>
                         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-                        <MudTd DataLabel="Diena">@context.Dat.DayOfWeek</MudTd>
+                   @*     <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>*@
                         <MudTd DataLabel="Kilometri">
                             <MudNumericField Format="N2" @bind-Value="@context.Km" />
                         </MudTd>
+                        <MudTd DataLabel="Laiks">
+                            <MudNumericField @bind-Value="@context.Time_run_min" />
+                        </MudTd>
+                        <MudTd DataLabel="Laiks (cits)">
+                            <MudNumericField @bind-Value="@context.Time_other_min" />
+                        </MudTd>
+                        <MudTd DataLabel="Izpilde">
+                            <MudTextField @bind-Value="@context.Completed" />
+                        </MudTd>
+                        <MudTd DataLabel="Temps">
+                            <MudTextField T="TimeSpan?" Format = "mm\:ss" @bind-Value="@context.Pace" />
+                        </MudTd>
+                        <MudTd DataLabel="Pulss">
+                            <MudNumericField  @bind-Value="@context.Pulse" />
+                        </MudTd>
+                        <MudTd DataLabel="Vertikāli">
+                            <MudNumericField  @bind-Value="@context.Vert" />
+                        </MudTd>
+                        <MudTd DataLabel="E">
+                            <MudNumericField Format="N2" @bind-Value="@context.E" />
+                        </MudTd>
+                        <MudTd DataLabel="S">
+                            <MudNumericField Format="N2" @bind-Value="@context.S" />
+                        </MudTd>
+                        <MudTd DataLabel="R">
+                            <MudNumericField Format="N2" @bind-Value="@context.R" />
+                        </MudTd>
+                        <MudTd DataLabel="I">
+                            <MudNumericField Format="N2" @bind-Value="@context.I" />
+                        </MudTd>
+                        <MudTd DataLabel="T">
+                            <MudNumericField Format="N2" @bind-Value="@context.T" />
+                        </MudTd>
+                        <MudTd DataLabel="M">
+                            <MudNumericField Format="N2" @bind-Value="@context.M" />
+                        </MudTd>
                     </RowEditingTemplate>
+                    
                    <PagerContent >
                         <div class="d-flex justify-center">
                             <MudIconButton OnClick="LastWeekClick" Icon="@Icons.Outlined.ArrowCircleLeft" Size="Size.Large"></MudIconButton>

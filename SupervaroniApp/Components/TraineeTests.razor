@@ -11,12 +11,12 @@
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Km)">Km</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Pace)">Pace</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Pace.Value.ToString())">Pace</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Datums">@context.Dat.Value.ToShortDateString()</MudTd>
         <MudTd DataLabel="Kilometri">@context.Km</MudTd>
-        <MudTd DataLabel="Pace">@context.Pace</MudTd>
+        <MudTd DataLabel="Pace">@context.Pace.Value.ToString("mm\\:ss")</MudTd>
 
     </RowTemplate>
 </MudTable>
