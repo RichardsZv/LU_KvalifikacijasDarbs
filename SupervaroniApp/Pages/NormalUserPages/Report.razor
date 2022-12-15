@@ -105,9 +105,9 @@
     @*  <MudIconButton Size="@Size.Small" Icon="@Icons.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />*@
 
 </MudTable>
-<MudText>Selected: @selectedItem?.Dat</MudText>
+@*<MudText>Selected: @selectedItem?.Dat</MudText>
 <MudText>Selected: @selectedItem?.Completed</MudText>
-<MudText>Selected: @selectedItem?.Planned</MudText>
+<MudText>Selected: @selectedItem?.Planned</MudText>*@
 
 @code {
     private RunnerModel runner = new RunnerModel();
@@ -165,6 +165,13 @@
     private void HandleRowCommit(RunnerReportDataModel report)
     {
         reportData.UpdateRunnerReportData(report, runner.Id);
+        SnackbarService.Add("Dienasgrāmata saglabāta", Severity.Success, config =>
+              {
+                  config.Onclick = snackbar =>
+                  {
+                      return Task.CompletedTask;
+                  };
+              });
         StateHasChanged();
     }
 

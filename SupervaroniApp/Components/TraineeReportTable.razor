@@ -1,0 +1,96 @@
+﻿@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@inject IReportData reportData
+@inject IRunnerData runnerData
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+
+
+<MudTable Items="@traineeReportList" Hover="true" ReadOnly="true" Elevation="2" Class="my-6 py-2 py-4">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Treniņu dienasgrāmata</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
+        <MudTh>Diena</MudTh>
+    
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>
+      
+    </RowTemplate>
+
+    <PagerContent>
+        <div class="d-flex justify-center">
+            <MudIconButton OnClick="LastWeekClick" Icon="@Icons.Outlined.ArrowCircleLeft" Size="Size.Large"></MudIconButton>
+            <MudIconButton OnClick="NextWeekClick" Icon="@Icons.Outlined.ArrowCircleRight" Size="Size.Large"></MudIconButton>
+        </div>
+    </PagerContent>
+</MudTable>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+    RunnerModel runner = new RunnerModel();
+
+    List<ReportModel> trainingCycles = new List<ReportModel>();
+    ReportWeekModel trainingWeek = new ReportWeekModel();
+
+
+    List<RunnerReportDataModel> traineeReportList = new List<RunnerReportDataModel>();
+ 
+    private string searchString = "";
+    int runnerId = 0; 
+    DateTime? DatS = DateTime.Today.AddDays(-6);
+    DateTime? DatB = DateTime.Today;
+   
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        var runnerInfo = runnerData.GetRunnerById(id);
+        runnerId = runnerInfo.Id;
+        trainingCycles = reportData.GetTrainingCycles(id);
+        if (trainingCycles.Count() != 0)
+        {
+            trainingWeek = reportData.GetCurrentWeek(id);
+            traineeReportList = reportData.GetRunnerReportData(runnerId, trainingWeek.Dat_S, trainingWeek.Dat_B);
+        }
+        else{
+            traineeReportList = reportData.GetRunnerReportData(runnerId, DatS, DatB);
+        }
+    }
+
+    public void NextWeekClick()
+    {
+        trainingWeek.Dat_S = trainingWeek.Dat_S.AddDays(7);
+        trainingWeek.Dat_B = trainingWeek.Dat_B.AddDays(7);
+        //Pārbaude lai nevar saspaidīt par daudz nedēļas uz priekšu (60 dienas no šodienas)
+        if (trainingWeek.Dat_S > DatS?.AddDays(60) || trainingWeek.Dat_B > DatB?.AddDays(60)){
+            return; 
+        }
+        else{
+            traineeReportList = reportData.GetRunnerReportData(runnerId, trainingWeek.Dat_S, trainingWeek.Dat_B);
+        }
+       
+    }
+    public void LastWeekClick()
+    {
+        trainingWeek.Dat_S = trainingWeek.Dat_S.AddDays(-7);
+        trainingWeek.Dat_B = trainingWeek.Dat_B.AddDays(-7);
+        if (trainingWeek.Dat_S < DatS?.AddDays(-60) || trainingWeek.Dat_B < DatB?.AddDays(-60))
+        {
+            return;
+        }
+        else{
+            traineeReportList = reportData.GetRunnerReportData(runnerId, trainingWeek.Dat_S, trainingWeek.Dat_B);
+        }
+        
+    }
+
+   
+
+  }

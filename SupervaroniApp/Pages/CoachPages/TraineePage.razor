@@ -63,6 +63,17 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
+    @*Audzēkņa dienasgrāmata*@
+    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+        <MudCard>
+            <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
+                <MudText Typo="Typo.h6" Color="Color.Default">Audzēkņa dienasgrāmata</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <TraineeReportTable id="@id" />
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
     @*Atskaite - Plāns*@
     <MudItem xs="12" sm="12" md="12" lg="4" xl="5" xxl="5">
         <MudCard>
@@ -87,17 +98,8 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
-     @*Dienasgrāmata*@
-    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
-        <MudCard>
-            <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
-                <MudText Typo="Typo.h6" Color="Color.Default">Audzēkņa dienasgrāmata</MudText>
-            </MudCardHeader>
-            <MudCardContent>
-
-            </MudCardContent>
-        </MudCard>
-    </MudItem>
+     
+    
 </MudGrid>
 
 
@@ -127,11 +129,10 @@
         parameters.Add("runnerid", runner.Id); 
         var options = new DialogOptions()
         {
-
                 CloseOnEscapeKey = true,
                 MaxWidth = MaxWidth.Medium,
                 FullWidth = true,
-            };
+        };
         if (runner != null)
         {
             DialogService.Show<CreateTrainingCycleDialog>("Izveidot jaunu treniņu ciklu", parameters, options);
