@@ -12,21 +12,25 @@
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
 @inject IDialogService DialogService
-<link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
-
-
+<link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet"/>
 
 
 <MudButton Color="Color.Primary" @onclick="OpenDialog">Pievienot jaunu audzēkni</MudButton>
 <MudGrid Justify="Justify.FlexStart">
     @foreach (var runner in CoachRunners)
     {
-        <MudItem xs="12" sm="12" md="4" lg="4" xl="3" xxl="2" Class="d-flex flex-column">
+
+        <MudItem xs="12" sm="12" md="4" lg="4" xl="3" xxl="2" Class="d-flex flex-column mud-card" >
+          
             <MudBadge Dot="true" Color="@color" Overlap="true" Origin="Origin.TopRight">
-                <MudCard Class="d-flex flex-column justify-center mud-width-full pt-8 " Style="min-width:fit-content;" @onclick="@(() => OpenRunner(@runner.Id))">
+               <div>
+
+              
+                    <MudCard Class="d-flex flex-column justify-center mud-width-full pt-8 hc" Style="min-width:fit-content;"  @onclick="@(() => OpenRunner(@runner.Id))">
+                    
                     <MudCardHeader Class="d-flex justify-content-center">
                         <CardHeaderAvatar>
-                            <MudAvatar>T</MudAvatar>
+                            <MudAvatar></MudAvatar>
                         </CardHeaderAvatar>
                     </MudCardHeader>
                     <MudDivider />
@@ -46,9 +50,19 @@
                         </MudPopover>
                     </MudCardActions>
                 </MudCard>
+                </div>
             </MudBadge>
+          
         </MudItem>
+       
     }
+    <MudItem xs="12" sm="12" md="4" lg="4" xl="3" xxl="2" Class="d-flex flex-column table-hover hc" dropzone="true">
+        <MudCard>
+
+        </MudCard>
+       
+    </MudItem>
+    <MudText>@elevation</MudText>
 </MudGrid>
 
 
@@ -56,6 +70,8 @@
 
     List<RunnerModel> runners = new List<RunnerModel>();
     List<RunnerModel> CoachRunners = new List<RunnerModel>();
+    public int elevation {get; set; } = 2; 
+
     protected async override Task OnInitializedAsync()
     {
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
@@ -64,6 +80,7 @@
         if(user != null){
             CoachRunners = runnerData.GetCoachRunners(user.Name);
         }
+        elevation = 2; 
 
     }
 
@@ -79,7 +96,7 @@
         {
             DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
         }
-       
+
     }
 
     public Color color { get; set; } = Color.Info;
@@ -97,4 +114,9 @@
     {
         NavigationManager.NavigateTo("supervaronis/" + id);
     }
+    public void Elevate(){
+        elevation = 4; 
+        StateHasChanged(); 
+    }
+
 }
