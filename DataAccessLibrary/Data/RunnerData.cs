@@ -26,7 +26,11 @@ namespace DataAccessLibrary.Data
             string sql = @"SELECT Id, email, birthdate, height, weight, hr, hr_max, gender, start_info, username, firstname, lastname, strava_link from dbo.Users where username = '" + uname+"'";
             //runner = _db.LoadData<RunnerModel, dynamic>(sql, new { })[0];
             var a = _db.Query<RunnerModel>(sql, "DefaultConnection");
+        
+
             runner = a.FirstOrDefault();
+
+            
             return runner; 
         }
         /// <summary>
@@ -95,8 +99,8 @@ namespace DataAccessLibrary.Data
         {
             RunnerModel runner = new RunnerModel();
             string sql = @"SELECT * FROM dbo.Users WHERE Id =" + id;
-            var a = _db.Query<RunnerModel>(sql, "DefaultConnection");
-            return a.FirstOrDefault();
+            var a = _db.Query<RunnerModel>(sql, "DefaultConnection").ToList()[0];
+            return a;
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿@using DataAccessLibrary.Data
 @using DataAccessLibrary.Models
+@using System.Globalization
 @inject IReportData reportData
 @inject IRunnerData runnerData
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
@@ -19,14 +20,14 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-        <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>
+        <MudTd DataLabel="Diena">@context.Dat.ToString("ddd", CultureInfo.CreateSpecificCulture("lv"))</MudTd>
         <MudTd DataLabel="Ieplānots">@context.Plan_Description</MudTd>
 
     </RowTemplate>
 
     <RowEditingTemplate>
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-        <MudTd DataLabel="Datums">@context.Dat.DayOfWeek</MudTd>
+        <MudTd DataLabel="Datums">@context.Dat.ToString("ddd", CultureInfo.CreateSpecificCulture("lv"))</MudTd>
         <MudTd DataLabel="Ieplānots">
             <MudTextField @bind-Value="@context.Plan_Description" />
         </MudTd>

@@ -1,5 +1,6 @@
 ﻿@using DataAccessLibrary.Data
 @using DataAccessLibrary.Models
+@using System.Globalization
 @inject IReportData reportData
 @inject IRunnerData runnerData
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
@@ -13,7 +14,7 @@
     </ToolBarContent>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Dat.DayOfWeek.ToString())">Diena</MudTableSortLabel></MudTh>
+        <MudTh>Diena</MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Planned)">Plāns</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Completed)">Izpildīts</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Km)">Kilometri</MudTableSortLabel></MudTh>
@@ -23,7 +24,7 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-        <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>
+        <MudTd DataLabel="Diena">@context.Dat.ToString("ddd", CultureInfo.CreateSpecificCulture("lv"))</MudTd>
         <MudTd DataLabel="Plāns">@context.Planned</MudTd>
         <MudTd DataLabel="Izpildīts">@context.Completed</MudTd>
         <MudTd DataLabel="Kilometri">@context.Km</MudTd>

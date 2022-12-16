@@ -99,11 +99,6 @@
     <PagerContent>
         <MudTablePager />
     </PagerContent>
-
-
-
-    @*  <MudIconButton Size="@Size.Small" Icon="@Icons.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />*@
-
 </MudTable>
 @*<MudText>Selected: @selectedItem?.Dat</MudText>
 <MudText>Selected: @selectedItem?.Completed</MudText>
@@ -133,7 +128,7 @@
     async Task CreateReport()
     {
         _processing = true;
-        await Task.Delay(2000);
+        await Task.Delay(100);
         _processing = false;
     }
 

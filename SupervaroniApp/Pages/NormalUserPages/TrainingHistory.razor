@@ -1,5 +1,109 @@
-﻿<h3>TrainingHistory</h3>
+﻿@page "/vesture"
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@using System.ComponentModel.DataAnnotations
+@using DataAccessLibrary
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using SupervaroniApp.Components
+@using System.Globalization
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject IRunnerData runnerData
+@inject IReportData reportData
+@inject IDialogService DialogService
+@inject ISnackbar SnackbarService
 
-@code {
+
+<MudTable Items="@reportList" Hover="true" ReadOnly="true" Elevation="2" Class="my-6 py-2 py-4" GroupBy="@_groupDefinition" Height="70vh" FixedHeader="true">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Treniņu vēsture</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Meklēt" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Planned)">Ieplānots</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Completed)">Izpildīts</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Time)">Laiks</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Km)">Distance (KM)</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Pulse)">Pulss</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Notes)">Piezīmes</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <GroupHeaderTemplate>
+        <MudTh Class="mud-table-cell-custom-group" colspan="7">@($"{context.GroupName}: {context.Key}")</MudTh>
+    </GroupHeaderTemplate>
+    <RowTemplate>
+        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Ieplānots">@context.Planned</MudTd>
+        <MudTd DataLabel="Izpildīts">@context.Completed</MudTd>
+        <MudTd DataLabel="Laiks">@context.Time</MudTd>
+        <MudTd DataLabel="Distance">@context.Km</MudTd>
+        <MudTd DataLabel="Pulss">@context.Pulse</MudTd>
+        <MudTd DataLabel="Piezīmes">@context.Notes</MudTd>
+    </RowTemplate>
+    <GroupFooterTemplate>
+            <MudTd>
+                <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                    Kopā: 
+                </MudText>
+            </MudTd>
+
+            <MudTd/> 
+            <MudTd/>
+            <MudTd DataLabel="Laiks"> 
+                <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                    @context.Items.Sum((e) => e.Time.TotalHours).ToString("N2") h
+                </MudText>
+            </MudTd>
+            <MudTd DataLabel="Laiks">
+                <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                    @context.Items.Sum((e) => e.Km) km
+                </MudText>
+                
+            </MudTd>
+            <MudTd DataLabel="Laiks"> 
+                <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                    @context.Items.Average((e) => e.Pulse > 0 ? e.Pulse : null) bpm
+                </MudText>
+            </MudTd>
+            <MudTd/>
+  
+    </GroupFooterTemplate>
+
+</MudTable>
+
+    @code {
+    private RunnerModel runner = new RunnerModel();
+    List<RunnerReportDataModel> reportList = new List<RunnerReportDataModel>();
+
+    private string searchString = "";
+
+    //Ielādējot lapu ielasam datus
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User.Identity;
+        runner = runnerData.GetCurrentRunner(user.Name);
+        reportList = reportData.GetRunnerHistoricData(runner.Id);
+    }
+    //select * from RunnerReportData where runner_id =
+
+    private TableGroupDefinition<RunnerReportDataModel> _groupDefinition = new()
+        {
+            GroupName = "Gads",
+            Indentation = true,
+            Expandable = true,
+            IsInitiallyExpanded = false,
+            Selector = (e) => e.Dat.Year,
+            InnerGroup = new TableGroupDefinition<RunnerReportDataModel>()
+            {
+                GroupName = "Mēnesis",
+                Expandable = true,
+                IsInitiallyExpanded = false,
+                Indentation = true,
+                Selector = (e) => e.Dat.ToString("MMMM", CultureInfo.CreateSpecificCulture("Lv"))
+            }
+        };
 
 }

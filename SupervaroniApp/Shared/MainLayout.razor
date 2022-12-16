@@ -89,7 +89,6 @@
         };
           
     private bool _isDarkMode;
-    string icon = "";
   
     private MudThemeProvider _mudThemeProvider;
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -99,13 +98,6 @@
         {
             _isDarkMode = await _mudThemeProvider.GetSystemPreference();
             StateHasChanged();
-        }
-        if (_isDarkMode)
-        {
-            icon = "fa-solid fa-moon";
-        }
-        else{
-            icon = "fa-solid fa-sun"; 
         }
     }
 
