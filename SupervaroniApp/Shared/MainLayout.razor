@@ -15,9 +15,11 @@
         <MudSpacer />
         <AuthorizeView>
             <Authorized>
-                <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Tertiary" Class="ma-4" T="bool"/>
+                @*<MudSwitch @bind-Checked="@_isDarkMode" T="bool" Color="Color.Tertiary" Class="ma-4"  ThumbIcon="@Icons.Filled.Mail" />*@
                 @*<MudLink Color="Color.Surface" Underline="Underline.None" Href="Identity/Account/Manage">Sveiks, @context.User.Identity?.Name!</MudLink>*@
-
+                <MudToggleIconButton @bind-Toggled="@_isDarkMode"
+                                     Icon="fa-sharp fa-solid fa-moon" Color="@Color.Dark" Title="Off"
+                                     ToggledIcon="fa-sharp fa-solid fa-sun" ToggledColor="@Color.Warning" ToggledTitle="On" Class="ma-4" />
                
                 <form method="post" action="Identity/Account/LogOut">
                     <button type="submit" class="nav-link btn btn-link btn-outline-danger" style="color:white">Iziet</button>
@@ -87,13 +89,23 @@
         };
           
     private bool _isDarkMode;
+    string icon = "";
+  
     private MudThemeProvider _mudThemeProvider;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        
         if (firstRender)
         {
             _isDarkMode = await _mudThemeProvider.GetSystemPreference();
             StateHasChanged();
+        }
+        if (_isDarkMode)
+        {
+            icon = "fa-solid fa-moon";
+        }
+        else{
+            icon = "fa-solid fa-sun"; 
         }
     }
 

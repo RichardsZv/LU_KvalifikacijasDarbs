@@ -12,13 +12,24 @@
         <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortBy="new Func<ReportDataPlannedModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
-        <MudTh>Diena</MudTh>
-    
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Dat.DayOfWeek.ToString())">Diena</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Planned)">Plāns</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Completed)">Izpildīts</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Km)">Kilometri</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Time)">Laiks</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Pulse)">Pulss</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Notes)">Piezīmes</MudTableSortLabel></MudTh> 
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
         <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>
+        <MudTd DataLabel="Plāns">@context.Planned</MudTd>
+        <MudTd DataLabel="Izpildīts">@context.Completed</MudTd>
+        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
+        <MudTd DataLabel="Laiks">@context.Time</MudTd>
+        <MudTd DataLabel="Pulss">@context.Pulse</MudTd>
+        <MudTd DataLabel="Piezīmes">@context.Notes</MudTd>
       
     </RowTemplate>
 
