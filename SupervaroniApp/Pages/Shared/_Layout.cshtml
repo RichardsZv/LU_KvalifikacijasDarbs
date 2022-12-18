@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SupervaroniApp</title>
+    <title>@ViewData["Title"] - Supervaroņu treniņi</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/Identity/lib/bootstrap/dist/css/bootstrap.css" />
@@ -19,14 +19,16 @@
               asp-fallback-href="~/Identity/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/Identity/css/site.css" asp-append-version="true" />
-        <link rel="stylesheet" href="/Pages/CoachPages/UsersPage.razor.css"
+
     </environment>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+ 
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" href="~/">SupervaroniApp</a>
+                <a class="navbar-brand" href="~/">Supervaroņu treniņi</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -51,14 +53,14 @@
     </header>
 
     <div class="container">
-        <partial name="_CookieConsentPartial" optional />
+   
         <main role="main" class="pb-1">
             @RenderBody()
         </main>
     </div>
-    <footer class="footer border-top pl-3 text-muted">
-        <div class="container">
-        &copy; 2022 - SupervaroniApp
+    <footer class="footer border-top text-muted">
+        <div class="d-flex justify-content-center">
+            <p>&copy; 2023 - Ričards Zvagulis</p>
             @{
                 var foundPrivacy = Url.Page("/Privacy", new { area = "" });
             }
@@ -66,7 +68,9 @@
             {
                 <a asp-area="" asp-page="/Privacy">Privacy</a>
             }
+
         </div>
+
     </footer>
 
     <environment include="Development">

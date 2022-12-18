@@ -115,13 +115,29 @@
     //private HashSet<ReportDataModel> selectedItems = new HashSet<ReportDataModel>();
     List<RunnerReportDataModel> reportList = new List<RunnerReportDataModel>();
 
+    List<ReportModel> trainingCycles = new List<ReportModel>();
+    ReportModel trainingCycle = new ReportModel();
+    ReportWeekModel trainingWeek = new ReportWeekModel();
+
+
     //Ielādējot lapu ielasam datus
     protected async override Task OnInitializedAsync()
     {
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var user = authstate.User.Identity;
         runner = runnerData.GetCurrentRunner(user.Name);
+
+        //Ja treneris izvedojis treniņu ciklu, tad sākimā atlasam pēc treniņu cikla datumiem
+        trainingWeek = reportData?.GetCurrentWeek(runner.Id.ToString());
+        if (trainingWeek != null)
+        {
+            DatS = trainingWeek.Dat_S;
+            DatB = trainingWeek.Dat_B;
+        }
         reportList = reportData.GetRunnerReportData(runner.Id, DatS, DatB);
+
+        
+        
     }
     //Pogas ielādes animācija
     private bool _processing = false;

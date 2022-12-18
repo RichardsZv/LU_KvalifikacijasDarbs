@@ -9,6 +9,13 @@ using static DataAccessLibrary.Models.RunnerModel;
 
 namespace DataAccessLibrary.Models
 {
+    public enum Gender
+    {
+        Vīrietis,
+        Sievietie,
+        Cits,
+    }
+
     public class RunnerModel
     {
         [Key]
@@ -18,14 +25,8 @@ namespace DataAccessLibrary.Models
         public int Height { get; set; } 
         public int Weight { get; set; } 
         public int Hr{ get; set; } 
-        public int Hr_max { get; set; } 
-        public enum Gender 
-        {
-            Vīrietis,
-            Sievietie,
-            Cits,
-        }
-        public Gender enumValue { get; set; }
+        public int Hr_max { get; set; }
+        public Gender gender { get; set; }
         public string Start_info { get; set; }
         public string Username{ get; set; }
         //public string AspUserId{ get; set; }    
@@ -34,5 +35,6 @@ namespace DataAccessLibrary.Models
         public string Strava_Link { get; set; }
         public string Garmin_link { get; set; }
     }
-    
+   
+
 }

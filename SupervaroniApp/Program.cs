@@ -80,6 +80,7 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.ShowTransitionDuration = 500;
     config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
 });
+
 //Interfeisi 
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IRunnerData, RunnerData>();
@@ -87,6 +88,17 @@ builder.Services.AddSingleton<IReportData, ReportData>();
 builder.Services.AddSingleton<IDialogService, DialogService>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllersWithViews();
+
+//GDPR
+
+    builder.Services.Configure<CookiePolicyOptions>(options =>
+    {
+        options.CheckConsentNeeded = context => true;
+        options.MinimumSameSitePolicy = SameSiteMode.None;
+    });
+
+
+
 
 var app = builder.Build();
 

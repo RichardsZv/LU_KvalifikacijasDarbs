@@ -5,6 +5,7 @@
 @using DataAccessLibrary.Data
 @using DataAccessLibrary.Models
 @using System.Security.Claims
+
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
 
@@ -29,11 +30,10 @@
                         <MudTextField Label="Uzvārds" @bind-Value="runner.Lastname"  />
                         <MudTextField Label="E-pasts" @bind-Value="runner.Email"  />
                         <MudDatePicker Label="Dzimšanas datums" @bind-Date="runner.Birthdate" />
-                        <MudSelect T="RunnerModel.Gender" Label="Dzimums" @bind-Value="runner.enumValue">
-                             @foreach (RunnerModel.Gender item in Enum.GetValues(typeof(RunnerModel.Gender)))
-                                {
-                                    <MudSelectItem Value="@item">@item</MudSelectItem>
-                                }
+                        <MudSelect T="Gender" Label="Dzimums" @bind-Value="runner.gender" >
+                            <MudSelectItem Value="@Gender.Vīrietis"></MudSelectItem>
+                            <MudSelectItem Value="@Gender.Sievietie"></MudSelectItem>
+                            <MudSelectItem Value="@Gender.Cits"></MudSelectItem>
                         </MudSelect>
                         <MudNumericField Label="Augums" @bind-Value="runner.Height" />
                         <MudNumericField Label="Svars" @bind-Value="runner.Weight"  />
@@ -41,8 +41,6 @@
                         <MudNumericField Label="Maksimālais pulss" @bind-Value="runner.Hr_max"  />
                         <MudTextField Label="Strava links" @bind-Value="runner.Strava_Link" />
                         <MudTextField Label="Garmin links" @bind-Value="runner.Garmin_link" />
-                    
-                    
                     </MudCardContent>
                     <MudCardActions>
                         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto ">Saglabāt</MudButton>
@@ -57,7 +55,7 @@
 @code {
     RunnerModel runner = new RunnerModel(); 
     public IDictionary<string, string> AuthProperties { get; set; }
-
+    Gender selectedGender; 
     private string Avatar;
     //private string Firstname; 
 

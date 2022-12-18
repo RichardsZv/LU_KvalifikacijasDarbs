@@ -11,6 +11,7 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
+@inject IReportData reportData
 @inject IDialogService DialogService
 <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet"/>
 
@@ -56,22 +57,19 @@
         </MudItem>
        
     }
-    <MudItem xs="12" sm="12" md="4" lg="4" xl="3" xxl="2" Class="d-flex flex-column table-hover hc" dropzone="true">
-        <MudCard>
 
-        </MudCard>
-       
-    </MudItem>
-    <MudText>@elevation</MudText>
+
 </MudGrid>
 
 
 @code {
 
     List<RunnerModel> runners = new List<RunnerModel>();
+    ReportWeekModel trainingWeek = new ReportWeekModel();
     List<RunnerModel> CoachRunners = new List<RunnerModel>();
-    public int elevation {get; set; } = 2; 
-
+    List<ReportModel> trainingCycles = new List<ReportModel>();
+    public int x {get; set; } = 0; 
+    public Color color { get; set; } = Color.Info;
     protected async override Task OnInitializedAsync()
     {
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
@@ -80,10 +78,8 @@
         if(user != null){
             CoachRunners = runnerData.GetCoachRunners(user.Name);
         }
-        elevation = 2; 
-
     }
-
+  
     private void OpenDialog()
     {
         var options = new DialogOptions()
@@ -99,7 +95,7 @@
 
     }
 
-    public Color color { get; set; } = Color.Info;
+    
 
     public bool _isOpen;
 
@@ -114,9 +110,6 @@
     {
         NavigationManager.NavigateTo("supervaronis/" + id);
     }
-    public void Elevate(){
-        elevation = 4; 
-        StateHasChanged(); 
-    }
+
 
 }

@@ -107,9 +107,17 @@ namespace DataAccessLibrary.Data
             ReportWeekModel week = new ReportWeekModel();
             string connectionString = _config.GetConnectionString("DefaultConnection");
             string sql = @"SELECT *, dbo.getMaxWeekNum(b.report_id) week_num_max FROM dbo.Reports a inner join ReportWeek b on a.Id = b.report_id WHERE b.dat_s <= GETDATE() and b.dat_b >= GETDATE() and runner_id = " + id;
-
-            week = _db.Query<ReportWeekModel>(sql, "DefaultConnection").ToList()[0];
-            return week; 
+            if (sql != null)
+            {
+                week = _db?.Query<ReportWeekModel>(sql, "DefaultConnection").FirstOrDefault();
+                return week;
+            }
+            else
+            {
+                return null;
+            } 
+          
+       
         }
         /// <summary>
         /// Funkcija padod parametrus procedūrai, kas iegūst datus par plānotajiem treniņiem
@@ -145,6 +153,8 @@ namespace DataAccessLibrary.Data
             return _db.LoadDataSP<CoachReportDataModel, dynamic>("spGetCoachReportData", p, connstring);
         
         }
+
+
     }
 
 
