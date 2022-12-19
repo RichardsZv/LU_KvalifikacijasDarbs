@@ -57,6 +57,7 @@
                         <MudExpansionPanel Text="@tc.Title">
                         <MudText>Sākuma datums: @tc.Dat_S.Value.ToShortDateString()</MudText>
                         <MudText>Beigu datums: @tc.Dat_B.Value.ToShortDateString()</MudText>
+                        <MudIconButton OnClick="@(()=> HandleDeleteCycleClick(tc.Id))" Color="@Color.Error" Icon="@Icons.Filled.Delete" Title="Dzēst treniņu ciklu"></MudIconButton>
                       </MudExpansionPanel>
                   }
                 </MudExpansionPanels>
@@ -124,18 +125,27 @@
         _loading = false; 
     }
 
-    public void OnCreateCycleClick(){
+    public void OnCreateCycleClick()
+    {
         var parameters = new DialogParameters();
-        parameters.Add("runnerid", runner.Id); 
+        parameters.Add("runnerid", runner.Id);
         var options = new DialogOptions()
-        {
+            {
                 CloseOnEscapeKey = true,
                 MaxWidth = MaxWidth.Medium,
                 FullWidth = true,
-        };
+            };
         if (runner != null)
         {
             DialogService.Show<CreateTrainingCycleDialog>("Izveidot jaunu treniņu ciklu", parameters, options);
         }
+    }
+    
+    public void HandleDeleteCycleClick(int cycle_id){
+        if(cycle_id != null){
+            reportData.DeleteCycle(runner.Id.ToString(), cycle_id);
+            trainingCycles = reportData.GetTrainingCycles(id); 
+        }
+        StateHasChanged(); 
     }
 }

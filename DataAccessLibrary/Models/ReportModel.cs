@@ -9,7 +9,6 @@ namespace DataAccessLibrary.Models
     public class ReportModel
     {
         public int Id { get; set; }
-       
         public int RunnerId { get; set; }
         public int CoachId { get; set; }
         public string Title { get; set; }

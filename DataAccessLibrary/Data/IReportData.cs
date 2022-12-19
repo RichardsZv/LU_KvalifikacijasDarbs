@@ -8,6 +8,7 @@ namespace DataAccessLibrary.Data
         List<RunnerReportDataModel> GetRunnerHistoricData(int runnerId); 
         void UpdateRunnerReportData(RunnerReportDataModel reportdata, int runnerId);
         public List<ReportModel> CreateTrainingCycle(ReportModel trainingCylce);
+        void DeleteCycle(string runner_id, int cycle_id); 
         List<ReportModel> GetTrainingCycles(string id);
         ReportModel GetTrainingCycle(string id);
         ReportWeekModel GetCurrentWeek(string id);

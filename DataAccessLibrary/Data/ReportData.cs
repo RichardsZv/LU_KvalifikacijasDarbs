@@ -75,6 +75,14 @@ namespace DataAccessLibrary.Data
             return _db.LoadDataSP<ReportModel, dynamic>("spCreateTrainingCycle", p, connstring);
 
         }
+        /// <summary>
+        /// Funkcija izvēlētā treniņu cikla izdzēšanai
+        /// </summary>
+        public void DeleteCycle(string runner_id, int cycle_id)
+        {
+            string sql = @"DELETE FROM Reports WHERE runner_id = " + runner_id + " and Id = " + cycle_id;
+            _db.Query<ReportModel>(sql, "DefaultConnection").ToList();
+        }
 
         /// <summary>
         /// Funkcija, kas iegūst audzēkņa treniņu ciklus, treniņu ciklu attēlošanai trenerim
@@ -83,7 +91,7 @@ namespace DataAccessLibrary.Data
         public List<ReportModel> GetTrainingCycles(string id)
         {
             List<ReportModel> a = new List<ReportModel>();
-            string sql = @"SELECT runner_id, coach_id, title, dat_s, dat_b FROM dbo.Reports WHERE runner_id = " + id + " ORDER BY dat_s desc"; 
+            string sql = @"SELECT id, runner_id, coach_id, title, dat_s, dat_b FROM dbo.Reports WHERE runner_id = " + id + " ORDER BY dat_s desc"; 
             a = _db.Query<ReportModel>(sql, "DefaultConnection").ToList();
             return a;
         }
