@@ -10,13 +10,17 @@ namespace DataAccessLibrary.Data
         public void SaveRunnerToCoach(int Id, string uname);
         public List<RunnerModel> GetCoachRunners(string uname);
         public RunnerModel GetRunnerById(string id);
-        public void AddTest(TestsModel test); 
+        public void AddTest(TestsModel test);
+        void DeleteTest(string runner_id, int test_Id); 
         public List<TestsModel> GetTests(string runner_id);
         public void AddRace(RaceModel race);
+        void DeleteRace(string runner_id, int race_id); 
         public List<RaceModel> GetRaces(string runner_id);
         public void AddInjury(InjuryModel injury);
+        void DeleteInjury(string runner_id, int pb_id); 
         public List<InjuryModel> GetInjuries(string runner_id);
         public void AddPersonalBest(PersonalBestsModel pb);
+        void DeletePb(string runner_id, int pb_id); 
         public List<PersonalBestsModel> GetPersonalBests(string runner_id); 
 
     }

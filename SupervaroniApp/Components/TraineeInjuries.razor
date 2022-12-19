@@ -5,9 +5,28 @@
 @inject IRunnerData runnerData
 @inject IDialogService DialogService
 
+<style>
+
+.selected {
+    background-color: #1E88E5 !important;
+}
+
+.selected > td {
+    color: white !important;
+}
+
+.selected > td .mud-input {
+    color: white !important;
+}
+
+</style>
+
+
 <MudButton OnClick="@AddInjury" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
-<MudIconButton OnClick="Reload" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
-<MudTable Items="@injuries" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By">
+<MudIconButton OnClick="Reload" Color="@Color.Info" Icon="@Icons.Filled.RotateRight"></MudIconButton>
+<MudIconButton OnClick="HandleDeleteInjuryClick" Color="@Color.Error" Icon="@Icons.Filled.Delete" Title="Dzēst izvēlēto"></MudIconButton>
+
+<MudTable Items="@injuries" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By" @bind-SelectedItem="@selectedItem" RowClassFunc="@SelectedRowClassFunc" T="InjuryModel">
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<InjuryModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<InjuryModel, object>(x=>x.Description)">Apraksts</MudTableSortLabel></MudTh>
@@ -24,6 +43,10 @@
     List<InjuryModel> injuries = new List<InjuryModel>();
     private bool _loading = true;
     RunnerModel runner = new RunnerModel();
+
+    private List<string> clickedEvents = new();
+    private InjuryModel selectedItem = null;
+    private int selectedRowNumber = -1;
 
     protected async override Task OnInitializedAsync()
     {
@@ -56,4 +79,31 @@
         _loading = false;
     }
 
+    private string SelectedRowClassFunc(InjuryModel test, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber)
+        {
+            return string.Empty;
+        }
+        else if (selectedItem != null && selectedItem.Equals(test))
+        {
+            selectedRowNumber = rowNumber;
+            clickedEvents.Add($"Selected Row: {rowNumber}");
+            return "selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
+    private void HandleDeleteInjuryClick()
+    {
+        if (selectedItem != null)
+        {
+            runnerData.DeleteInjury(runner.Id.ToString(), selectedItem.Id);
+            injuries = runnerData.GetInjuries(id);
+        }
+        StateHasChanged();
+    }
 }

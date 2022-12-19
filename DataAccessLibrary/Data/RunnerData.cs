@@ -123,6 +123,17 @@ namespace DataAccessLibrary.Data
             var a = _db.Query<TestsModel>(sql, "DefaultConnection").ToList();
             return a;
         }
+        /// <summary>
+        /// Funkcija izvēlētā testa izdēšānai
+        /// </summary>
+        public void DeleteTest(string runner_id, int test_Id)
+        {
+
+            string sql = @"DELETE FROM Tests WHERE runner_id = " + runner_id + " and Id = " + test_Id;
+            _db.Query<TestsModel>(sql, "DefaultConnection").ToList();
+            
+        }
+
 
         /// <summary>
         /// Funkcija sacensību pievienošanai audzēknim
@@ -133,6 +144,15 @@ namespace DataAccessLibrary.Data
             _db.SaveDataSP(sql, new { RunnerId = race.RunnerId, Dat = race.Dat, Title = race.Title, Result = race.Result, Place = race.Place, Group = race.Group, Notes = race.Notes, Evaluation = race.Evaluation });
 
         }
+        /// <summary>
+        /// Funkcija izvēlētās sacīkstes izdzēšanai
+        /// </summary>
+        public void DeleteRace(string runner_id, int race_id)
+        {
+            string sql = @"DELETE FROM Races WHERE runner_id = " + runner_id + " and Id = " + race_id;
+            _db.Query<RaceModel>(sql, "DefaultConnection").ToList();
+        }
+
         /// <summary>
         /// Funkcija audzēķņa sacensību iegūšanai
         /// </summary>
@@ -155,6 +175,15 @@ namespace DataAccessLibrary.Data
 
         }
         /// <summary>
+        /// Funkcija izvēlētās sacīkstes izdzēšanai
+        /// </summary>
+        public void DeleteInjury(string runner_id, int pb_id)
+        {
+            string sql = @"DELETE FROM Injuries WHERE runner_id = " + runner_id + " and Id = " + pb_id;
+            _db.Query<InjuryModel>(sql, "DefaultConnection").ToList();
+        }
+
+        /// <summary>
         /// Funkcija audzēķņa traumu iegūšanai
         /// </summary>
         public List<InjuryModel> GetInjuries(string runner_id)
@@ -172,8 +201,16 @@ namespace DataAccessLibrary.Data
         {
             string sql = @"INSERT INTO dbo.Records (runner_id, dat, time, title, description) VALUES (@RunnerId, @Dat, @Time, @Title, @Description)";
             _db.SaveDataSP(sql, new { RunnerId = pb.RunnerId, Dat = pb.Dat, Time = pb.Time, Title = pb.Title, Description = pb.Description });
-
         }
+        /// <summary>
+        /// Funkcija izvēlētā personīgā rekorda izdēšanai
+        /// </summary>
+        public void DeletePb(string runner_id, int pb_id)
+        {
+            string sql = @"DELETE FROM Records WHERE runner_id = " + runner_id + " and Id = " + pb_id;
+            _db.Query<PersonalBestsModel>(sql, "DefaultConnection").ToList();
+        }
+
         /// <summary>
         /// Funkcija personīgo rekordu iegūšanai
         /// </summary>

@@ -5,9 +5,28 @@
 @inject IRunnerData runnerData
 @inject IDialogService DialogService
 
+<style>
+
+.selected {
+    background-color: #1E88E5 !important;
+}
+
+.selected > td {
+color: white !important;
+}
+
+.selected > td .mud-input {
+    color: white !important;
+}
+
+</style>
+
+
 <MudButton OnClick="@AddRace" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
-<MudIconButton OnClick="Reload" Color="@Color.Default" Icon="@Icons.Filled.RotateRight"></MudIconButton>
-<MudTable Items="@races" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By" Dense="true">
+<MudIconButton OnClick="Reload" Color="@Color.Info" Icon="@Icons.Filled.RotateRight"></MudIconButton>
+<MudIconButton OnClick="HandleDeleteRaceClick" Color="@Color.Error" Icon="@Icons.Filled.Delete"></MudIconButton>
+
+<MudTable Items="@races" T="RaceModel"  Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By" Dense="true" @bind-SelectedItem="@selectedItem" RowClassFunc="@SelectedRowClassFunc">
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Title)">Nosaukums</MudTableSortLabel></MudTh>
@@ -34,6 +53,10 @@
     List<RaceModel> races = new List<RaceModel>();
     private bool _loading = true;
     RunnerModel runner = new RunnerModel();
+
+    private List<string> clickedEvents = new();
+    private RaceModel selectedItem = null;
+    private int selectedRowNumber = -1;
 
     protected async override Task OnInitializedAsync()
     {
@@ -67,4 +90,31 @@
         _loading = false;
     }
 
+    private string SelectedRowClassFunc(RaceModel race, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber)
+        {
+            return string.Empty;
+        }
+        else if (selectedItem != null && selectedItem.Equals(race))
+        {
+            selectedRowNumber = rowNumber;
+            clickedEvents.Add($"Selected Row: {rowNumber}");
+            return "selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
+    private void HandleDeleteRaceClick()
+    {
+        if (selectedItem != null)
+        {
+            runnerData.DeleteRace(runner.Id.ToString(), selectedItem.Id);
+            races = runnerData.GetRaces(id);
+        }
+        StateHasChanged();
+    }
 }
