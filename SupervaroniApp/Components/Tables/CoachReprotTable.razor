@@ -6,7 +6,7 @@
 
 
 <MudTable Items="@reportDataList" Hover="true" CanCancelEdit="true" SortLabel="Kārtot pēc" CommitEditTooltip="Commit Edit"
-          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4">
+          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4" Dense="true">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Izpilde</MudText>
         <MudSpacer />
@@ -114,10 +114,7 @@
             </MudText>
         </MudTd>
         <MudTd />
-        <MudTd DataLabel="Pace">
-           
-        </MudTd>
-
+        <MudTd DataLabel="Pace"/>
         <MudTd DataLabel="Pulss">
             <MudText Color="Color.Tertiary" Typo="Typo.body2">
                 @reportDataList.Average((e) => e.Pulse > 0 ? e.Pulse : null) bpm

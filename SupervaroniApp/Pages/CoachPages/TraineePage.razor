@@ -18,7 +18,7 @@
 
 <MudGrid>  
     @*Informācija par audzēkni*@
-    <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+    <MudItem xs="12" sm="12" md="12" lg="size1" xl="size1" xxl="size1">
         <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-8" Color="Color.Tertiary" Style="min-height:25vh; ">
             @*Pamatinformācija*@
             <MudTabPanel Text="Audzēkņa informācija">
@@ -43,11 +43,13 @@
             <MudIconButton></MudIconButton>
             
         </MudTabs>
-@*        <MudSlider @bind-Value="size1" Min="1" Max="12" Color="Color.Tertiary" Class="mt-2" > </MudSlider>*@
+        <MudHidden Breakpoint="Breakpoint.MdAndDown" >
+            <MudSlider @bind-Value="size1" Min="1" Max="12" Step="1" Color="Color.Tertiary" TickMarks = "true" Immediate = "false" Class="mt-2"> </MudSlider>
+        </MudHidden>
     </MudItem>
  
     @*Treniņu cikli*@
-    <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+    <MudItem xs="12" sm="12" md="12" lg="size2" xl="size2" xxl="size2">
         <MudCard Elevation="2" Style="min-height: 25vh;">
             <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
                 <MudText Typo="Typo.h6" Color="Color.Default">Treniņu cikli</MudText>
@@ -67,9 +69,12 @@
                 </MudExpansionPanels>
             </MudCardContent>
         </MudCard>
+        <MudHidden Breakpoint="Breakpoint.MdAndDown">
+            <MudSlider @bind-Value="size2" Min="1" Max="12" Step="1" Color="Color.Tertiary" TickMarks="true" Immediate="false" Class="mt-2"> </MudSlider>
+        </MudHidden>
     </MudItem>
     @*Audzēkņa dienasgrāmata*@
-    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+    <MudItem xs="12" sm="12" md="12" lg="size3" xl="size3" xxl="size3">
         <MudCard>
             <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
                 <MudText Typo="Typo.h6" Color="Color.Default">Audzēkņa dienasgrāmata</MudText>
@@ -78,9 +83,12 @@
                 <TraineeReportTable id="@id" />
             </MudCardContent>
         </MudCard>
+        <MudHidden Breakpoint="Breakpoint.MdAndDown">
+            <MudSlider @bind-Value="size3" Min="1" Max="12" Step="1" Color="Color.Tertiary" TickMarks="true" Immediate="false" Class="mt-2"> </MudSlider>
+        </MudHidden>
     </MudItem>
     @*Atskaite - Plāns*@
-    <MudItem xs="12" sm="12" md="12" lg="4" xl="5" xxl="5">
+    <MudItem xs="12" sm="12" md="12" lg="size4" xl="size4" xxl="size4">
         <MudCard>
             <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
                 <MudText Typo="Typo.h6" Color="Color.Default">Treniņu plāns</MudText>
@@ -90,10 +98,13 @@
                 <PlannedReportTable id="@id"/> 
             </MudCardContent>
         </MudCard>
+        <MudHidden Breakpoint="Breakpoint.MdAndDown">
+            <MudSlider @bind-Value="size4" Min="1" Max="12" Step="1" Color="Color.Tertiary" TickMarks="true" Immediate="false" Class="mt-2"> </MudSlider>
+        </MudHidden>
     </MudItem>
 
     @*Atskaite - Realitātē izpildīasi*@
-    <MudItem xs="12" sm="12" md="12" lg="8" xl="7" xxl="7">
+    <MudItem xs="12" sm="12" md="12" lg="size5" xl="size5" xxl="size5">
         <MudCard>
             <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
                 <MudText Typo="Typo.h6" Color="Color.Default">Realitātē</MudText>
@@ -102,6 +113,9 @@
                 <CoachReprotTable id="@id"/>
             </MudCardContent>
         </MudCard>
+        <MudHidden Breakpoint="Breakpoint.MdAndDown">
+            <MudSlider @bind-Value="size5" Min="1" Max="12" Step="1" Color="Color.Tertiary" TickMarks="true" Immediate="false" Class="mt-2"> </MudSlider>
+        </MudHidden>
     </MudItem>
      
     
@@ -120,6 +134,10 @@
     ReportWeekModel trainingWeek = new ReportWeekModel();
 
     public int size1 { get; set; } = 6; 
+    public int size2 { get; set; } = 6; 
+    public int size3 { get; set; } = 12; 
+    public int size4 { get; set; } = 4; 
+    public int size5 { get; set; } = 8; 
 
     protected async override Task OnInitializedAsync()
     {
