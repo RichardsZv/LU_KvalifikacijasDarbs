@@ -159,11 +159,49 @@ namespace DataAccessLibrary.Data
             p.Add("Week", weeknum);
             var connstring = "DefaultConnection";
             return _db.LoadDataSP<CoachReportDataModel, dynamic>("spGetCoachReportData", p, connstring);
-        
+        }
+
+        public void UpdateCoachReport(CoachReportDataModel reportdata, string runnerId)
+        {
+            string sql = @"UPDATE CoachReportData SET km = @Km
+                                , time_run_min = @TimeR
+                                , time_other_min = @TimeO
+                                , completed = @Completed
+                                , pace = @Pace
+                                , pulse = @Pulse
+                                , vert = @Vert
+                                , e = @E
+                                , s = @S
+                                , r = @R
+                                , t = @T
+                                , m = @M
+                                , vdot = @VDOT
+            WHERE EXISTS( 
+                SELECT null FROM ReportWeek b 
+                inner join Reports c on c.Id = b.report_id 
+                WHERE b.Id = CoachReportData.report_week_id and c.runner_id = @RunnerId and CoachReportData.dat = @Date)";
+            _db.SaveDataSP(sql, new
+            {
+                 Date = reportdata.Dat
+                , RunnerId = runnerId
+                , Km = reportdata.Km
+                , TimeR = reportdata.Time_run_min
+                , TimeO = reportdata.Time_other_min
+                , Completed = reportdata.Completed
+                , Pace = reportdata.Pace
+                , Pulse = reportdata.Pulse
+                , Vert = reportdata.Vert
+                , E = reportdata.E
+                , S = reportdata.S
+                , R = reportdata.R
+                , T = reportdata.T
+                , M = reportdata.M
+                , VDOT = reportdata.VDOT
+            });
         }
 
 
-    }
+     }
 
 
 

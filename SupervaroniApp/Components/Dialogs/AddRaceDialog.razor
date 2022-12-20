@@ -22,10 +22,7 @@
                             <MudTextField Label="Grupa" @bind-Value="@race.Group" For="@(() => race.Group)"> </MudTextField>
                             <MudTextField Label="Piezīmes" @bind-Value="@race.Notes" For="@(() => race.Notes)"> </MudTextField>
                             <MudText>Novērtējums : <MudRating @bind-SelectedValue="@race.Evaluation" MaxValue="5" Color="Color.Tertiary" FullIcon="@Icons.Filled.Circle" EmptyIcon="@Icons.Outlined.Circle" Class="pt-4">Novērtējums</MudRating></MudText>
-                             
-                        
-                         
-                           @* <MudNumericField Label="Novērtējums" @bind-Value="@race.Evaluation" For="@(() => race.Evaluation)"> </MudNumericField>*@
+
                         </MudCardContent>
                         <MudCardActions>
                             <MudButton OnClick="Cancel">Atcelt</MudButton>

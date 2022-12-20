@@ -56,13 +56,13 @@
                     @context.Items.Sum((e) => e.Time.TotalHours).ToString("N2") h
                 </MudText>
             </MudTd>
-            <MudTd DataLabel="Laiks">
+            <MudTd DataLabel="Kilometri">
                 <MudText Color="Color.Tertiary" Typo="Typo.body2">
                     @context.Items.Sum((e) => e.Km) km
                 </MudText>
                 
             </MudTd>
-            <MudTd DataLabel="Laiks"> 
+            <MudTd DataLabel="Pulss"> 
                 <MudText Color="Color.Tertiary" Typo="Typo.body2">
                     @context.Items.Average((e) => e.Pulse > 0 ? e.Pulse : null) bpm
                 </MudText>

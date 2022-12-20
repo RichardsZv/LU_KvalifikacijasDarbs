@@ -15,6 +15,7 @@ namespace DataAccessLibrary.Data
         List<ReportDataPlannedModel> GetPlannedReportList(string runnerId, int weeknum);
         void UpdatePlannedReports(ReportDataPlannedModel reportdata, string runnerId);
         List<CoachReportDataModel> GetCoachReportList(string runnerId, int weeknum);
+        void UpdateCoachReport(CoachReportDataModel reportdata, string runnerId); 
 
     }
 }

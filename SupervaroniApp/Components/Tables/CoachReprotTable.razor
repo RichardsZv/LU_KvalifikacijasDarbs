@@ -5,100 +5,168 @@
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 
 
- <MudTable Items="@reportDataList" Hover="true" CanCancelEdit="true" SortLabel="Kārtot pēc" CommitEditTooltip="Commit Edit"
-                          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4">
-                    <ToolBarContent>
-                        <MudText Typo="Typo.h6">Izpilde</MudText>
-                        <MudSpacer />
-                        <MudTextField @bind-Value="searchString" Placeholder="Meklēt" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                    </ToolBarContent>
-                    <HeaderContent>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
-                     @*   <MudTh>Diena</MudTh>*@
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Km)">Kilometri</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Time_run_min)">Laiks</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Time_other_min)">Laiks (cits)</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Completed)">Izpilde</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Pace)">Temps</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Pulse)">Pulss</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Vert)">Vertikāli</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.E)">E</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.S)">S</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.R)">R</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.I)">I</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.T)">T</MudTableSortLabel></MudTh>
-                        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.M)">M</MudTableSortLabel></MudTh>
-                    </HeaderContent>
-                    <RowTemplate >
-                        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-                         @*   <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>*@
-                        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
-                        <MudTd DataLabel="Laiks">@context.Time_run_min</MudTd>
-                        <MudTd DataLabel="Laiks (cits)">@context.Time_other_min</MudTd>
-                        <MudTd DataLabel="Izpilde">@context.Completed</MudTd>
-                        <MudTd DataLabel="Temps">@context.Pace.Value.ToString("mm\\:ss")</MudTd>
-                        <MudTd DataLabel="Pulss">@context.Pulse</MudTd>
-                        <MudTd DataLabel="Vertikāli">@context.Vert</MudTd>
-                        <MudTd DataLabel="E">@context.E</MudTd>
-                        <MudTd DataLabel="S">@context.S</MudTd>
-                        <MudTd DataLabel="R">@context.R</MudTd>
-                        <MudTd DataLabel="I">@context.I</MudTd>
-                        <MudTd DataLabel="T">@context.T</MudTd>
-                        <MudTd DataLabel="M">@context.M</MudTd>
-                    </RowTemplate>
+<MudTable Items="@reportDataList" Hover="true" CanCancelEdit="true" SortLabel="Kārtot pēc" CommitEditTooltip="Commit Edit"
+          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Izpilde</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Meklēt" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
+        @*   <MudTh>Diena</MudTh>*@
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Km)">Kilometri</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Time_run_min)">Laiks</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Time_other_min)">Laiks (cits)</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Completed)">Izpilde</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Pace)">Temps</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Pulse)">Pulss</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Vert)">Vertikāli</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.E)">E</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.S)">S</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.R)">R</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.I)">I</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.T)">T</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.M)">M</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
+        @*   <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>*@
+        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
+        <MudTd DataLabel="Laiks">@context.Time_run_min</MudTd>
+        <MudTd DataLabel="Laiks (cits)">@context.Time_other_min</MudTd>
+        <MudTd DataLabel="Izpilde">@context.Completed</MudTd>
+        <MudTd DataLabel="Temps">@context.Pace.Value.ToString("mm\\:ss")</MudTd>
+        <MudTd DataLabel="Pulss">@context.Pulse</MudTd>
+        <MudTd DataLabel="Vertikāli">@context.Vert</MudTd>
+        <MudTd DataLabel="E">@context.E</MudTd>
+        <MudTd DataLabel="S">@context.S</MudTd>
+        <MudTd DataLabel="R">@context.R</MudTd>
+        <MudTd DataLabel="I">@context.I</MudTd>
+        <MudTd DataLabel="T">@context.T</MudTd>
+        <MudTd DataLabel="M">@context.M</MudTd>
 
-                    <RowEditingTemplate>
-                        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-                   @*     <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>*@
-                        <MudTd DataLabel="Kilometri">
-                            <MudNumericField Format="N2" @bind-Value="@context.Km" />
-                        </MudTd>
-                        <MudTd DataLabel="Laiks">
-                            <MudNumericField @bind-Value="@context.Time_run_min" />
-                        </MudTd>
-                        <MudTd DataLabel="Laiks (cits)">
-                            <MudNumericField @bind-Value="@context.Time_other_min" />
-                        </MudTd>
-                        <MudTd DataLabel="Izpilde">
-                            <MudTextField @bind-Value="@context.Completed" />
-                        </MudTd>
-                        <MudTd DataLabel="Temps">
-                            <MudTextField T="TimeSpan?" Format = "mm\:ss" @bind-Value="@context.Pace" />
-                        </MudTd>
-                        <MudTd DataLabel="Pulss">
-                            <MudNumericField  @bind-Value="@context.Pulse" />
-                        </MudTd>
-                        <MudTd DataLabel="Vertikāli">
-                            <MudNumericField  @bind-Value="@context.Vert" />
-                        </MudTd>
-                        <MudTd DataLabel="E">
-                            <MudNumericField Format="N2" @bind-Value="@context.E" />
-                        </MudTd>
-                        <MudTd DataLabel="S">
-                            <MudNumericField Format="N2" @bind-Value="@context.S" />
-                        </MudTd>
-                        <MudTd DataLabel="R">
-                            <MudNumericField Format="N2" @bind-Value="@context.R" />
-                        </MudTd>
-                        <MudTd DataLabel="I">
-                            <MudNumericField Format="N2" @bind-Value="@context.I" />
-                        </MudTd>
-                        <MudTd DataLabel="T">
-                            <MudNumericField Format="N2" @bind-Value="@context.T" />
-                        </MudTd>
-                        <MudTd DataLabel="M">
-                            <MudNumericField Format="N2" @bind-Value="@context.M" />
-                        </MudTd>
-                    </RowEditingTemplate>
-                    
-                   <PagerContent >
-                        <div class="d-flex justify-center">
-                            <MudIconButton OnClick="LastWeekClick" Icon="@Icons.Outlined.ArrowCircleLeft" Size="Size.Large"></MudIconButton>
-                            <MudIconButton OnClick="NextWeekClick" Icon="@Icons.Outlined.ArrowCircleRight" Size="Size.Large"></MudIconButton>
-                       </div>
 
-                    </PagerContent>
-                </MudTable>
+    </RowTemplate>
+
+    <RowEditingTemplate>
+        <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
+        @*     <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>*@
+        <MudTd DataLabel="Kilometri">
+            <MudNumericField Format="N2" @bind-Value="@context.Km" />
+        </MudTd>
+        <MudTd DataLabel="Laiks">
+            <MudNumericField @bind-Value="@context.Time_run_min" />
+        </MudTd>
+        <MudTd DataLabel="Laiks (cits)">
+            <MudNumericField @bind-Value="@context.Time_other_min" />
+        </MudTd>
+        <MudTd DataLabel="Izpilde">
+            <MudTextField @bind-Value="@context.Completed" />
+        </MudTd>
+        <MudTd DataLabel="Temps">
+            <MudTextField T="TimeSpan?" Format="mm\:ss" @bind-Value="@context.Pace" />
+        </MudTd>
+        <MudTd DataLabel="Pulss">
+            <MudNumericField @bind-Value="@context.Pulse" />
+        </MudTd>
+        <MudTd DataLabel="Vertikāli">
+            <MudNumericField @bind-Value="@context.Vert" />
+        </MudTd>
+        <MudTd DataLabel="E">
+            <MudNumericField Format="N2" @bind-Value="@context.E" />
+        </MudTd>
+        <MudTd DataLabel="S">
+            <MudNumericField Format="N2" @bind-Value="@context.S" />
+        </MudTd>
+        <MudTd DataLabel="R">
+            <MudNumericField Format="N2" @bind-Value="@context.R" />
+        </MudTd>
+        <MudTd DataLabel="I">
+            <MudNumericField Format="N2" @bind-Value="@context.I" />
+        </MudTd>
+        <MudTd DataLabel="T">
+            <MudNumericField Format="N2" @bind-Value="@context.T" />
+        </MudTd>
+        <MudTd DataLabel="M">
+            <MudNumericField Format="N2" @bind-Value="@context.M" />
+        </MudTd>
+    </RowEditingTemplate>
+    <FooterContent>
+        <MudTd>
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                Kopā:
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="Kilometri">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @reportDataList.Sum((e) => e.Km) km
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="Laiks">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @reportDataList.Sum((e) => e.Time_run_min) min
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="Laiks (cits)">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @reportDataList.Sum((e) => e.Time_other_min) min
+            </MudText>
+        </MudTd>
+        <MudTd />
+        <MudTd DataLabel="Pace">
+           
+        </MudTd>
+
+        <MudTd DataLabel="Pulss">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @reportDataList.Average((e) => e.Pulse > 0 ? e.Pulse : null) bpm
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="Vertikāli">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @reportDataList.Sum((e) => e.Vert) m
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="E">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @reportDataList.Sum((e) => e.E) 
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="S">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @reportDataList.Sum((e) => e.S) 
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="R">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @reportDataList.Sum((e) => e.R) 
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="I">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @reportDataList.Sum((e) => e.I) 
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="T">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @reportDataList.Sum((e) => e.T) 
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="M">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @reportDataList.Sum((e) => e.M) 
+            </MudText>
+        </MudTd>
+    </FooterContent>
+    <PagerContent>
+        <div class="d-flex justify-center">
+            <MudIconButton OnClick="LastWeekClick" Icon="@Icons.Outlined.ArrowCircleLeft" Size="Size.Large"></MudIconButton>
+            <MudIconButton OnClick="NextWeekClick" Icon="@Icons.Outlined.ArrowCircleRight" Size="Size.Large"></MudIconButton>
+        </div>
+
+    </PagerContent>
+</MudTable>
 
 @code {
     [Parameter]
@@ -132,6 +200,15 @@
         }
     }
 
+    //public string GetAveragePace(){
+    //    var averagePace = reportDataList
+    //    .Where(e => e.Pace.HasValue && e.Pace.Value > TimeSpan.Zero)
+    //    .Average(e => e.Pace.Value.TotalMinutes);
+
+    //    var averagePaceString = TimeSpan.FromMinutes(averagePace).ToString("mm\\:ss");
+    //    return averagePaceString; 
+    //}
+
     public void NextWeekClick()
     {
         weekNum = weekNum + 1;
@@ -153,7 +230,7 @@
     }
     private void HandleRowCommit(CoachReportDataModel report)
     {
-        //reportData.UpdatePlannedReports(report);
+        reportData.UpdateCoachReport(report, id);
         StateHasChanged();
     }
 
