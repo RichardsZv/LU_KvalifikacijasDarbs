@@ -9,26 +9,25 @@
 
 <MudDialog>
     <DialogContent>
-        <EditForm Model="@test">
+        <EditForm Model="@test" OnValidSubmit="Submit">
             <DataAnnotationsValidator />
             <MudGrid>
                 <MudItem xs="12" sm="12">
                     <MudCard>
                         <MudCardContent>      
                             <MudDatePicker Label="Datums" @bind-Date="@test.Dat" DateFormat="dd.MM.yyyy"></MudDatePicker>
-                            <MudNumericField Format="N2" Label = "Kilometri" @bind-Value="@test.Km"> </MudNumericField>
+                            <MudNumericField Format="N2" Label="Kilometri" @bind-Value="@test.Km" For="@(() => test.Km)"> </MudNumericField>
                             <MudTextField T="TimeSpan?" Format="mm\:ss" Label="Pace" @bind-Value="@test.Pace" />
                         </MudCardContent>
+                        <MudCardActions>
+                            <MudButton OnClick="Cancel">Atcelt</MudButton>
+                            <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Saglabāt</MudButton>
+                        </MudCardActions>
                     </MudCard>
                 </MudItem>
             </MudGrid>
         </EditForm>
-
     </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Cancel">Atcelt</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">Saglabāt</MudButton>
-    </DialogActions>
 </MudDialog>
 @code {
     TestsModel test = new TestsModel();

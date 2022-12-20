@@ -9,20 +9,24 @@
 
 <MudDialog>
     <DialogContent>
-        <EditForm Model="@race">
+        <EditForm Model="@race" OnValidSubmit="Submit">
             <DataAnnotationsValidator />
             <MudGrid>
                 <MudItem xs="12" sm="12">
                     <MudCard>
                         <MudCardContent>
                             <MudDatePicker Label="Datums" @bind-Date="@race.Dat" DateFormat="dd.MM.yyyy"></MudDatePicker>
-                            <MudTextField Label="Nosaukums" @bind-Value="@race.Title"> </MudTextField>
-                            <MudTextField T="TimeSpan?" Label="Rezultāts" @bind-Value="@race.Result"/> 
-                            <MudTextField Label="Vieta" @bind-Value="@race.Place"> </MudTextField>
-                            <MudTextField Label="Grupa" @bind-Value="@race.Group"> </MudTextField>
-                            <MudTextField Label="Piezīmes" @bind-Value="@race.Notes"> </MudTextField>
-                            <MudNumericField Label="Novērtējums" @bind-Value="@race.Evaluation"> </MudNumericField>
+                            <MudTextField Label="Nosaukums" @bind-Value="@race.Title" For="@(() => race.Title)"> </MudTextField>
+                            <MudTextField T="TimeSpan?" Label="Rezultāts" @bind-Value="@race.Result" />
+                            <MudTextField Label="Vieta" @bind-Value="@race.Place" For="@(() => race.Place)"> </MudTextField>
+                            <MudTextField Label="Grupa" @bind-Value="@race.Group" For="@(() => race.Group)"> </MudTextField>
+                            <MudTextField Label="Piezīmes" @bind-Value="@race.Notes" For="@(() => race.Notes)"> </MudTextField>
+                            <MudNumericField Label="Novērtējums" @bind-Value="@race.Evaluation" For="@(() => race.Evaluation)"> </MudNumericField>
                         </MudCardContent>
+                        <MudCardActions>
+                            <MudButton OnClick="Cancel">Atcelt</MudButton>
+                            <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Saglabāt</MudButton>
+                        </MudCardActions>
                     </MudCard>
                 </MudItem>
             </MudGrid>
@@ -30,8 +34,7 @@
 
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">Atcelt</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">Saglabāt</MudButton>
+       
     </DialogActions>
 </MudDialog>
 @code {

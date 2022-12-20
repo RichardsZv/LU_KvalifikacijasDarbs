@@ -9,33 +9,31 @@
 
 <MudDialog>
     <DialogContent>
-        <EditForm Model="@report">
-            <DataAnnotationsValidator/>
+        <EditForm Model="@report" OnValidSubmit="Submit">
+            <DataAnnotationsValidator />
             <MudGrid>
                 <MudItem xs="12" sm="12">
-        <MudCard>
-            <MudCardContent>
-                <MudTextField Label="Nosaukums" @bind-Value="@report.Title" ></MudTextField>
-                <MudDatePicker Label="Sākuma datums" @bind-Date="@report.Dat_S"></MudDatePicker>
-                <MudDatePicker Label="Beigu datums" @bind-Date="@report.Dat_B"></MudDatePicker>
-            </MudCardContent>
-        </MudCard>
-        </MudItem>
+                    <MudCard>
+                        <MudCardContent>
+                            <MudTextField Label="Nosaukums" @bind-Value="@report.Title" For="@(() => report.Title)"></MudTextField>
+                            <MudDatePicker Label="Sākuma datums" @bind-Date="@report.Dat_S"></MudDatePicker>
+                            <MudDatePicker Label="Beigu datums" @bind-Date="@report.Dat_B"></MudDatePicker>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton OnClick="Cancel">Atcelt</MudButton>
+                            <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Saglabāt</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
             </MudGrid>
-
         </EditForm>
-
     </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Cancel">Atcelt</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">Saglabāt</MudButton>
-    </DialogActions>
 </MudDialog>
 @code {
-    ReportModel report = new ReportModel(); 
+    ReportModel report = new ReportModel();
     RunnerModel coach = new RunnerModel();
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    [Parameter] public int runnerid {get; set; }
+    [Parameter] public int runnerid { get; set; }
     string uname = "";
 
     protected async override Task OnInitializedAsync()
@@ -45,13 +43,14 @@
         uname = user.Name;
         coach = runnerData.GetCurrentRunner(uname);
     }
-    void Submit(){
-        report.CoachId = coach.Id; 
-        report.RunnerId = runnerid;  
+    void Submit()
+    {
+        report.CoachId = coach.Id;
+        report.RunnerId = runnerid;
         reportData.CreateTrainingCycle(report);
         StateHasChanged();
         MudDialog.Close(DialogResult.Ok(true));
     }
     void Cancel() => MudDialog.Cancel();
-    
+
 }
