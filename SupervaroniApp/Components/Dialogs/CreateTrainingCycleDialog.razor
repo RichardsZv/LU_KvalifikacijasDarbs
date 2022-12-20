@@ -32,7 +32,7 @@
 @code {
     ReportModel report = new ReportModel();
     RunnerModel coach = new RunnerModel();
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
     [Parameter] public int runnerid { get; set; }
     string uname = "";
 
@@ -49,8 +49,8 @@
         report.RunnerId = runnerid;
         reportData.CreateTrainingCycle(report);
         StateHasChanged();
-        MudDialog.Close(DialogResult.Ok(true));
+        MudDialog?.Close(DialogResult.Ok(true));
     }
-    void Cancel() => MudDialog.Cancel();
+    void Cancel() => MudDialog?.Cancel();
 
 }
