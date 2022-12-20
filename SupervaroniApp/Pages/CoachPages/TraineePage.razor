@@ -7,6 +7,7 @@
 @using DataAccessLibrary.Data
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using SupervaroniApp.Components
+@using SupervaroniApp.Components.Tables
 @using SupervaroniApp.Pages
 @using SupervaroniApp.Components.Dialogs
 @inject NavigationManager NavigationManager
@@ -40,8 +41,11 @@
                 <TraineePersonalBests id="@id"></TraineePersonalBests>
             </MudTabPanel>
             <MudIconButton></MudIconButton>
+            
         </MudTabs>
+@*        <MudSlider @bind-Value="size1" Min="1" Max="12" Color="Color.Tertiary" Class="mt-2" > </MudSlider>*@
     </MudItem>
+ 
     @*Treniņu cikli*@
     <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
         <MudCard Elevation="2" Style="min-height: 25vh;">
@@ -113,7 +117,9 @@
 
     List<ReportModel> trainingCycles = new List<ReportModel>(); 
     ReportModel trainingCycle = new ReportModel(); 
-    ReportWeekModel trainingWeek = new ReportWeekModel(); 
+    ReportWeekModel trainingWeek = new ReportWeekModel();
+
+    public int size1 { get; set; } = 6; 
 
     protected async override Task OnInitializedAsync()
     {

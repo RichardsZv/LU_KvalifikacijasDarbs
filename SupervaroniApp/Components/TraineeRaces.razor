@@ -43,7 +43,7 @@ color: white !important;
         <MudTd DataLabel="Vieta">@context.Place</MudTd>
         <MudTd DataLabel="Grupa">@context.Group</MudTd>
         <MudTd DataLabel="Piezīmes">@context.Notes</MudTd>
-        <MudTd DataLabel="Novērtējums">@context.Evaluation</MudTd>
+        <MudTd DataLabel="Novērtējums"><MudRating SelectedValue="@context.Evaluation" MaxValue="5" ReadOnly="true" Color="Color.Tertiary" FullIcon="@Icons.Filled.Circle" EmptyIcon="@Icons.Outlined.Circle"></MudRating></MudTd>
     </RowTemplate>
 </MudTable>
 
