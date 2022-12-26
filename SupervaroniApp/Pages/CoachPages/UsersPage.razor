@@ -8,6 +8,7 @@
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using SupervaroniApp.Components
 @using SupervaroniApp.Components.Dialogs
+@using System.Net.Mail
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
@@ -57,7 +58,6 @@
         </MudItem>
        
     }
-
 
 </MudGrid>
 
@@ -110,6 +110,7 @@
     {
         NavigationManager.NavigateTo("supervaronis/" + id);
     }
-
+    private string message {get; set; } = "";
+ 
 
 }

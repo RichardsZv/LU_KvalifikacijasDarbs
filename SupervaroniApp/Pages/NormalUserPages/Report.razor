@@ -127,8 +127,8 @@
         var user = authstate.User.Identity;
         runner = runnerData.GetCurrentRunner(user.Name);
 
-        //Ja treneris izvedojis treniņu ciklu, tad sākimā atlasam pēc treniņu cikla datumiem
-        trainingWeek = reportData?.GetCurrentWeek(runner.Id.ToString());
+        //Ja treneris izvedojis treniņu ciklu, tad sākumā atlasam pēc treniņu cikla datumiem
+        trainingWeek = reportData.GetCurrentWeek(runner.Id.ToString());
         if (trainingWeek != null)
         {
             DatS = trainingWeek.Dat_S;

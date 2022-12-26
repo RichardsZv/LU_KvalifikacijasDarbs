@@ -11,6 +11,7 @@ using Dapper;
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
+using System.Linq.Expressions;
 
 namespace DataAccessLibrary.Data
 {
@@ -110,22 +111,29 @@ namespace DataAccessLibrary.Data
         /// Funkcija, kas iegūst šobrīdējo nedēļu no treniņu cikla
         /// </summary>
         /// <returns>Audzēkņa treniņu nedēļa</returns>
-        public ReportWeekModel GetCurrentWeek(string id)
+        public ReportWeekModel GetCurrentWeek(string runner_id)
         {
-            ReportWeekModel week = new ReportWeekModel();
-            string connectionString = _config.GetConnectionString("DefaultConnection");
-            string sql = @"SELECT *, dbo.getMaxWeekNum(b.report_id) week_num_max FROM dbo.Reports a inner join ReportWeek b on a.Id = b.report_id WHERE b.dat_s <= GETDATE() and b.dat_b >= GETDATE() and runner_id = " + id;
-            if (sql != null)
+            try
             {
-                week = _db?.Query<ReportWeekModel>(sql, "DefaultConnection").FirstOrDefault();
-                return week;
+                ReportWeekModel week = new ReportWeekModel();
+                string connectionString = _config.GetConnectionString("DefaultConnection");
+                string sql = @"SELECT *, dbo.getMaxWeekNum(b.report_id) week_num_max FROM dbo.Reports a inner join ReportWeek b on a.Id = b.report_id WHERE b.dat_s <= CAST(GETDATE() as Date) and b.dat_b >= CAST(GETDATE() as Date) and runner_id = " + runner_id;
+                if (sql != null)
+                {
+                    week = _db.Query<ReportWeekModel>(sql, "DefaultConnection").ToList()[0];
+                    return week;
+                }
+                else
+                {
+                    return null;
+                }
+
             }
-            else
+            catch (Exception)
             {
-                return null;
-            } 
-          
-       
+                return null; 
+            }
+            
         }
         /// <summary>
         /// Funkcija padod parametrus procedūrai, kas iegūst datus par plānotajiem treniņiem
