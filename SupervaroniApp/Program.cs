@@ -122,7 +122,7 @@ app.UseRouting();
 
 app.UseCookiePolicy(new CookiePolicyOptions()
 {
-    MinimumSameSitePolicy = SameSiteMode.None
+    MinimumSameSitePolicy = SameSiteMode.Lax
 });
 app.UseAuthentication();
 app.UseAuthorization();
