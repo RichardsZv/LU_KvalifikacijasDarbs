@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,11 @@ namespace DataAccessLibrary.Models
     public class CoachReportDataModel
     {
         public int Id { get; set; }
+        [Range(0.01, 1000.00, ErrorMessage = "Vērtībai jābūt starp {1} un {2}")]
         public float Km { get; set; }
         public int Time_run_min { get; set; } //Laiks Minūtēs
         public int Time_other_min { get; set; } //Laiks Minūtēs
+        [StringLength(250, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
         public string Completed { get; set; }
         public TimeSpan? Pace { get; set; } = TimeSpan.Zero;
         public int Pulse { get; set; }

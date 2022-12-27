@@ -13,7 +13,7 @@ namespace DataAccessLibrary.Models
         public int Id { get; set; }
         public DateTime Dat { get; set; }
         public int Report_Week_Id { get; set; }
-        [StringLength(150, ErrorMessage = "Plāna apraksta garums pārsniedz atļauto limitu")]
+        [StringLength(150, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
         public string Plan_Description { get; set; }
     }
 }

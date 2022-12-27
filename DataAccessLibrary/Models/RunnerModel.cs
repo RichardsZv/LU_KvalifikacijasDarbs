@@ -20,6 +20,8 @@ namespace DataAccessLibrary.Models
     {
         [Key]
         public int Id { get; set; }
+        [EmailAddress]
+        [Display(Name = "Email")]
         public string Email { get; set; } 
         public DateTime? Birthdate { get; set; }
         public int Height { get; set; } 

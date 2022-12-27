@@ -13,7 +13,7 @@ namespace DataAccessLibrary.Models
         public int RunnerId { get; set; }
         public DateTime? Dat { get; set; } = DateTime.Now;
 
-        [StringLength(1000, ErrorMessage = "Apraksta garums pārsniedz atļauto limitu")]
+        [StringLength(1000, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
         public string? Description { get; set; }
     }
 }

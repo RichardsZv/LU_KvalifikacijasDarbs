@@ -120,7 +120,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCookiePolicy();
+app.UseCookiePolicy(new CookiePolicyOptions()
+{
+    MinimumSameSitePolicy = SameSiteMode.None
+});
 app.UseAuthentication();
 app.UseAuthorization();
 

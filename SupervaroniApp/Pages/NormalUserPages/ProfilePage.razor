@@ -28,7 +28,7 @@
                     <MudCardContent>
                         <MudTextField Label="Vārds" @bind-Value="runner.Firstname"/>
                         <MudTextField Label="Uzvārds" @bind-Value="runner.Lastname"  />
-                        <MudTextField Label="E-pasts" @bind-Value="runner.Email"  />
+                        <MudTextField Label="E-pasts" @bind-Value="runner.Email" ReadOnly="true" />
                         <MudDatePicker Label="Dzimšanas datums" @bind-Date="runner.Birthdate" />
                         <MudSelect T="Gender" Label="Dzimums" @bind-Value="runner.gender" >
                             <MudSelectItem Value="@Gender.Vīrietis"></MudSelectItem>

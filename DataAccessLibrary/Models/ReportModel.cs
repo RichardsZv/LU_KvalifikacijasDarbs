@@ -13,7 +13,7 @@ namespace DataAccessLibrary.Models
         public int Id { get; set; }
         public int RunnerId { get; set; }
         public int CoachId { get; set; }
-        [StringLength(50, ErrorMessage = "Nosaukums nedrīkst pārsniegt 50 simbolus")]
+        [StringLength(50, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
         public string? Title { get; set; }
         public DateTime? Dat_S { get; set; } = DateTime.Now; 
         public DateTime? Dat_B { get; set; } = DateTime.Now; 

@@ -14,9 +14,9 @@ namespace DataAccessLibrary.Models
         public int RunnerId { get; set; }
         public DateTime? Dat { get; set; } = DateTime.Now; 
         public TimeSpan? Time { get; set; } = TimeSpan.Zero;
-        [StringLength(50, ErrorMessage = "Nosaukums nedrīkst pārsniegt 50 simbolus")]
+        [StringLength(50, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
         public string? Title { get; set; }
-        [StringLength(1000, ErrorMessage = "Apraksta garums pārsniedz atļauto limitu")]
+        [StringLength(1000, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
         public string? Description { get; set; }
     }
 }

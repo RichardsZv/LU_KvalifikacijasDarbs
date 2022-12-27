@@ -16,7 +16,7 @@ namespace DataAccessLibrary.Models
         public int CoachId { get; set; }
         public DateTime? Dat { get; set; } = DateTime.Now;
 
-        [Range(0.01, 1000.00, ErrorMessage = "Kilometriem jābūt starp 0 un 1000")]
+        [Range(0.01, 1000.00, ErrorMessage = "Vērtībai jābūt starp {1} un {2}")]
         public float? Km { get; set; }
         public TimeSpan? Pace { get; set; } = TimeSpan.Zero;
 
