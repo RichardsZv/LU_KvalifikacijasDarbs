@@ -9,72 +9,68 @@
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
 
-
-
 <div class="col d-flex justify-content-center">
+    <MudItem xs="12" sm="10" md="8" lg="6" xl="6">
+        <MudCard Class="align-center py-5">
+            <EditForm Model="@runner" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
 
-  <MudItem xs="12" sm="10" md="8" lg="6" xl="6" >
-    <MudCard Class="align-center py-5">
-    <EditForm Model="@runner" OnValidSubmit="OnValidSubmit">
-        <DataAnnotationsValidator/>
-      
-           
-                    <MudText Typo="Typo.h6" Align="Align.Center">Informācija par mani</MudText>
-                    <MudCardHeader Class="d-flex justify-content-center">
+                <MudText Typo="Typo.h6" Align="Align.Center">Informācija par mani</MudText>
 
-                        <MudAvatar Image="@Avatar" Size="Size.Large" Icon="@Icons.Custom.Uncategorized.Radioactive"></MudAvatar>
-                    </MudCardHeader>
-                
-                    <MudCardContent>
-                        <MudTextField Label="Vārds" @bind-Value="runner.Firstname"/>
-                        <MudTextField Label="Uzvārds" @bind-Value="runner.Lastname"  />
-                        <MudTextField Label="E-pasts" @bind-Value="runner.Email" ReadOnly="true" />
-                        <MudDatePicker Label="Dzimšanas datums" @bind-Date="runner.Birthdate" />
-                        <MudSelect T="Gender" Label="Dzimums" @bind-Value="runner.gender" >
-                            <MudSelectItem Value="@Gender.Vīrietis"></MudSelectItem>
-                            <MudSelectItem Value="@Gender.Sievietie"></MudSelectItem>
-                            <MudSelectItem Value="@Gender.Cits"></MudSelectItem>
-                        </MudSelect>
-                        <MudNumericField Label="Augums" @bind-Value="runner.Height" />
-                        <MudNumericField Label="Svars" @bind-Value="runner.Weight"  />
-                        <MudNumericField Label="Miera pulss" @bind-Value="runner.Hr"  />
-                        <MudNumericField Label="Maksimālais pulss" @bind-Value="runner.Hr_max"  />
-                        <MudTextField Label="Strava links" @bind-Value="runner.Strava_Link" />
-                        <MudTextField Label="Garmin links" @bind-Value="runner.Garmin_link" />
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto ">Saglabāt</MudButton>
-                    </MudCardActions>
-        </EditForm>
-    </MudCard>
-</MudItem>
+                <MudCardHeader Class="d-flex justify-content-center">
+
+                    <MudAvatar Image="@Avatar" Size="Size.Large" Icon="@Icons.Custom.Uncategorized.Radioactive"></MudAvatar>
+                </MudCardHeader>
+
+                <MudCardContent>
+                    <MudTextField Label="Vārds" @bind-Value="runner.Firstname" For="@(() => runner.Firstname)" />
+                    <MudTextField Label="Uzvārds" @bind-Value="runner.Lastname" For="@(() => runner.Lastname)" />
+                    <MudTextField Label="E-pasts" @bind-Value="runner.Email" ReadOnly="true" />
+                    <MudDatePicker Label="Dzimšanas datums" @bind-Date="runner.Birthdate" />
+                    <MudSelect T="Gender" Label="Dzimums" @bind-Value="runner.gender">
+                        <MudSelectItem Value="@Gender.Vīrietis"></MudSelectItem>
+                        <MudSelectItem Value="@Gender.Sievietie"></MudSelectItem>
+                        <MudSelectItem Value="@Gender.Cits"></MudSelectItem>
+                    </MudSelect>
+                    <MudNumericField Label="Augums" @bind-Value="runner.Height" For="@(() => runner.Height)" />
+                    <MudNumericField Label="Svars" @bind-Value="runner.Weight" For="@(() => runner.Weight)" />
+                    <MudNumericField Label="Miera pulss" @bind-Value="runner.Hr" For="@(() => runner.Hr)" />
+                    <MudNumericField Label="Maksimālais pulss" @bind-Value="runner.Hr_max" For="@(() => runner.Hr_max)" />
+                    <MudTextField Label="Strava links" @bind-Value="runner.Strava_Link" For="@(() => runner.Strava_Link)" />
+                    <MudTextField Label="Garmin links" @bind-Value="runner.Garmin_link" For="@(() => runner.Garmin_link)" />
+                </MudCardContent>
+
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto ">Saglabāt</MudButton>
+                </MudCardActions>
+            </EditForm>
+        </MudCard>
+    </MudItem>
 
 </div>
 
-
 @code {
-    RunnerModel runner = new RunnerModel(); 
+    RunnerModel runner = new RunnerModel();
     public IDictionary<string, string> AuthProperties { get; set; }
-    private string Avatar = ""; 
-    //private string Firstname; 
+    private string Avatar = "";
+    //private string Firstname;
 
     protected async override Task OnInitializedAsync()
     {
         base.OnInitialized();
         //var authResult = await HttpContext.AuthenticateAsync();
-        
+
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var user = authstate.User.Identity;
         runner = runnerData.GetCurrentRunner(user.Name);
         var avatar = authstate.User.Claims.FirstOrDefault(c => c.Type == "urn:google:picture");
         Avatar = avatar?.Value;
-
     }
 
     private void OnValidSubmit(EditContext context)
     {
-        runnerData.SaveRunner(runner); 
-        StateHasChanged(); 
+        runnerData.SaveRunner(runner);
+        StateHasChanged();
 
     }
 }

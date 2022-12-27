@@ -221,5 +221,16 @@ namespace DataAccessLibrary.Data
             var a = _db.Query<PersonalBestsModel>(sql, "DefaultConnection").ToList();
             return a;
         }
+
+        /// <summary>
+        /// Funkcija sistēmas lietotāja dzēšanai no trenera audzēkņu sarakstsa
+        /// </summary>
+        public void RemoveTrainee(int runner_id, int coach_id)
+        {
+            string sql = @"DELETE FROM CoachRunnerDisplay WHERE runner_id = " + runner_id + " and coach_id = " + coach_id;
+            _db.Query<RunnerModel>(sql, "DefaultConnection").ToList();
+        }
+
+
     }
 }

@@ -14,7 +14,7 @@
 @inject IRunnerData runnerData
 @inject IReportData reportData
 @inject IDialogService DialogService
-<link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet"/>
+<link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet" />
 
 
 <MudButton Color="Color.Primary" @onclick="OpenDialog">Pievienot jaunu audzēkni</MudButton>
@@ -22,41 +22,42 @@
     @foreach (var runner in CoachRunners)
     {
 
-        <MudItem xs="12" sm="12" md="4" lg="4" xl="3" xxl="2" Class="d-flex flex-column mud-card" >
-          
+        <MudItem xs="12" sm="12" md="4" lg="4" xl="3" xxl="2" Class="d-flex flex-column mud-card">
+
             <MudBadge Dot="true" Color="@color" Overlap="true" Origin="Origin.TopRight">
-               <div>
+                <div>
 
-              
-                    <MudCard Class="d-flex flex-column justify-center mud-width-full pt-8 hc" Style="min-width:fit-content;"  @onclick="@(() => OpenRunner(@runner.Id))">
-                    
-                    <MudCardHeader Class="d-flex justify-content-center">
-                        <CardHeaderAvatar>
-                            <MudAvatar></MudAvatar>
-                        </CardHeaderAvatar>
-                    </MudCardHeader>
-                    <MudDivider />
-                    <MudCardContent>
-                        <MudText> <b>Vārds:</b> @runner.Firstname</MudText>
-                        <MudText> <b>Uzvārds:</b> @runner.Lastname</MudText>
-                        <MudText> <b>Epasts:</b> @runner.Email</MudText>
-                    </MudCardContent>
-                    <MudCardActions Class="d-flex justify-content-center">
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" />
 
-                        <MudIconButton Icon="fa-brands fa-strava" Color="Color.Warning" Href="#" />
-                        <MudPopover Open="@_isOpen" Fixed="true" Class="px-4 pt-4">
-                            <div class="d-flex flex-column">
-                                <MudButton OnClick="@ToggleOpen" Class="ml-auto mr-n3 mb-1" Color="Color.Error">Close</MudButton>
-                            </div>
-                        </MudPopover>
-                    </MudCardActions>
-                </MudCard>
+                    <MudCard Class="d-flex flex-column justify-center mud-width-full pt-8 hc" Style="min-width:fit-content;" @onclick="@(() => OpenRunner(@runner.Id))">
+
+                        <MudCardHeader Class="d-flex justify-content-center">
+                            <CardHeaderAvatar>
+                                <MudAvatar></MudAvatar>
+                            </CardHeaderAvatar>
+                        </MudCardHeader>
+                        <MudDivider />
+                        <MudCardContent>
+                            <MudText> <b>Vārds:</b> @runner.Firstname</MudText>
+                            <MudText> <b>Uzvārds:</b> @runner.Lastname</MudText>
+                            <MudText> <b>Epasts:</b> @runner.Email</MudText>
+                        </MudCardContent>
+                        <MudCardActions Class="d-flex justify-content-center">
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => HandleDeleteTraineeClick(runner.Id))" />
+
+                            <MudIconButton Icon="fa-brands fa-strava" Color="Color.Warning" Href="@runner.Strava_Link" />
+                            <MudIconButton Icon="fa-solid fa-g" Color="Color.Primary" Href="@runner.Garmin_link" />
+                            <MudPopover Open="@_isOpen" Fixed="true" Class="px-4 pt-4">
+                                <div class="d-flex flex-column">
+                                    <MudButton OnClick="@ToggleOpen" Class="ml-auto mr-n3 mb-1" Color="Color.Error">Close</MudButton>
+                                </div>
+                            </MudPopover>
+                        </MudCardActions>
+                    </MudCard>
                 </div>
             </MudBadge>
-          
+
         </MudItem>
-       
+
     }
 
 </MudGrid>
@@ -68,18 +69,21 @@
     ReportWeekModel trainingWeek = new ReportWeekModel();
     List<RunnerModel> CoachRunners = new List<RunnerModel>();
     List<ReportModel> trainingCycles = new List<ReportModel>();
-    public int x {get; set; } = 0; 
+    RunnerModel coach = new RunnerModel();
+    public int x { get; set; } = 0;
     public Color color { get; set; } = Color.Info;
     protected async override Task OnInitializedAsync()
     {
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var user = authstate.User.Identity;
+        coach = runnerData.GetCurrentRunner(user.Name);
         runners = runnerData.GetRunners();
-        if(user != null){
+        if (user != null)
+        {
             CoachRunners = runnerData.GetCoachRunners(user.Name);
         }
     }
-  
+
     private void OpenDialog()
     {
         var options = new DialogOptions()
@@ -88,14 +92,14 @@
                 MaxWidth = MaxWidth.Medium,
                 FullWidth = true,
             };
-        if(runners != null)
+        if (runners != null)
         {
             DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
         }
 
     }
 
-    
+
 
     public bool _isOpen;
 
@@ -110,7 +114,18 @@
     {
         NavigationManager.NavigateTo("supervaronis/" + id);
     }
-    private string message {get; set; } = "";
- 
+    private string message { get; set; } = "";
+
+    public void HandleDeleteTraineeClick(int crunner_id)
+    {
+
+        if (crunner_id != null)
+        {
+            runnerData.RemoveTrainee(crunner_id, coach.Id);
+            StateHasChanged();
+            CoachRunners = runnerData.GetCoachRunners(coach.Email);
+        }
+
+    }
 
 }

@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 appsettings.json
+/SupervaroniApp/.config/dotnet-tools.json

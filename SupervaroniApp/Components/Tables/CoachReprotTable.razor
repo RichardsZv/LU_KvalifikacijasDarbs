@@ -7,6 +7,7 @@
 
 <MudTable Items="@reportDataList" Hover="true" CanCancelEdit="true" SortLabel="Kārtot pēc" CommitEditTooltip="Commit Edit"
           OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4" Dense="true">
+  
     <ToolBarContent>
         <MudText Typo="Typo.h6">Izpilde</MudText>
         <MudSpacer />
@@ -30,6 +31,7 @@
         <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.M)">M</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
+      
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
         @*   <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>*@
         <MudTd DataLabel="Kilometri">@context.Km</MudTd>
@@ -49,48 +51,50 @@
 
     </RowTemplate>
 
-    <RowEditingTemplate>
+    <RowEditingTemplate >
+       
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
         @*     <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>*@
         <MudTd DataLabel="Kilometri">
-            <MudNumericField Format="N2" @bind-Value="@context.Km" />
+            <MudNumericField Format="N2" @bind-Value="@context.Km" Min="0" Max="1000"/>
         </MudTd>
         <MudTd DataLabel="Laiks">
-            <MudNumericField @bind-Value="@context.Time_run_min" />
+            <MudNumericField @bind-Value="@context.Time_run_min" Min="0" Max="10000" />
         </MudTd>
         <MudTd DataLabel="Laiks (cits)">
-            <MudNumericField @bind-Value="@context.Time_other_min" />
+            <MudNumericField @bind-Value="@context.Time_other_min" Min="0" Max="10000" />
         </MudTd>
         <MudTd DataLabel="Izpilde">
-            <MudTextField @bind-Value="@context.Completed" />
+            <MudTextField @bind-Value="@context.Completed" MaxLength="250" />
         </MudTd>
         <MudTd DataLabel="Temps">
-            <MudTextField T="TimeSpan?" Format="mm\:ss" @bind-Value="@context.Pace" />
+            <MudTextField T="TimeSpan?" Format="mm\:ss" @bind-Value="@context.Pace"/>
         </MudTd>
         <MudTd DataLabel="Pulss">
-            <MudNumericField @bind-Value="@context.Pulse" />
+            <MudNumericField @bind-Value="@context.Pulse" Min="0" Max="300" />
         </MudTd>
         <MudTd DataLabel="Vertikāli">
-            <MudNumericField @bind-Value="@context.Vert" />
+            <MudNumericField @bind-Value="@context.Vert" Min="0" Max="100000" />
         </MudTd>
         <MudTd DataLabel="E">
-            <MudNumericField Format="N2" @bind-Value="@context.E" />
+            <MudNumericField Format="N2" @bind-Value="@context.E" Min="0" Max="1000" />
         </MudTd>
         <MudTd DataLabel="S">
-            <MudNumericField Format="N2" @bind-Value="@context.S" />
+            <MudNumericField Format="N2" @bind-Value="@context.S" Min="0" Max="1000" />
         </MudTd>
         <MudTd DataLabel="R">
-            <MudNumericField Format="N2" @bind-Value="@context.R" />
+            <MudNumericField Format="N2" @bind-Value="@context.R" Min="0" Max="1000" />
         </MudTd>
         <MudTd DataLabel="I">
-            <MudNumericField Format="N2" @bind-Value="@context.I" />
+            <MudNumericField Format="N2" @bind-Value="@context.I" Min="0" Max="1000" />
         </MudTd>
         <MudTd DataLabel="T">
-            <MudNumericField Format="N2" @bind-Value="@context.T" />
+            <MudNumericField Format="N2" @bind-Value="@context.T" Min="0" Max="1000" />
         </MudTd>
         <MudTd DataLabel="M">
-            <MudNumericField Format="N2" @bind-Value="@context.M" />
+            <MudNumericField Format="N2" @bind-Value="@context.M" Min="0" Max="1000" />
         </MudTd>
+        
     </RowEditingTemplate>
     <FooterContent>
         <MudTd>
@@ -169,11 +173,8 @@
     [Parameter]
     public string id { get; set; }
     RunnerModel runner = new RunnerModel();
-
     List<ReportModel> trainingCycles = new List<ReportModel>();
     ReportWeekModel trainingWeek = new ReportWeekModel();
-
-
     List<CoachReportDataModel> reportDataList = new List<CoachReportDataModel>();
     private List<string> editEvents = new();
     private string searchString = "";

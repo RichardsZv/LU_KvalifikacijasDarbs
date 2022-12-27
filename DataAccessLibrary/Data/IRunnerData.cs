@@ -21,7 +21,8 @@ namespace DataAccessLibrary.Data
         public List<InjuryModel> GetInjuries(string runner_id);
         public void AddPersonalBest(PersonalBestsModel pb);
         void DeletePb(string runner_id, int pb_id); 
-        public List<PersonalBestsModel> GetPersonalBests(string runner_id); 
+        public List<PersonalBestsModel> GetPersonalBests(string runner_id);
+        void RemoveTrainee(int runner_id, int coach_id); 
 
     }
 }

@@ -12,12 +12,17 @@ namespace DataAccessLibrary.Models
         public int Id { get; set; }
         [Range(0.01, 1000.00, ErrorMessage = "Vērtībai jābūt starp {1} un {2}")]
         public float Km { get; set; }
+        [Range(0, 10000, ErrorMessage = "Vērtībai jābūt starp {1} un {2}")]
         public int Time_run_min { get; set; } //Laiks Minūtēs
+
+        [Range(0, 10000, ErrorMessage = "Vērtībai jābūt starp {1} un {2}")]
         public int Time_other_min { get; set; } //Laiks Minūtēs
         [StringLength(250, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
-        public string Completed { get; set; }
+        public string? Completed { get; set; }
         public TimeSpan? Pace { get; set; } = TimeSpan.Zero;
+        [Range(0, 500, ErrorMessage = "Vērtībai jābūt starp {1} un {2}")]
         public int Pulse { get; set; }
+        [Range(0, 10000, ErrorMessage = "Vērtībai jābūt starp {1} un {2}")]
         public int Vert { get; set; }
         public float E { get; set; }
         public float S { get; set; }

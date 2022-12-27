@@ -24,18 +24,26 @@ namespace DataAccessLibrary.Models
         [Display(Name = "Email")]
         public string Email { get; set; } 
         public DateTime? Birthdate { get; set; }
-        public int Height { get; set; } 
-        public int Weight { get; set; } 
-        public int Hr{ get; set; } 
+        [Range(0, 1000, ErrorMessage = "Vērtībai jābūt starp {1} un {2}")]
+        public int Height { get; set; }
+        [Range(0, 1000, ErrorMessage = "Vērtībai jābūt starp {1} un {2}")]
+        public int Weight { get; set; }
+        [Range(0, 1000, ErrorMessage = "Vērtībai jābūt starp {1} un {2}")]
+        public int Hr{ get; set; }
+        [Range(0, 1000, ErrorMessage = "Vērtībai jābūt starp {1} un {2}")]
         public int Hr_max { get; set; }
         public Gender gender { get; set; }
-        public string Start_info { get; set; }
-        public string Username{ get; set; }
-        //public string AspUserId{ get; set; }    
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
-        public string Strava_Link { get; set; }
-        public string Garmin_link { get; set; }
+        [StringLength(10000, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
+        public string? Start_info { get; set; }
+        public string? Username{ get; set; }
+        [StringLength(50, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
+        public string? Firstname { get; set; }
+        [StringLength(50, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
+        public string? Lastname { get; set; }
+        [StringLength(250, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
+        public string? Strava_Link { get; set; }
+        [StringLength(250, ErrorMessage = "Teksta garums nedrīkst pārsniegt {1} simbolus")]
+        public string? Garmin_link { get; set; }
     }
    
 
