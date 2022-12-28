@@ -23,11 +23,11 @@
     {
 
         <MudItem xs="12" sm="12" md="4" lg="4" xl="3" xxl="2" Class="d-flex flex-column mud-card">
-
-            <MudBadge Dot="true" Color="@color" Overlap="true" Origin="Origin.TopRight">
+            
+                <MudBadge Dot="true" Color="color" Overlap="true" Origin="Origin.TopRight">
+            
+         
                 <div>
-
-
                     <MudCard Class="d-flex flex-column justify-center mud-width-full pt-8 hc" Style="min-width:fit-content;" @onclick="@(() => OpenRunner(@runner.Id))">
 
                         <MudCardHeader Class="d-flex justify-content-center">
@@ -71,7 +71,8 @@
     List<ReportModel> trainingCycles = new List<ReportModel>();
     RunnerModel coach = new RunnerModel();
     public int x { get; set; } = 0;
-    public Color color { get; set; } = Color.Info;
+    public int status = 0; 
+    public Color color { get; set; } = Color.Default;
     protected async override Task OnInitializedAsync()
     {
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
@@ -80,7 +81,24 @@
         runners = runnerData.GetRunners();
         if (user != null)
         {
-            CoachRunners = runnerData.GetCoachRunners(user.Name);
+            CoachRunners = runnerData.GetCoachRunners(coach.Id);
+        }
+        foreach(var a in CoachRunners)
+        {
+            a.Status = runnerData.GetStatus(a.Id); 
+            if(a.Status == 2)
+            {
+                color = Color.Error;
+            }
+            if(a.Status == 1)
+            {
+                color = Color.Success;
+            }
+            if(a.Status == 0)
+            {
+                color = Color.Info; 
+            }
+
         }
     }
 
@@ -99,7 +117,10 @@
 
     }
 
-
+    public Color GetSatatus()
+    {
+        return Color.Info; 
+    }
 
     public bool _isOpen;
 
@@ -123,7 +144,7 @@
         {
             runnerData.RemoveTrainee(crunner_id, coach.Id);
             StateHasChanged();
-            CoachRunners = runnerData.GetCoachRunners(coach.Email);
+            CoachRunners = runnerData.GetCoachRunners(coach.Id);
         }
 
     }

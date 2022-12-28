@@ -89,7 +89,7 @@ namespace SupervaroniApp.Areas.Identity.Pages.Account
             [Required]
             [StringLength(100, ErrorMessage = "{0}i jābūt vismaz {2} un ne vairāk par {1} simbolus garai", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Parole")]
+            [Display(Name = "Password")]
             public string Password { get; set; }
 
             /// <summary>
@@ -98,7 +98,7 @@ namespace SupervaroniApp.Areas.Identity.Pages.Account
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Parole atkārtoti")]
-            [Compare("Parole", ErrorMessage = "Parolei un apstiprinājuma parolei ir jāsakrīt")]
+            [Compare("Password", ErrorMessage = "Parolei un apstiprinājuma parolei ir jāsakrīt")]
             public string ConfirmPassword { get; set; }
         }
 

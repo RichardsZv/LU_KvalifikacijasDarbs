@@ -1,4 +1,5 @@
-﻿using DataAccessLibrary.Models;
+﻿using Dapper;
+using DataAccessLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,13 +82,11 @@ namespace DataAccessLibrary.Data
         /// Funkcija treneru skatam
         /// </summary>
         /// <returns>Trenera audzēkņi</returns>
-        public List<RunnerModel> GetCoachRunners(string uname)
+        public List<RunnerModel> GetCoachRunners(int id )
         {
-            RunnerModel coach = new RunnerModel();
-            coach = GetCurrentRunner(uname);
             string sql = @"SELECT * FROM dbo.Users a 
                                 LEFT JOIN dbo.CoachRunnerDisplay b ON a.Id = b.runner_id
-                                WHERE b.coach_id = " + coach.Id; 
+                                WHERE b.coach_id = " + id; 
             var a = _db.Query<RunnerModel>(sql, "DefaultConnection").ToList();
             return a;
         }
@@ -229,6 +228,19 @@ namespace DataAccessLibrary.Data
         {
             string sql = @"DELETE FROM CoachRunnerDisplay WHERE runner_id = " + runner_id + " and coach_id = " + coach_id;
             _db.Query<RunnerModel>(sql, "DefaultConnection").ToList();
+        }
+
+        /// <summary>
+        /// Funkcija, kas iegūst audzekņa atskaites statusu balstoties uz dienasgrāmatas aizpildījuma datiem. 
+        /// </summary>
+        public int GetStatus(int runnerId)
+        {
+            var p = new DynamicParameters();
+            p.Add("RunnerId", runnerId);
+            var connstring = "DefaultConnection";
+            var a = _db.LoadDataSP<RunnerModel, dynamic>("spGetReportStatus", p, connstring).FirstOrDefault();
+            int i = a.Status;
+            return i; 
         }
 
 

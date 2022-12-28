@@ -1,4 +1,5 @@
-﻿using DataAccessLibrary.Models;
+﻿using AutoMapper.Configuration.Conventions;
+using DataAccessLibrary.Models;
 
 namespace DataAccessLibrary.Data
 {
@@ -8,7 +9,7 @@ namespace DataAccessLibrary.Data
         void SaveRunner(RunnerModel runner);
         public List<RunnerModel> GetRunners();
         public void SaveRunnerToCoach(int Id, string uname);
-        public List<RunnerModel> GetCoachRunners(string uname);
+        public List<RunnerModel> GetCoachRunners(int id);
         public RunnerModel GetRunnerById(string id);
         public void AddTest(TestsModel test);
         void DeleteTest(string runner_id, int test_Id); 
@@ -22,7 +23,8 @@ namespace DataAccessLibrary.Data
         public void AddPersonalBest(PersonalBestsModel pb);
         void DeletePb(string runner_id, int pb_id); 
         public List<PersonalBestsModel> GetPersonalBests(string runner_id);
-        void RemoveTrainee(int runner_id, int coach_id); 
+        void RemoveTrainee(int runner_id, int coach_id);
+        int GetStatus(int runnerId); 
 
     }
 }
