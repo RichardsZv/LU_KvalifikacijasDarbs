@@ -89,13 +89,13 @@ builder.Services.AddScoped<IDialogService, DialogService>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllersWithViews();
 
-//GDPR
+//Cookie policy
 
-    builder.Services.Configure<CookiePolicyOptions>(options =>
-    {
-        options.CheckConsentNeeded = context => true;
-        options.MinimumSameSitePolicy = SameSiteMode.None;
-    });
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.CheckConsentNeeded = context => true;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
 
 
 
