@@ -106,18 +106,12 @@
     {
         
         var options = new DialogOptions()
-            {
+         {
                 CloseOnEscapeKey = true,
                 MaxWidth = MaxWidth.Medium,
                 FullWidth = true,
-            };
-       
-        this.InvokeAsync(() =>
-        {
-            DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
-            this.StateHasChanged();
-        });
-        
+         };
+       DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
     }
 
 
