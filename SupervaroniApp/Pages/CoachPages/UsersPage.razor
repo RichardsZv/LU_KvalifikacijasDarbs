@@ -102,20 +102,24 @@
         }
     }
 
-    private void OpenDialog()
+    public void OpenDialog()
     {
+        
         var options = new DialogOptions()
             {
                 CloseOnEscapeKey = true,
                 MaxWidth = MaxWidth.Medium,
                 FullWidth = true,
             };
-        if (runners != null)
+       
+        this.InvokeAsync(() =>
         {
             DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
-        }
-
+            this.StateHasChanged();
+        });
+        
     }
+
 
     public Color GetSatatus()
     {

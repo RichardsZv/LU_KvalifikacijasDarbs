@@ -87,7 +87,7 @@ namespace SupervaroniApp.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "{0}i jābūt vismaz {2} un ne vairāk par {1} simbolus garai", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0} jābūt vismaz {2} un ne vairāk par {1} simbolus garai", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }

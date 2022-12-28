@@ -34,9 +34,12 @@
     void Cancel() => MudDialog.Cancel();
     
 
-    public void AddToCoach(int Id){
-        runnerData.SaveRunnerToCoach(Id, uname);
-        StateHasChanged();
-        runners = runnerData.GetRunners();
+    public async void AddToCoach(int Id)
+    {
+        
+        await InvokeAsync(() =>
+        {
+            runnerData.SaveRunnerToCoach(Id, uname);
+        });
     }
 }

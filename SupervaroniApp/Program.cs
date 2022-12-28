@@ -83,9 +83,9 @@ builder.Services.AddMudServices(config =>
 
 //Interfeisi 
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
-builder.Services.AddSingleton<IRunnerData, RunnerData>();
-builder.Services.AddSingleton<IReportData, ReportData>();
-builder.Services.AddSingleton<IDialogService, DialogService>();
+builder.Services.AddTransient<IRunnerData, RunnerData>();
+builder.Services.AddTransient<IReportData, ReportData>();
+builder.Services.AddScoped<IDialogService, DialogService>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllersWithViews();
 
