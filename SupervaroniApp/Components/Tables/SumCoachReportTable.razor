@@ -1,0 +1,70 @@
+﻿@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@using System.Globalization
+@using System.ComponentModel.DataAnnotations
+@inject IReportData reportData
+@inject IRunnerData runnerData
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+
+<MudSimpleTable Style="overflow-x: auto;">
+    <thead>
+        <tr>
+            <th>
+                <MudText>Km</MudText>
+            </th>
+            <th>
+                <MudText>Laiks</MudText>
+            </th>
+            <th>
+                <MudText>Laiks(cits)</MudText>
+            </th>
+            <th>
+                <MudText>E</MudText>
+            </th>
+            <th>
+                <MudText>S</MudText>
+            </th>
+            <th>
+                <MudText>R</MudText>
+            </th>
+            <th>
+                <MudText>I</MudText>
+            </th>
+            <th>
+                <MudText>T</MudText>
+            </th>
+            <th>
+                <MudText>M</MudText>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in weekSums)
+        {
+            <tr>
+                <td>@row.Km_sum</td>
+                <td>@row.Time_run_sum</td>
+                <td>@row.Time_other_sum</td>
+                <td>@row.E_sum</td>
+                <td>@row.S_sum</td>
+                <td>@row.R_sum</td>
+                <td>@row.I_sum</td>
+                <td>@row.T_sum</td>
+                <td>@row.M_sum</td>
+            </tr>
+        }
+    </tbody>
+</MudSimpleTable>
+@code {
+    [Parameter]
+    public string id { get; set; }
+    List<CoachReporDataSumModel> weekSums = new List<CoachReporDataSumModel>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        //var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        //var user = authstate.User.Identity;
+        //var runnerInfo = runnerData.GetRunnerById(id.ToString);
+        weekSums = reportData.GetSums(id);
+    }
+}

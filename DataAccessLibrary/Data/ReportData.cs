@@ -168,7 +168,8 @@ namespace DataAccessLibrary.Data
             var connstring = "DefaultConnection";
             return _db.LoadDataSP<CoachReportDataModel, dynamic>("spGetCoachReportData", p, connstring);
         }
-
+        /// <summary>
+        /// Tabulas ieraksta update 
         public void UpdateCoachReport(CoachReportDataModel reportdata, string runnerId)
         {
             string sql = @"UPDATE CoachReportData SET km = @Km
@@ -184,10 +185,10 @@ namespace DataAccessLibrary.Data
                                 , t = @T
                                 , m = @M
                                 , vdot = @VDOT
-            WHERE EXISTS( 
-                SELECT null FROM ReportWeek b 
-                inner join Reports c on c.Id = b.report_id 
-                WHERE b.Id = CoachReportData.report_week_id and c.runner_id = @RunnerId and CoachReportData.dat = @Date)";
+                WHERE EXISTS( 
+                    SELECT null FROM ReportWeek b 
+                    INNER JOIN Reports c on c.Id = b.report_id 
+                    WHERE b.Id = CoachReportData.report_week_id and c.runner_id = @RunnerId and CoachReportData.dat = @Date)";
             _db.SaveDataSP(sql, new
             {
                  Date = reportdata.Dat
@@ -208,11 +209,14 @@ namespace DataAccessLibrary.Data
             });
         }
 
+        public List<CoachReporDataSumModel> GetSums(string cycle_id)
+        {
+            var p = new DynamicParameters();
+            p.Add("ReportId", cycle_id);
+            var connstring = "DefaultConnection";
+            return _db.LoadDataSP<CoachReporDataSumModel, dynamic>("spSumByReportWeek", p, connstring);
+        }
 
-     }
-
-
-
-
+    }
 }
 

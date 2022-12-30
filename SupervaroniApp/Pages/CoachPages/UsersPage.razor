@@ -21,12 +21,8 @@
 <MudGrid Justify="Justify.FlexStart">
     @foreach (var runner in CoachRunners)
     {
-
         <MudItem xs="12" sm="12" md="4" lg="4" xl="3" xxl="2" Class="d-flex flex-column mud-card">
-            
                 <MudBadge Dot="true" Color="color" Overlap="true" Origin="Origin.TopRight">
-            
-         
                 <div>
                     <MudCard Class="d-flex flex-column justify-center mud-width-full pt-8 hc" Style="min-width:fit-content;" @onclick="@(() => OpenRunner(@runner.Id))">
 
@@ -55,9 +51,7 @@
                     </MudCard>
                 </div>
             </MudBadge>
-
         </MudItem>
-
     }
 
 </MudGrid>
@@ -86,6 +80,7 @@
         foreach(var a in CoachRunners)
         {
             a.Status = runnerData.GetStatus(a.Id); 
+           
             if(a.Status == 2)
             {
                 color = Color.Error;

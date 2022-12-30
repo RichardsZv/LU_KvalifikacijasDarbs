@@ -63,6 +63,8 @@
                         <MudExpansionPanel Text="@tc.Title">
                         <MudText>Sākuma datums: @tc.Dat_S.Value.ToShortDateString()</MudText>
                         <MudText>Beigu datums: @tc.Dat_B.Value.ToShortDateString()</MudText>
+                        <MudDivider></MudDivider>
+                            <SumCoachReportTable id="@tc.Id.ToString()" />
                         <MudIconButton OnClick="@(()=> HandleDeleteCycleClick(tc.Id))" Color="@Color.Error" Icon="@Icons.Filled.Delete" Title="Dzēst treniņu ciklu"></MudIconButton>
                       </MudExpansionPanel>
                   }
@@ -125,7 +127,6 @@
 @code {
     [Parameter]
     public string id { get; set; }
-
     public bool _loading = true;
     RunnerModel runner = new RunnerModel();
 
