@@ -19,7 +19,6 @@ namespace DataAccessLibrary.Data
             _db = db;
 
         }
-
         /// <returns>Šobrīdējo lietotāju</returns>
         public RunnerModel GetCurrentRunner(string uname)
         {
@@ -27,11 +26,7 @@ namespace DataAccessLibrary.Data
             string sql = @"SELECT Id, email, birthdate, height, weight, hr, hr_max, gender, start_info, username, firstname, lastname, strava_link from dbo.Users where username = '" + uname+"'";
             //runner = _db.LoadData<RunnerModel, dynamic>(sql, new { })[0];
             var a = _db.Query<RunnerModel>(sql, "DefaultConnection");
-        
-
             runner = a.FirstOrDefault();
-
-            
             return runner; 
         }
         /// <summary>

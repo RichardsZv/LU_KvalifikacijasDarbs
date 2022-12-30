@@ -6,65 +6,101 @@
 @inject IRunnerData runnerData
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 
-<MudSimpleTable Style="overflow-x: auto;">
-    <thead>
-        <tr>
-            <th>
-                <MudText>Km</MudText>
-            </th>
-            <th>
-                <MudText>Laiks</MudText>
-            </th>
-            <th>
-                <MudText>Laiks(cits)</MudText>
-            </th>
-            <th>
-                <MudText>E</MudText>
-            </th>
-            <th>
-                <MudText>S</MudText>
-            </th>
-            <th>
-                <MudText>R</MudText>
-            </th>
-            <th>
-                <MudText>I</MudText>
-            </th>
-            <th>
-                <MudText>T</MudText>
-            </th>
-            <th>
-                <MudText>M</MudText>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var row in weekSums)
-        {
-            <tr>
-                <td>@row.Km_sum</td>
-                <td>@row.Time_run_sum</td>
-                <td>@row.Time_other_sum</td>
-                <td>@row.E_sum</td>
-                <td>@row.S_sum</td>
-                <td>@row.R_sum</td>
-                <td>@row.I_sum</td>
-                <td>@row.T_sum</td>
-                <td>@row.M_sum</td>
-            </tr>
-        }
-    </tbody>
-</MudSimpleTable>
+<MudTable Items="@weekSums" Hover="true" ReadOnly="true" Elevation="2" Dense="true" Filter="new Func<CoachReporDataSumModel,bool>(SearchFunction1)">
+    <ToolBarContent>
+        <MudTextField @bind-Value="searchString" Placeholder="Meklēt" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.Km_sum)">Kilometri</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.Time_run_sum)">Laiks</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.Time_other_sum)">Laiks (cits)</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.E_sum)">E</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.S_sum)">S</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.R_sum)">R</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.I_sum)">I</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.T_sum)">T</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.M_sum)">M</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Kilometri">@context.Km_sum</MudTd>
+        <MudTd DataLabel="Laiks">@context.Time_run_sum</MudTd>
+        <MudTd DataLabel="Laiks (cits)">@context.Time_other_sum</MudTd>
+        <MudTd DataLabel="E">@context.E_sum</MudTd>
+        <MudTd DataLabel="S">@context.S_sum</MudTd>
+        <MudTd DataLabel="R">@context.R_sum</MudTd>
+        <MudTd DataLabel="I">@context.I_sum</MudTd>
+        <MudTd DataLabel="T">@context.T_sum</MudTd>
+        <MudTd DataLabel="M">@context.M_sum</MudTd>
+    </RowTemplate>
+    <FooterContent>
+        <MudTd DataLabel="Kilometri">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Sum((e) => e.Km_sum).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="Laiks">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Sum((e) => e.Time_run_sum)
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="Laiks">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Sum((e) => e.Time_other_sum)
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="E">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Sum((e) => e.E_sum).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="S">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Sum((e) => e.S_sum).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="R">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Sum((e) => e.R_sum).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="I">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Sum((e) => e.I_sum).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="T">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Sum((e) => e.T_sum).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="M">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Sum((e) => e.M_sum).ToString("N2")
+            </MudText>
+        </MudTd>
+    </FooterContent>
+</MudTable>
+  
+
 @code {
     [Parameter]
     public string id { get; set; }
     List<CoachReporDataSumModel> weekSums = new List<CoachReporDataSumModel>();
+    private string searchString = "";
 
     protected async override Task OnInitializedAsync()
     {
-        //var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
-        //var user = authstate.User.Identity;
-        //var runnerInfo = runnerData.GetRunnerById(id.ToString);
         weekSums = reportData.GetSums(id);
+    }
+
+    private bool SearchFunction1(CoachReporDataSumModel data) => SearchFunction(data, searchString);
+
+    private bool SearchFunction(CoachReporDataSumModel data, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if ($"{data.Km_sum} {data.Time_run_sum} {data.Time_other_sum} {data.E_sum} {data.S_sum} {data.R_sum} {data.I_sum} {data.T_sum} {data.M_sum}".Contains(searchString))
+            return true;
+        return false;
     }
 }

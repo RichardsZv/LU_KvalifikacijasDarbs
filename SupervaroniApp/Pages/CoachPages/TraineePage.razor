@@ -63,8 +63,16 @@
                         <MudExpansionPanel Text="@tc.Title">
                         <MudText>Sākuma datums: @tc.Dat_S.Value.ToShortDateString()</MudText>
                         <MudText>Beigu datums: @tc.Dat_B.Value.ToShortDateString()</MudText>
-                        <MudDivider></MudDivider>
-                            <SumCoachReportTable id="@tc.Id.ToString()" />
+                        <MudDivider/>
+                            <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-8" Color="Color.Tertiary" Style="min-height:25vh; ">
+                                <MudTabPanel Text="Cikla Summārās vērtības">
+                                    <SumCoachReportTable id="@tc.Id.ToString()" />
+                                </MudTabPanel>
+                                <MudTabPanel Text="Cikla vidējās vērtības">
+                                    <SumCoachReportTable id="@tc.Id.ToString()" />
+                                </MudTabPanel>
+                            </MudTabs>
+                         <MudSpacer />
                         <MudIconButton OnClick="@(()=> HandleDeleteCycleClick(tc.Id))" Color="@Color.Error" Icon="@Icons.Filled.Delete" Title="Dzēst treniņu ciklu"></MudIconButton>
                       </MudExpansionPanel>
                   }
@@ -120,7 +128,7 @@
         </MudHidden>
     </MudItem>
      
-    
+   
 </MudGrid>
 
 
@@ -134,11 +142,12 @@
     ReportModel trainingCycle = new ReportModel(); 
     ReportWeekModel trainingWeek = new ReportWeekModel();
 
-    public int size1 { get; set; } = 6; 
-    public int size2 { get; set; } = 6; 
+    public int size1 { get; set; } = 12; 
+    public int size2 { get; set; } = 12; 
     public int size3 { get; set; } = 12; 
-    public int size4 { get; set; } = 4; 
-    public int size5 { get; set; } = 8; 
+    public int size4 { get; set; } = 12; 
+    public int size5 { get; set; } = 12; 
+    private Transition transition = Transition.Slide;
 
     protected async override Task OnInitializedAsync()
     {
