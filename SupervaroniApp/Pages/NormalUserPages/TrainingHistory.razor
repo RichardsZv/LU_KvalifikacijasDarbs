@@ -15,7 +15,7 @@
 @inject ISnackbar SnackbarService
 
 
-<MudTable Items="@reportList" Hover="true" ReadOnly="true" Elevation="2" Class="my-6 py-2 py-4" GroupBy="@_groupDefinition" Height="70vh" FixedHeader="true">
+<MudTable Items="@reportList" Hover="true" ReadOnly="true" Elevation="2" Class="my-6 py-2 py-4" GroupBy="@_groupDefinition" Height="70vh" FixedHeader="true" Filter="new Func<RunnerReportDataModel,bool>(SearchFunction1)">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Treniņu vēsture</MudText>
         <MudSpacer />
@@ -87,10 +87,10 @@
         runner = runnerData.GetCurrentRunner(user.Name);
         reportList = reportData.GetRunnerHistoricData(runner.Id);
     }
-    //select * from RunnerReportData where runner_id =
 
+    //Tabulas grupu definīcija
     private TableGroupDefinition<RunnerReportDataModel> _groupDefinition = new()
-        {
+    {
             GroupName = "Gads",
             Indentation = true,
             Expandable = true,
@@ -104,6 +104,34 @@
                 Indentation = true,
                 Selector = (e) => e.Dat.ToString("MMMM", CultureInfo.CreateSpecificCulture("Lv"))
             }
-        };
+     };
+
+    private bool SearchFunction1(RunnerReportDataModel data) => SearchFunction(data, searchString);
+
+    private bool SearchFunction(RunnerReportDataModel data, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (data.Dat.ToShortDateString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (data.Planned != null)
+        {
+            if (data.Planned.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        if (data.Completed != null)
+        {
+            if (data.Completed.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        if (data.Notes != null)
+        {
+            if (data.Notes.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        if ($"{data.Km} {data.Pulse}".Contains(searchString))
+            return true;
+        return false;
+    }
 
 }

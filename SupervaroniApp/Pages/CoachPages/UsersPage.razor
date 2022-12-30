@@ -8,7 +8,7 @@
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using SupervaroniApp.Components
 @using SupervaroniApp.Components.Dialogs
-@using System.Net.Mail
+@inject ISnackbar SnackbarService
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
@@ -104,14 +104,14 @@
 
     public void OpenDialog()
     {
-        
+
         var options = new DialogOptions()
          {
                 CloseOnEscapeKey = true,
                 MaxWidth = MaxWidth.Medium,
                 FullWidth = true,
          };
-       DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
+        DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
     }
 
 
@@ -143,8 +143,19 @@
             runnerData.RemoveTrainee(crunner_id, coach.Id);
             StateHasChanged();
             CoachRunners = runnerData.GetCoachRunners(coach.Id);
+            SnackbarService.Add("Lietotājs noņemts no audzēkņu saraksta", Severity.Success, config =>
+            {
+               config.Onclick = snackbar =>
+               {
+                   return Task.CompletedTask;
+               };
+            });
         }
 
     }
+
+   
+
+   
 
 }

@@ -50,11 +50,14 @@
 
 
 <MudTable Items="@reportList" Hover="true" CanCancelEdit="true" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
-          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4">
+          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" 
+          RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted"
+          @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4"
+          Filter="new Func<RunnerReportDataModel,bool>(SearchFunction1)">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Treniņu dienasgrāmata</MudText>
         <MudSpacer />
-        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudTextField @bind-Value="searchString" Placeholder="Meklēt" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
@@ -78,22 +81,22 @@
     <RowEditingTemplate>
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
         <MudTd DataLabel="Ieplānots">
-            <MudTextField @bind-Value="@context.Planned" />
+            <MudTextField @bind-Value="@context.Planned" MaxLength="100" />
         </MudTd>
         <MudTd DataLabel="Izpildīts">
-            <MudTextField @bind-Value="@context.Completed" />
+            <MudTextField @bind-Value="@context.Completed" MaxLength="100" />
         </MudTd>
         <MudTd DataLabel="Laiks">
             <MudTextField @bind-Value="@context.Time" />
         </MudTd>
         <MudTd DataLabel="Distance">
-            <MudNumericField @bind-Value="@context.Km" Format="N2" />
+            <MudNumericField @bind-Value="@context.Km" Format="N2" Min="0" Max="10000" />
         </MudTd>
         <MudTd DataLabel="Pulss">
-            <MudNumericField @bind-Value="@context.Pulse"/>
+            <MudNumericField @bind-Value="@context.Pulse" Min="0" Max="1000" />
         </MudTd>
         <MudTd Style="overflow-wrap: break-word;" DataLabel="Peizīmes">
-            <MudTextField T="string" Lines="3"  @bind-Value="@context.Notes" Adornment="Adornment.Start" />
+            <MudTextField T="string" Lines="3" @bind-Value="@context.Notes" Adornment="Adornment.Start" MaxLength="200" />
         </MudTd>
     </RowEditingTemplate>
     <PagerContent>
@@ -136,8 +139,8 @@
         }
         reportList = reportData.GetRunnerReportData(runner.Id, DatS, DatB);
 
-        
-        
+
+
     }
     //Pogas ielādes animācija
     private bool _processing = false;
@@ -162,11 +165,9 @@
 
     private void BackupItem(object report)
     {
-        reportBeforeEdit = new()
-        {
+        reportBeforeEdit = new();
 
-        };
-        //AddEditionEvent($"RowEditPreview event: made a backup of Element {((Element)element).Name}");
+
     }
     private void ItemHasBeenCommitted(object report)
     {
@@ -185,6 +186,35 @@
               });
         StateHasChanged();
     }
+
+    private bool SearchFunction1(RunnerReportDataModel data) => SearchFunction(data, searchString);
+
+    private bool SearchFunction(RunnerReportDataModel data, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (data.Dat.ToShortDateString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if(data.Planned != null)
+        {
+            if (data.Planned.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        if(data.Completed != null)
+        {
+            if (data.Completed.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true; 
+        }
+        if(data.Notes != null)
+        {
+            if (data.Notes.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        if ($"{data.Km} {data.Pulse}".Contains(searchString))
+            return true;
+        return false;
+    }
+
 
     private void HandleDateFilterClick()
     {

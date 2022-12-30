@@ -6,12 +6,12 @@
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 
 
-<MudTable Items="@traineeReportList" Hover="true" ReadOnly="true" Elevation="2" Class="my-6 py-2 py-4">
+<MudTable Items="@traineeReportList" Hover="true" ReadOnly="true" Elevation="2" Class="my-6 py-2 py-4" Filter="new Func<RunnerReportDataModel,bool>(SearchFunction1)">
    
     <ToolBarContent>
         <MudText Typo="Typo.h6">Treniņu dienasgrāmata</MudText>
         <MudSpacer />
-        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudTextField @bind-Value="searchString" Placeholder="Meklēt" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
@@ -28,11 +28,10 @@
         <MudTd DataLabel="Diena">@context.Dat.ToString("ddd", CultureInfo.CreateSpecificCulture("lv"))</MudTd>
         <MudTd DataLabel="Plāns">@context.Planned</MudTd>
         <MudTd DataLabel="Izpildīts">@context.Completed</MudTd>
-        <MudTd DataLabel="Kilometri">@context.Km</MudTd>
+        <MudTd DataLabel="Kilometri" >@context.Km.ToString("N2")</MudTd>
         <MudTd DataLabel="Laiks">@context.Time</MudTd>
         <MudTd DataLabel="Pulss">@context.Pulse</MudTd>
         <MudTd DataLabel="Piezīmes">@context.Notes</MudTd>
-      
     </RowTemplate>
 
     <PagerContent>
@@ -44,21 +43,21 @@
 </MudTable>
 
 @code {
-    [Parameter]
-    public string id { get; set; }
-    RunnerModel runner = new RunnerModel();
+        [Parameter]
+        public string id { get; set; }
+        RunnerModel runner = new RunnerModel();
 
-    List<ReportModel> trainingCycles = new List<ReportModel>();
-    ReportWeekModel trainingWeek = new ReportWeekModel();
+        List<ReportModel> trainingCycles = new List<ReportModel>();
+        ReportWeekModel trainingWeek = new ReportWeekModel();
 
 
-    List<RunnerReportDataModel> traineeReportList = new List<RunnerReportDataModel>();
- 
+        List<RunnerReportDataModel> traineeReportList = new List<RunnerReportDataModel>();
+
     private string searchString = "";
     int runnerId = 0; 
     DateTime? DatS = DateTime.Today.AddDays(-6);
     DateTime? DatB = DateTime.Today;
-   
+
 
     protected async override Task OnInitializedAsync()
     {
@@ -88,7 +87,7 @@
         else{
             traineeReportList = reportData.GetRunnerReportData(runnerId, trainingWeek.Dat_S, trainingWeek.Dat_B);
         }
-       
+
     }
     public void LastWeekClick()
     {
@@ -100,8 +99,39 @@
         }
         else{
             traineeReportList = reportData.GetRunnerReportData(runnerId, trainingWeek.Dat_S, trainingWeek.Dat_B);
+        }  
+    }
+
+    private bool SearchFunction1(RunnerReportDataModel data) => SearchFunction(data, searchString);
+
+    private bool SearchFunction(RunnerReportDataModel data, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (data.Dat.ToShortDateString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (data.Dat.ToString("ddd", CultureInfo.CreateSpecificCulture("lv")).Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (data.Planned != null)
+        {
+            if (data.Planned.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
         }
-        
+        if (data.Completed != null)
+        {
+            if (data.Completed.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        if (data.Notes != null)
+        {
+            if (data.Notes.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        if (data.Time.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{data.Km} {data.Pulse}".Contains(searchString))
+            return true;
+        return false;
     }
 
    

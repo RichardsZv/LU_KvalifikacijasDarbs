@@ -5,7 +5,7 @@
 @using DataAccessLibrary.Data
 @using DataAccessLibrary.Models
 @using System.Security.Claims
-
+@inject ISnackbar SnackbarService
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject IRunnerData runnerData
 
@@ -70,6 +70,13 @@
     private void OnValidSubmit(EditContext context)
     {
         runnerData.SaveRunner(runner);
+        SnackbarService.Add("Profila informācija saglabata", Severity.Success, config =>
+              {
+                  config.Onclick = snackbar =>
+                  {
+                      return Task.CompletedTask;
+                  };
+              });
         StateHasChanged();
 
     }

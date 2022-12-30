@@ -30,7 +30,7 @@ namespace DataAccessLibrary.Models
         public float I { get; set; }
         public float T { get; set; }
         public float M { get; set; }
-        public float VDOT { get; set; }
+        public int VDOT { get; set; } 
         public DateTime Dat { get; set; }
      
     }

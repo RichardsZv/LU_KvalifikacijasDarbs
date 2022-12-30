@@ -8,8 +8,10 @@
 
 
 <MudTable Items="@plannedList" Hover="true" CanCancelEdit="true" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
-          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4">
-    
+          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" 
+          RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" 
+          @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4"
+          Filter="new Func<ReportDataPlannedModel,bool>(SearchFunction1)">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Plāns</MudText>
         <MudSpacer />
@@ -84,6 +86,22 @@
         {
             plannedList = reportData.GetPlannedReportList(id, weekNum);
         }
+    }
+
+    private bool SearchFunction1(ReportDataPlannedModel data) => SearchFunction(data, searchString);
+
+    private bool SearchFunction(ReportDataPlannedModel data, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (data.Dat.ToShortDateString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (data.Plan_Description != null)
+        {
+            if (data.Plan_Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        return false;
     }
 
     private void AddEditionEvent(string message)
