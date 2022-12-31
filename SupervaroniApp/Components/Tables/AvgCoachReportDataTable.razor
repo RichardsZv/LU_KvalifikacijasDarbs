@@ -1,0 +1,106 @@
+﻿@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@using System.Globalization
+@using System.ComponentModel.DataAnnotations
+@inject IReportData reportData
+@inject IRunnerData runnerData
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+
+<MudTable Items="@weekSums" Hover="true" ReadOnly="true" Elevation="2" Dense="true" Filter="new Func<CoachReporDataSumModel,bool>(SearchFunction1)">
+    <ToolBarContent>
+        <MudTextField @bind-Value="searchString" Placeholder="Meklēt" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.Km_avg)">Kilometri</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.Time_run_avg)">Laiks</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.Time_other_avg)">Laiks (cits)</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.E_avg)">E</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.S_avg)">S</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.R_avg)">R</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.I_avg)">I</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.T_avg)">T</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<CoachReporDataSumModel, object>(x=>x.M_avg)">M</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Kilometri">@context.Km_avg</MudTd>
+        <MudTd DataLabel="Laiks">@context.Time_run_avg</MudTd>
+        <MudTd DataLabel="Laiks (cits)">@context.Time_other_avg</MudTd>
+        <MudTd DataLabel="E">@context.E_avg</MudTd>
+        <MudTd DataLabel="S">@context.S_avg</MudTd>
+        <MudTd DataLabel="R">@context.R_avg</MudTd>
+        <MudTd DataLabel="I">@context.I_avg</MudTd>
+        <MudTd DataLabel="T">@context.T_avg</MudTd>
+        <MudTd DataLabel="M">@context.M_avg</MudTd>
+    </RowTemplate>
+    <FooterContent>
+        <MudTd DataLabel="Kilometri">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Average((e) => e.Km_avg).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="Laiks">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Average((e) => e.Time_run_avg)
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="Laiks">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Average((e) => e.Time_other_avg)
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="E">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Average((e) => e.E_avg).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="S">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Average((e) => e.S_avg).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="R">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Average((e) => e.R_avg).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="I">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Average((e) => e.I_avg).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="T">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Average((e) => e.T_avg).ToString("N2")
+            </MudText>
+        </MudTd>
+        <MudTd DataLabel="M">
+            <MudText Color="Color.Tertiary" Typo="Typo.body2">
+                @weekSums.Average((e) => e.M_avg).ToString("N2")
+            </MudText>
+        </MudTd>
+    </FooterContent>
+</MudTable>
+
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+    List<CoachReporDataSumModel> weekSums = new List<CoachReporDataSumModel>();
+    private string searchString = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        weekSums = reportData.GetAverages(id);
+    }
+
+    private bool SearchFunction1(CoachReporDataSumModel data) => SearchFunction(data, searchString);
+
+    private bool SearchFunction(CoachReporDataSumModel data, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if ($"{data.Km_avg} {data.Time_run_avg} {data.Time_other_avg} {data.E_avg} {data.S_avg} {data.R_avg} {data.I_avg} {data.T_avg} {data.M_avg}".Contains(searchString))
+            return true;
+        return false;
+    }
+}

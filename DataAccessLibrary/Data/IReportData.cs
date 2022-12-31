@@ -16,7 +16,8 @@ namespace DataAccessLibrary.Data
         void UpdatePlannedReports(ReportDataPlannedModel reportdata, string runnerId);
         List<CoachReportDataModel> GetCoachReportList(string runnerId, int weeknum);
         void UpdateCoachReport(CoachReportDataModel reportdata, string runnerId);
-        List<CoachReporDataSumModel> GetSums(string cycle_id); 
+        List<CoachReporDataSumModel> GetSums(string cycle_id);
+        List<CoachReporDataSumModel> GetAverages(string cycle_id); 
 
     }
 }

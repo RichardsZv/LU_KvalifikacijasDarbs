@@ -217,6 +217,14 @@ namespace DataAccessLibrary.Data
             return _db.LoadDataSP<CoachReporDataSumModel, dynamic>("spSumByReportWeek", p, connstring);
         }
 
+        public List<CoachReporDataSumModel> GetAverages(string cycle_id)
+        {
+            var p = new DynamicParameters();
+            p.Add("ReportId", cycle_id);
+            var connstring = "DefaultConnection";
+            return _db.LoadDataSP<CoachReporDataSumModel, dynamic>("spAvgByReportWeek", p, connstring);
+        }
+
     }
 }
 
