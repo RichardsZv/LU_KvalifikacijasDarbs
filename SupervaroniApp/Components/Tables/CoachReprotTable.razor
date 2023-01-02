@@ -6,10 +6,10 @@
 
 
 <MudTable Items="@reportDataList" Hover="true" CanCancelEdit="true" SortLabel="Kārtot pēc" CommitEditTooltip="Commit Edit"
-          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))" 
-          RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted" 
+          OnCommitEditClick="@(() => HandleRowCommit(selectedItem))"
+          RowEditPreview="BackupItem" RowEditCommit="ItemHasBeenCommitted"
           @bind-SelectedItem="selectedItem" Elevation="2" Class="my-6 py-2 py-4" Dense="true" Filter="new Func<CoachReportDataModel,bool>(SearchFunction1)">
-  
+
     <ToolBarContent>
         <MudText Typo="Typo.h6">Izpilde</MudText>
         <MudSpacer />
@@ -17,7 +17,6 @@
     </ToolBarContent>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Dat)">Datums</MudTableSortLabel></MudTh>
-        @*   <MudTh>Diena</MudTh>*@
         <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Km)">Kilometri</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Time_run_min)">Laiks</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.Time_other_min)">Laiks (cits)</MudTableSortLabel></MudTh>
@@ -33,9 +32,7 @@
         <MudTh><MudTableSortLabel SortBy="new Func<CoachReportDataModel, object>(x=>x.M)">M</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
-      
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-        @*   <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>*@
         <MudTd DataLabel="Kilometri">@context.Km</MudTd>
         <MudTd DataLabel="Laiks">@context.Time_run_min</MudTd>
         <MudTd DataLabel="Laiks (cits)">@context.Time_other_min</MudTd>
@@ -49,16 +46,14 @@
         <MudTd DataLabel="I">@context.I</MudTd>
         <MudTd DataLabel="T">@context.T</MudTd>
         <MudTd DataLabel="M">@context.M</MudTd>
-
-
     </RowTemplate>
 
-    <RowEditingTemplate >
-       
+    <RowEditingTemplate>
+
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
         @*     <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>*@
         <MudTd DataLabel="Kilometri">
-            <MudNumericField Format="N2" @bind-Value="@context.Km" Min="0" Max="1000"/>
+            <MudNumericField Format="N2" @bind-Value="@context.Km" Min="0" Max="1000" />
         </MudTd>
         <MudTd DataLabel="Laiks">
             <MudNumericField @bind-Value="@context.Time_run_min" Min="0" Max="10000" />
@@ -70,7 +65,7 @@
             <MudTextField @bind-Value="@context.Completed" MaxLength="250" />
         </MudTd>
         <MudTd DataLabel="Temps">
-            <MudTextField T="TimeSpan?" Format="mm\:ss" @bind-Value="@context.Pace"/>
+            <MudTextField T="TimeSpan?" Format="mm\:ss" @bind-Value="@context.Pace" />
         </MudTd>
         <MudTd DataLabel="Pulss">
             <MudNumericField @bind-Value="@context.Pulse" Min="0" Max="300" HideSpinButtons="true" />
@@ -96,7 +91,7 @@
         <MudTd DataLabel="M">
             <MudNumericField Format="N2" @bind-Value="@context.M" Min="0" Max="1000" HideSpinButtons="true" />
         </MudTd>
-        
+
     </RowEditingTemplate>
     <FooterContent>
         <MudTd>
@@ -120,7 +115,7 @@
             </MudText>
         </MudTd>
         <MudTd />
-        <MudTd DataLabel="Pace"/>
+        <MudTd DataLabel="Pace" />
         <MudTd DataLabel="Pulss">
             <MudText Color="Color.Tertiary" Typo="Typo.body2">
                 @reportDataList.Average((e) => e.Pulse > 0 ? e.Pulse : null) bpm
@@ -133,32 +128,32 @@
         </MudTd>
         <MudTd DataLabel="E">
             <MudText Color="Color.Tertiary" Typo="Typo.body2">
-                @reportDataList.Sum((e) => e.E) 
+                @reportDataList.Sum((e) => e.E)
             </MudText>
         </MudTd>
         <MudTd DataLabel="S">
             <MudText Color="Color.Tertiary" Typo="Typo.body2">
-                @reportDataList.Sum((e) => e.S) 
+                @reportDataList.Sum((e) => e.S)
             </MudText>
         </MudTd>
         <MudTd DataLabel="R">
             <MudText Color="Color.Tertiary" Typo="Typo.body2">
-                @reportDataList.Sum((e) => e.R) 
+                @reportDataList.Sum((e) => e.R)
             </MudText>
         </MudTd>
         <MudTd DataLabel="I">
             <MudText Color="Color.Tertiary" Typo="Typo.body2">
-                @reportDataList.Sum((e) => e.I) 
+                @reportDataList.Sum((e) => e.I)
             </MudText>
         </MudTd>
         <MudTd DataLabel="T">
             <MudText Color="Color.Tertiary" Typo="Typo.body2">
-                @reportDataList.Sum((e) => e.T) 
+                @reportDataList.Sum((e) => e.T)
             </MudText>
         </MudTd>
         <MudTd DataLabel="M">
             <MudText Color="Color.Tertiary" Typo="Typo.body2">
-                @reportDataList.Sum((e) => e.M) 
+                @reportDataList.Sum((e) => e.M)
             </MudText>
         </MudTd>
     </FooterContent>
@@ -205,7 +200,7 @@
     //    .Average(e => e.Pace.Value.TotalMinutes);
 
     //    var averagePaceString = TimeSpan.FromMinutes(averagePace).ToString("mm\\:ss");
-    //    return averagePaceString; 
+    //    return averagePaceString;
     //}
 
     public void NextWeekClick()
@@ -252,7 +247,7 @@
             return true;
         if (data.Dat.ToShortDateString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-     
+
         if (data.Completed != null)
         {
             if (data.Completed.Contains(searchString, StringComparison.OrdinalIgnoreCase))

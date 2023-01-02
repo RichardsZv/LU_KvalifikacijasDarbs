@@ -7,17 +7,17 @@
 
 <style>
 
-.selected {
-    background-color: #1E88E5 !important;
-}
+    .selected {
+        background-color: #1E88E5 !important;
+    }
 
-.selected > td {
-color: white !important;
-}
+        .selected > td {
+            color: white !important;
+        }
 
-.selected > td .mud-input {
-    color: white !important;
-}
+            .selected > td .mud-input {
+                color: white !important;
+            }
 
 </style>
 
@@ -26,7 +26,7 @@ color: white !important;
 <MudIconButton OnClick="Reload" Color="@Color.Info" Icon="@Icons.Filled.RotateRight"></MudIconButton>
 <MudIconButton OnClick="HandleDeleteRaceClick" Color="@Color.Error" Icon="@Icons.Filled.Delete"></MudIconButton>
 
-<MudTable Items="@races" T="RaceModel"  Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By" Dense="true" @bind-SelectedItem="@selectedItem" RowClassFunc="@SelectedRowClassFunc">
+<MudTable Items="@races" T="RaceModel" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By" Dense="true" @bind-SelectedItem="@selectedItem" RowClassFunc="@SelectedRowClassFunc">
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<RaceModel, object>(x=>x.Title)">Nosaukums</MudTableSortLabel></MudTh>
@@ -86,7 +86,7 @@ color: white !important;
     async void Reload()
     {
         _loading = true;
-        races = runnerData.GetRaces(id); 
+        races = runnerData.GetRaces(id);
         _loading = false;
     }
 

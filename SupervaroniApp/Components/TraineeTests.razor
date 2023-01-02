@@ -12,21 +12,21 @@
 
 <style>
 
-.selected {
-    background-color: #1E88E5 !important;
-}
+    .selected {
+        background-color: #1E88E5 !important;
+    }
 
-.selected > td {
-    color: white !important;
-}
+        .selected > td {
+            color: white !important;
+        }
 
-.selected > td .mud-input {
-    color: white !important;
-}
+            .selected > td .mud-input {
+                color: white !important;
+            }
 
 </style>
 
-<MudTable Items="@tests" T="TestsModel" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By" @bind-SelectedItem="@selectedItem"  RowClassFunc="@SelectedRowClassFunc">
+<MudTable Items="@tests" T="TestsModel" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By" @bind-SelectedItem="@selectedItem" RowClassFunc="@SelectedRowClassFunc">
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Dat.Value)">Datums</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<TestsModel, object>(x=>x.Km)">Km</MudTableSortLabel></MudTh>
@@ -38,8 +38,6 @@
         <MudTd DataLabel="Pace">@context.Pace.Value.ToString("mm\\:ss")</MudTd>
     </RowTemplate>
 </MudTable>
-
-
 
 @code {
     [Parameter]
@@ -61,7 +59,7 @@
         runner = runnerInfo;
         tests = runnerData.GetTests(id);
         Age = DateTime.Today.Year - runner.Birthdate.Value.Year;
-        _loading = false; 
+        _loading = false;
     }
     void AddTest()
     {
@@ -85,7 +83,7 @@
         {
             tests = runnerData.GetTests(id);
         }
-     
+
         _loading = false;
 
 
@@ -109,12 +107,14 @@
         }
     }
 
-    private void HandleDeleteTestClick(){
-        if(selectedItem != null){
+    private void HandleDeleteTestClick()
+    {
+        if (selectedItem != null)
+        {
             runnerData.DeleteTest(runner.Id.ToString(), selectedItem.Id);
             tests = runnerData.GetTests(id);
         }
-        StateHasChanged(); 
+        StateHasChanged();
     }
 
 }

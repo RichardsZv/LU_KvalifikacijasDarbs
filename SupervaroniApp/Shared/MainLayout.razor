@@ -15,11 +15,7 @@
         <MudText Typo="Typo.h6" Class="ml-3">Supervaroņi</MudText>
         <MudSpacer />
         <AuthorizeView>
-
             <Authorized>
-               
-                @*<MudSwitch @bind-Checked="@_isDarkMode" T="bool" Color="Color.Tertiary" Class="ma-4"  ThumbIcon="@Icons.Filled.Mail" />*@
-                @*<MudLink Color="Color.Surface" Underline="Underline.None" Href="Identity/Account/Manage">Sveiks, @context.User.Identity?.Name!</MudLink>*@
                 <MudToggleIconButton @bind-Toggled="@_isDarkMode"
                                      Icon="fa-sharp fa-solid fa-moon" Color="@Color.Dark" Title="Off"
                                      ToggledIcon="fa-sharp fa-solid fa-sun" ToggledColor="@Color.Warning" ToggledTitle="On" Class="ma-4" />

@@ -7,7 +7,7 @@
 
 
 <MudTable Items="@traineeReportList" Hover="true" ReadOnly="true" Elevation="2" Class="my-6 py-2 py-4" Filter="new Func<RunnerReportDataModel,bool>(SearchFunction1)">
-   
+
     <ToolBarContent>
         <MudText Typo="Typo.h6">Treniņu dienasgrāmata</MudText>
         <MudSpacer />
@@ -21,14 +21,14 @@
         <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Km)">Kilometri</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Time)">Laiks</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Pulse)">Pulss</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Notes)">Piezīmes</MudTableSortLabel></MudTh> 
+        <MudTh><MudTableSortLabel SortBy="new Func<RunnerReportDataModel, object>(x=>x.Notes)">Piezīmes</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
         <MudTd DataLabel="Diena">@context.Dat.ToString("ddd", CultureInfo.CreateSpecificCulture("lv"))</MudTd>
         <MudTd DataLabel="Plāns">@context.Planned</MudTd>
         <MudTd DataLabel="Izpildīts">@context.Completed</MudTd>
-        <MudTd DataLabel="Kilometri" >@context.Km.ToString("N2")</MudTd>
+        <MudTd DataLabel="Kilometri">@context.Km.ToString("N2")</MudTd>
         <MudTd DataLabel="Laiks">@context.Time</MudTd>
         <MudTd DataLabel="Pulss">@context.Pulse</MudTd>
         <MudTd DataLabel="Piezīmes">@context.Notes</MudTd>
@@ -43,18 +43,18 @@
 </MudTable>
 
 @code {
-        [Parameter]
-        public string id { get; set; }
-        RunnerModel runner = new RunnerModel();
+    [Parameter]
+    public string id { get; set; }
+    RunnerModel runner = new RunnerModel();
 
-        List<ReportModel> trainingCycles = new List<ReportModel>();
-        ReportWeekModel trainingWeek = new ReportWeekModel();
+    List<ReportModel> trainingCycles = new List<ReportModel>();
+    ReportWeekModel trainingWeek = new ReportWeekModel();
 
 
-        List<RunnerReportDataModel> traineeReportList = new List<RunnerReportDataModel>();
+    List<RunnerReportDataModel> traineeReportList = new List<RunnerReportDataModel>();
 
     private string searchString = "";
-    int runnerId = 0; 
+    int runnerId = 0;
     DateTime? DatS = DateTime.Today.AddDays(-6);
     DateTime? DatB = DateTime.Today;
 
@@ -71,7 +71,8 @@
             trainingWeek = reportData.GetCurrentWeek(id);
             traineeReportList = reportData.GetRunnerReportData(runnerId, trainingWeek.Dat_S, trainingWeek.Dat_B);
         }
-        else{
+        else
+        {
             traineeReportList = reportData.GetRunnerReportData(runnerId, DatS, DatB);
         }
     }
@@ -81,10 +82,12 @@
         trainingWeek.Dat_S = trainingWeek.Dat_S.AddDays(7);
         trainingWeek.Dat_B = trainingWeek.Dat_B.AddDays(7);
         //Pārbaude lai nevar saspaidīt par daudz nedēļas uz priekšu (60 dienas no šodienas)
-        if (trainingWeek.Dat_S > DatS?.AddDays(60) || trainingWeek.Dat_B > DatB?.AddDays(60)){
-            return; 
+        if (trainingWeek.Dat_S > DatS?.AddDays(60) || trainingWeek.Dat_B > DatB?.AddDays(60))
+        {
+            return;
         }
-        else{
+        else
+        {
             traineeReportList = reportData.GetRunnerReportData(runnerId, trainingWeek.Dat_S, trainingWeek.Dat_B);
         }
 
@@ -97,9 +100,10 @@
         {
             return;
         }
-        else{
+        else
+        {
             traineeReportList = reportData.GetRunnerReportData(runnerId, trainingWeek.Dat_S, trainingWeek.Dat_B);
-        }  
+        }
     }
 
     private bool SearchFunction1(RunnerReportDataModel data) => SearchFunction(data, searchString);
@@ -133,7 +137,4 @@
             return true;
         return false;
     }
-
-   
-
-  }
+}

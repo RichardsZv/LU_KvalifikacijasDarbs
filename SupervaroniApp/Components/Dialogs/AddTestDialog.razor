@@ -14,7 +14,7 @@
             <MudGrid>
                 <MudItem xs="12" sm="12">
                     <MudCard>
-                        <MudCardContent>      
+                        <MudCardContent>
                             <MudDatePicker Label="Datums" @bind-Date="@test.Dat" DateFormat="dd.MM.yyyy"></MudDatePicker>
                             <MudNumericField Format="N2" Label="Kilometri" @bind-Value="@test.Km" For="@(() => test.Km)"> </MudNumericField>
                             <MudTextField T="TimeSpan?" Format="mm\:ss" Label="Pace" @bind-Value="@test.Pace" />

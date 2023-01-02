@@ -22,28 +22,36 @@ namespace DataAccessLibrary.Data
         /// <returns>Šobrīdējo lietotāju</returns>
         public RunnerModel GetCurrentRunner(string uname)
         {
-            RunnerModel runner = new RunnerModel();
-            string sql = @"SELECT Id, email, birthdate, height, weight, hr, hr_max, gender, start_info, username, firstname, lastname, strava_link from dbo.Users where username = '" + uname+"'";
-            //runner = _db.LoadData<RunnerModel, dynamic>(sql, new { })[0];
-            var a = _db.Query<RunnerModel>(sql, "DefaultConnection");
-            runner = a.FirstOrDefault();
-            return runner; 
+            try
+            {
+                RunnerModel runner = new RunnerModel();
+                string sql = @"SELECT Id, email, birthdate, height, weight, hr, hr_max, gender, start_info, username, firstname, lastname, strava_link from dbo.Users where username = '" + uname + "'";
+                //runner = _db.LoadData<RunnerModel, dynamic>(sql, new { })[0];
+                var a = _db.Query<RunnerModel>(sql, "DefaultConnection");
+                runner = a.FirstOrDefault();
+                return runner;
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
         /// <summary>
         /// Saglabā info par lietotāju, ja lietotājs jau izveidots, tad update.
         /// </summary>
         public void SaveRunner(RunnerModel runner)
         {
-            string sql = "";
-            if (runner.Id == 0)
+            try
             {
-                sql = @"INSERT INTO dbo.Users (email, birthdate, height, weight, hr, hr_max, gender, username, firstname, lastname, strava_link) values (@Email, @Birthdate, @Height, @Weight, @Hr, @HrMax, @Gender, @Username, @Firstname, @Lastname , @StravaLink);";
+                string sql = "";
+                if (runner.Id == 0)
+                {
+                    sql = @"INSERT INTO dbo.Users (email, birthdate, height, weight, hr, hr_max, gender, username, firstname, lastname, strava_link) values (@Email, @Birthdate, @Height, @Weight, @Hr, @HrMax, @Gender, @Username, @Firstname, @Lastname , @StravaLink);";
+                }
+                else
+                {
+                    sql = @"UPDATE dbo.Users SET email = @Email, birthdate = @Birthdate, height = @Height, weight = @Weight, hr = @Hr, hr_max = @HrMax, gender = @Gender, username = @Username, firstname = @Firstname, lastname = @Lastname, strava_link = @StravaLink where username = @Username";
+                }
+                _db.SaveDataSP(sql, new { Email = runner.Email, Birthdate = runner.Birthdate, Height = runner.Height, Weight = runner.Weight, Hr = runner.Hr, HrMax = runner.Hr_max, Gender = runner.gender, Username = runner.Username, Firstname = runner.Firstname, Lastname = runner.Lastname, StravaLink = runner.Strava_Link });
             }
-            else
-            {
-                sql = @"UPDATE dbo.Users SET email = @Email, birthdate = @Birthdate, height = @Height, weight = @Weight, hr = @Hr, hr_max = @HrMax, gender = @Gender, username = @Username, firstname = @Firstname, lastname = @Lastname, strava_link = @StravaLink where username = @Username";
-            }
-            _db.SaveDataSP(sql, new { Email = runner.Email, Birthdate = runner.Birthdate, Height = runner.Height, Weight = runner.Weight, Hr = runner.Hr, HrMax = runner.Hr_max, Gender = runner.gender, Username = runner.Username, Firstname = runner.Firstname, Lastname = runner.Lastname, StravaLink = runner.Strava_Link });
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
         /// <summary>
         /// Iegūst visus skrējējus, kas ir aizpildījuši savu informāciju
@@ -51,12 +59,16 @@ namespace DataAccessLibrary.Data
         /// <returns>Saraksts ar ar skrējējiem</returns>
         public List<RunnerModel> GetRunners()
         {
-            List<RunnerModel> a = new List<RunnerModel>();
-            string sql = @"SELECT * from dbo.Users a 
+            try
+            {
+                List<RunnerModel> a = new List<RunnerModel>();
+                string sql = @"SELECT * from dbo.Users a 
                                 left join dbo.CoachRunnerDisplay b on a.Id = b.runner_id
                                 where firstname <> '' and lastname <> '' and b.runner_id is null";
-            a = _db.Query<RunnerModel>(sql, "DefaultConnection").ToList();
-            return a;
+                a = _db.Query<RunnerModel>(sql, "DefaultConnection").ToList();
+                return a;
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
 
         /// <summary>
@@ -66,24 +78,33 @@ namespace DataAccessLibrary.Data
         /// <param name="uname">Identity username lai noteiktu šobrīējā lietotāja id</param>
         public void SaveRunnerToCoach(int Id, string uname)
         {
-            RunnerModel runner = new RunnerModel();
+            try
+            {
+                RunnerModel runner = new RunnerModel();
             string sql = "";
             sql = @"INSERT INTO dbo.CoachRunnerDisplay (runner_id, coach_id) VALUES (@RunnerId, @CoachId)";
             runner = GetCurrentRunner(uname);
 
             _db.SaveDataSP(sql, new { RunnerId = Id, CoachId = runner.Id});
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
+            
         /// <summary>
         /// Funkcija treneru skatam
         /// </summary>
         /// <returns>Trenera audzēkņi</returns>
         public List<RunnerModel> GetCoachRunners(int id )
         {
-            string sql = @"SELECT * FROM dbo.Users a 
+            try
+            {
+                string sql = @"SELECT * FROM dbo.Users a 
                                 LEFT JOIN dbo.CoachRunnerDisplay b ON a.Id = b.runner_id
-                                WHERE b.coach_id = " + id; 
-            var a = _db.Query<RunnerModel>(sql, "DefaultConnection").ToList();
-            return a;
+                                WHERE b.coach_id = " + id;
+                var a = _db.Query<RunnerModel>(sql, "DefaultConnection").ToList();
+                return a;
+            }
+            catch(Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
         /// <summary>
         /// Funkcija skrējēja atlasīšanai pēc lietotāja id, priekš skrējēja informācijas attēlošanas trenerim
@@ -91,10 +112,15 @@ namespace DataAccessLibrary.Data
         /// <returns>Trenera audzēkņa info</returns>
         public RunnerModel GetRunnerById(string id)
         {
-            RunnerModel runner = new RunnerModel();
-            string sql = @"SELECT * FROM dbo.Users WHERE Id =" + id;
-            var a = _db.Query<RunnerModel>(sql, "DefaultConnection").ToList()[0];
-            return a;
+            try
+            {
+                RunnerModel runner = new RunnerModel();
+                string sql = @"SELECT * FROM dbo.Users WHERE Id =" + id;
+                var a = _db.Query<RunnerModel>(sql, "DefaultConnection").ToList()[0];
+                return a;
+            }
+            catch(Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
+            
         }
 
         /// <summary>
@@ -102,30 +128,41 @@ namespace DataAccessLibrary.Data
         /// </summary>
         public void AddTest(TestsModel test)
         {
-            string sql = @"INSERT INTO dbo.Tests (runner_id, coach_id, dat, km, pace) VALUES (@RunnerId, @CoachId, @Dat, @Km, @Pace)";
-            _db.SaveDataSP(sql, new { RunnerId = test.RunnerId, CoachId = test.CoachId, Dat = test.Dat, Km = test.Km, Pace = test.Pace });
-         
+            try
+            {
+                string sql = @"INSERT INTO dbo.Tests (runner_id, coach_id, dat, km, pace) VALUES (@RunnerId, @CoachId, @Dat, @Km, @Pace)";
+                _db.SaveDataSP(sql, new { RunnerId = test.RunnerId, CoachId = test.CoachId, Dat = test.Dat, Km = test.Km, Pace = test.Pace });
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
+
         }
         /// <summary>
         /// Funkcija audzēķņa testu iegūšanai
         /// </summary>
         public List<TestsModel> GetTests(string runner_id)
         {
-
-            string sql = @"SELECT * FROM dbo.Tests 
+            try
+            {
+                string sql = @"SELECT * FROM dbo.Tests 
                                 WHERE runner_id = " + runner_id;
-            var a = _db.Query<TestsModel>(sql, "DefaultConnection").ToList();
-            return a;
+                var a = _db.Query<TestsModel>(sql, "DefaultConnection").ToList();
+                return a;
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
         /// <summary>
         /// Funkcija izvēlētā testa izdēšānai
         /// </summary>
         public void DeleteTest(string runner_id, int test_Id)
         {
+            try
+            {
+                string sql = @"DELETE FROM Tests WHERE runner_id = " + runner_id + " and Id = " + test_Id;
+                _db.Query<TestsModel>(sql, "DefaultConnection").ToList();
 
-            string sql = @"DELETE FROM Tests WHERE runner_id = " + runner_id + " and Id = " + test_Id;
-            _db.Query<TestsModel>(sql, "DefaultConnection").ToList();
-            
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
+
         }
 
 
@@ -134,8 +171,12 @@ namespace DataAccessLibrary.Data
         /// </summary>
         public void AddRace(RaceModel race)
         {
-            string sql = @"INSERT INTO dbo.Races (runner_id, dat, title, result, place, [group], notes, evaluation) VALUES (@RunnerId, @Dat, @Title, @Result, @Place, @Group, @Notes, @Evaluation)";
-            _db.SaveDataSP(sql, new { RunnerId = race.RunnerId, Dat = race.Dat, Title = race.Title, Result = race.Result, Place = race.Place, Group = race.Group, Notes = race.Notes, Evaluation = race.Evaluation });
+            try
+            {
+                string sql = @"INSERT INTO dbo.Races (runner_id, dat, title, result, place, [group], notes, evaluation) VALUES (@RunnerId, @Dat, @Title, @Result, @Place, @Group, @Notes, @Evaluation)";
+                _db.SaveDataSP(sql, new { RunnerId = race.RunnerId, Dat = race.Dat, Title = race.Title, Result = race.Result, Place = race.Place, Group = race.Group, Notes = race.Notes, Evaluation = race.Evaluation });
+            }
+            catch(Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
 
         }
         /// <summary>
@@ -143,8 +184,12 @@ namespace DataAccessLibrary.Data
         /// </summary>
         public void DeleteRace(string runner_id, int race_id)
         {
-            string sql = @"DELETE FROM Races WHERE runner_id = " + runner_id + " and Id = " + race_id;
-            _db.Query<RaceModel>(sql, "DefaultConnection").ToList();
+            try
+            {
+                string sql = @"DELETE FROM Races WHERE runner_id = " + runner_id + " and Id = " + race_id;
+                _db.Query<RaceModel>(sql, "DefaultConnection").ToList();
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
 
         /// <summary>
@@ -152,11 +197,14 @@ namespace DataAccessLibrary.Data
         /// </summary>
         public List<RaceModel> GetRaces(string runner_id)
         {
-
-            string sql = @"SELECT * FROM dbo.Races
+            try
+            {
+                string sql = @"SELECT * FROM dbo.Races
                                 WHERE runner_id = " + runner_id;
-            var a = _db.Query<RaceModel>(sql, "DefaultConnection").ToList();
-            return a;
+                var a = _db.Query<RaceModel>(sql, "DefaultConnection").ToList();
+                return a;
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
 
         /// <summary>
@@ -164,8 +212,12 @@ namespace DataAccessLibrary.Data
         /// </summary>
         public void AddInjury(InjuryModel injury)
         {
-            string sql = @"INSERT INTO dbo.Injuries (runner_id, dat, description) VALUES (@RunnerId, @Dat, @Description)";
-            _db.SaveDataSP(sql, new { RunnerId = injury.RunnerId, Dat = injury.Dat, Description = injury.Description});
+            try
+            {
+                string sql = @"INSERT INTO dbo.Injuries (runner_id, dat, description) VALUES (@RunnerId, @Dat, @Description)";
+                _db.SaveDataSP(sql, new { RunnerId = injury.RunnerId, Dat = injury.Dat, Description = injury.Description });
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
 
         }
         /// <summary>
@@ -173,8 +225,12 @@ namespace DataAccessLibrary.Data
         /// </summary>
         public void DeleteInjury(string runner_id, int pb_id)
         {
-            string sql = @"DELETE FROM Injuries WHERE runner_id = " + runner_id + " and Id = " + pb_id;
-            _db.Query<InjuryModel>(sql, "DefaultConnection").ToList();
+            try
+            {
+                string sql = @"DELETE FROM Injuries WHERE runner_id = " + runner_id + " and Id = " + pb_id;
+                _db.Query<InjuryModel>(sql, "DefaultConnection").ToList();
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
 
         /// <summary>
@@ -182,27 +238,38 @@ namespace DataAccessLibrary.Data
         /// </summary>
         public List<InjuryModel> GetInjuries(string runner_id)
         {
-
-            string sql = @"SELECT * FROM dbo.Injuries
+            try
+            {
+                string sql = @"SELECT * FROM dbo.Injuries
                                 WHERE runner_id = " + runner_id;
-            var a = _db.Query<InjuryModel>(sql, "DefaultConnection").ToList();
-            return a;
+                var a = _db.Query<InjuryModel>(sql, "DefaultConnection").ToList();
+                return a;
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
         /// <summary>
         /// Funkcija audzēkņa personīgo rekordu pievienošanai
         /// </summary>
         public void AddPersonalBest(PersonalBestsModel pb)
         {
-            string sql = @"INSERT INTO dbo.Records (runner_id, dat, time, title, description) VALUES (@RunnerId, @Dat, @Time, @Title, @Description)";
-            _db.SaveDataSP(sql, new { RunnerId = pb.RunnerId, Dat = pb.Dat, Time = pb.Time, Title = pb.Title, Description = pb.Description });
+            try
+            {
+                string sql = @"INSERT INTO dbo.Records (runner_id, dat, time, title, description) VALUES (@RunnerId, @Dat, @Time, @Title, @Description)";
+                _db.SaveDataSP(sql, new { RunnerId = pb.RunnerId, Dat = pb.Dat, Time = pb.Time, Title = pb.Title, Description = pb.Description });
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
         /// <summary>
         /// Funkcija izvēlētā personīgā rekorda izdēšanai
         /// </summary>
         public void DeletePb(string runner_id, int pb_id)
         {
-            string sql = @"DELETE FROM Records WHERE runner_id = " + runner_id + " and Id = " + pb_id;
-            _db.Query<PersonalBestsModel>(sql, "DefaultConnection").ToList();
+            try
+            {
+                string sql = @"DELETE FROM Records WHERE runner_id = " + runner_id + " and Id = " + pb_id;
+                _db.Query<PersonalBestsModel>(sql, "DefaultConnection").ToList();
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
 
         /// <summary>
@@ -210,10 +277,14 @@ namespace DataAccessLibrary.Data
         /// </summary>
         public List<PersonalBestsModel> GetPersonalBests(string runner_id)
         {
-            string sql = @"SELECT * FROM dbo.Records
+            try
+            {
+                string sql = @"SELECT * FROM dbo.Records
                                 WHERE runner_id = " + runner_id;
-            var a = _db.Query<PersonalBestsModel>(sql, "DefaultConnection").ToList();
-            return a;
+                var a = _db.Query<PersonalBestsModel>(sql, "DefaultConnection").ToList();
+                return a;
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
 
         /// <summary>
@@ -221,8 +292,12 @@ namespace DataAccessLibrary.Data
         /// </summary>
         public void RemoveTrainee(int runner_id, int coach_id)
         {
-            string sql = @"DELETE FROM CoachRunnerDisplay WHERE runner_id = " + runner_id + " and coach_id = " + coach_id;
-            _db.Query<RunnerModel>(sql, "DefaultConnection").ToList();
+            try
+            {
+                string sql = @"DELETE FROM CoachRunnerDisplay WHERE runner_id = " + runner_id + " and coach_id = " + coach_id;
+                _db.Query<RunnerModel>(sql, "DefaultConnection").ToList();
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
 
         /// <summary>
@@ -230,12 +305,16 @@ namespace DataAccessLibrary.Data
         /// </summary>
         public int GetStatus(int runnerId)
         {
-            var p = new DynamicParameters();
-            p.Add("RunnerId", runnerId);
-            var connstring = "DefaultConnection";
-            var a = _db.LoadDataSP<RunnerModel, dynamic>("spGetReportStatus", p, connstring).FirstOrDefault();
-            int i = a.Status;
-            return i; 
+            try
+            {
+                var p = new DynamicParameters();
+                p.Add("RunnerId", runnerId);
+                var connstring = "DefaultConnection";
+                var a = _db.LoadDataSP<RunnerModel, dynamic>("spGetReportStatus", p, connstring).FirstOrDefault();
+                int i = a.Status;
+                return i;
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
         }
 
 
