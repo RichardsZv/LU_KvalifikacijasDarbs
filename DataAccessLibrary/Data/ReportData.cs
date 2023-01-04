@@ -149,12 +149,13 @@ namespace DataAccessLibrary.Data
                 string sql = @"SELECT *, dbo.getMaxWeekNum(b.report_id) week_num_max FROM dbo.Reports a inner join ReportWeek b on a.Id = b.report_id WHERE b.dat_s <= CAST(GETDATE() as Date) and b.dat_b >= CAST(GETDATE() as Date) and runner_id = " + runner_id;
                 if (sql != null)
                 {
-                    week = _db.Query<ReportWeekModel>(sql, "DefaultConnection").ToList()[0];
-                    return week;
+                    week = _db.Query<ReportWeekModel>(sql, "DefaultConnection").FirstOrDefault();
+                    if (week == null) return null;
+                    else return week;
                 }
                 else
                 {
-                    return null;
+                    return week; 
                 }
 
             }

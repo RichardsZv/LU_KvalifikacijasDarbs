@@ -103,9 +103,7 @@
         <MudTablePager />
     </PagerContent>
 </MudTable>
-@*<MudText>Selected: @selectedItem?.Dat</MudText>
-<MudText>Selected: @selectedItem?.Completed</MudText>
-<MudText>Selected: @selectedItem?.Planned</MudText>*@
+
 
 @code {
     private RunnerModel runner = new RunnerModel();
@@ -115,7 +113,6 @@
     private string searchString = "";
     private RunnerReportDataModel selectedItem = null;
     private RunnerReportDataModel reportBeforeEdit;
-    //private HashSet<ReportDataModel> selectedItems = new HashSet<ReportDataModel>();
     List<RunnerReportDataModel> reportList = new List<RunnerReportDataModel>();
 
     List<ReportModel> trainingCycles = new List<ReportModel>();
