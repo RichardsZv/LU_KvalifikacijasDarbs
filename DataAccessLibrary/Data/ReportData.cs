@@ -226,6 +226,7 @@ namespace DataAccessLibrary.Data
                                     , e = @E
                                     , s = @S
                                     , r = @R
+                                    , i = @I
                                     , t = @T
                                     , m = @M
                                     , vdot = @VDOT
@@ -247,6 +248,7 @@ namespace DataAccessLibrary.Data
                     , E = reportdata.E
                     , S = reportdata.S
                     , R = reportdata.R
+                    , I = reportdata.I
                     , T = reportdata.T
                     , M = reportdata.M
                     , VDOT = reportdata.VDOT
