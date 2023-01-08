@@ -54,27 +54,40 @@
             <MudCardHeader Style="background-color: #1ec8a5ff; color: whitesmoke; " Class="d-flex justify-center">
                 <MudText Typo="Typo.h6" Color="Color.Default">Treniņu cikli</MudText>
             </MudCardHeader>
-            <MudDivider></MudDivider>
             <MudCardContent>
                 <MudButton Variant="Variant.Outlined" Color="Color.Tertiary" OnClick="OnCreateCycleClick">Izveidot treniņu ciklu</MudButton>
                 <br />
                 <MudExpansionPanels Class="mt-6">
                   @foreach(var tc in trainingCycles){
+                        <div>
                         <MudExpansionPanel Text="@tc.Title">
                         <MudText>Sākuma datums: @tc.Dat_S.Value.ToShortDateString()</MudText>
                         <MudText>Beigu datums: @tc.Dat_B.Value.ToShortDateString()</MudText>
-                        <MudDivider/>
-                            <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-8" Color="Color.Tertiary" Style="min-height:25vh; ">
-                                <MudTabPanel Text="Cikla Summārās vērtības">
+                        <br>
+                            <div>
+                            <MudHidden Breakpoint="Breakpoint.SmAndUp">
+                                    <MudText Align="Align.Center">Summas:</MudText>    
                                     <SumCoachReportTable id="@tc.Id.ToString()" />
-                                </MudTabPanel>
-                                <MudTabPanel Text="Cikla vidējās vērtības">
-                                    <AvgCoachReportDataTable id="@tc.Id.ToString()" />
-                                </MudTabPanel>
-                            </MudTabs>
+                                    <br>
+                                    <MudDivider></MudDivider>
+                                    <MudText Align="Align.Center">Vidējās vērtības:</MudText>
+                                    <AvgCoachReportDataTable id="@tc.Id.ToString()" />    
+                            </MudHidden>
+                            <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                                        <MudTabs Centered="true" Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-2" Color="Color.Tertiary">
+                                            <MudTabPanel Text="Summas">
+                                                <SumCoachReportTable id="@tc.Id.ToString()" />
+                                            </MudTabPanel>
+                                            <MudTabPanel Text="Vidējās vērtības">
+                                                <AvgCoachReportDataTable id="@tc.Id.ToString()" />
+                                            </MudTabPanel>
+                                        </MudTabs>
+                            </MudHidden>
+                            </div>
                          <MudSpacer />
                         <MudIconButton OnClick="@(()=> HandleDeleteCycleClick(tc.Id))" Color="@Color.Error" Icon="@Icons.Filled.Delete" Title="Dzēst treniņu ciklu"></MudIconButton>
                       </MudExpansionPanel>
+                      </div>
                   }
                 </MudExpansionPanels>
             </MudCardContent>

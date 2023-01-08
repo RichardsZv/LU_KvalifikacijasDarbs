@@ -5,7 +5,6 @@
 @inject IReportData reportData
 @inject IRunnerData runnerData
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
-
 <MudTable Items="@weekSums" Hover="true" ReadOnly="true" Elevation="2" Dense="true" Filter="new Func<CoachReporDataSumModel,bool>(SearchFunction1)">
     <ToolBarContent>
         <MudTextField @bind-Value="searchString" Placeholder="Meklēt" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
