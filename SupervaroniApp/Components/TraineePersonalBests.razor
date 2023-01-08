@@ -6,7 +6,6 @@
 @inject IDialogService DialogService
 
 <style>
-
     .selected {
         background-color: #1E88E5 !important;
     }
@@ -18,15 +17,12 @@
             .selected > td .mud-input {
                 color: white !important;
             }
-
 </style>
 
 
 <MudButton OnClick="@AddPersonalBest" Color="@Color.Success" Class="add-item-btn">Pievienot</MudButton>
 <MudIconButton OnClick="Reload" Color="@Color.Info" Icon="@Icons.Filled.RotateRight"></MudIconButton>
 <MudIconButton OnClick="HandleDeletePbClick" Color="@Color.Error" Icon="@Icons.Filled.Delete" Title="Dzēst izvēlēto"></MudIconButton>
-
-
 
 <MudTable Items="@pbs" T="PersonalBestsModel" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By" @bind-SelectedItem="@selectedItem" RowClassFunc="@SelectedRowClassFunc">
     <HeaderContent>

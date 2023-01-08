@@ -4,9 +4,6 @@
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                @*<NotAuthorized>
-                    @{ _navigationManager.NavigateTo("/Identity/Account/Login", true, true); }
-                </NotAuthorized>*@
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>

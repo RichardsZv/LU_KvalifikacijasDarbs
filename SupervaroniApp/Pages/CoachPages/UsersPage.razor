@@ -25,7 +25,6 @@
                 <MudBadge Dot="true" Color="color" Overlap="true" Origin="Origin.TopRight">
                 <div>
                     <MudCard Class="d-flex flex-column justify-center mud-width-full pt-8 hc" Style="min-width:fit-content;" @onclick="@(() => OpenRunner(@runner.Id))">
-
                         <MudCardHeader Class="d-flex justify-content-center">
                             <CardHeaderAvatar>
                                 <MudAvatar></MudAvatar>
@@ -53,7 +52,6 @@
             </MudBadge>
         </MudItem>
     }
-
 </MudGrid>
 
 
@@ -80,7 +78,7 @@
         foreach(var a in CoachRunners)
         {
             a.Status = runnerData.GetStatus(a.Id); 
-           
+
             if(a.Status == 2)
             {
                 color = Color.Error;
@@ -89,17 +87,15 @@
             {
                 color = Color.Success;
             }
-            if(a.Status == 0)
+            if (a.Status == 0)
             {
-                color = Color.Info; 
+                color = Color.Info;
             }
-
         }
     }
 
     public void OpenDialog()
     {
-
         var options = new DialogOptions()
          {
                 CloseOnEscapeKey = true,
@@ -108,7 +104,6 @@
          };
         DialogService.Show<AddTraineeDialog>("Pievienot jaunu audzēkni", options);
     }
-
 
     public Color GetSatatus()
     {
@@ -132,7 +127,6 @@
 
     public void HandleDeleteTraineeClick(int crunner_id)
     {
-
         if (crunner_id != null)
         {
             runnerData.RemoveTrainee(crunner_id, coach.Id);
@@ -146,11 +140,5 @@
                };
             });
         }
-
     }
-
-   
-
-   
-
 }

@@ -4,8 +4,8 @@
 @using System.ComponentModel.DataAnnotations
 @inject IRunnerData runnerData
 @inject IReportData reportData
+@inject ISnackbar SnackbarService
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
-
 
 <MudDialog>
     <DialogContent>
@@ -47,9 +47,39 @@
     {
         report.CoachId = coach.Id;
         report.RunnerId = runnerid;
-        reportData.CreateTrainingCycle(report);
-        StateHasChanged();
-        MudDialog?.Close(DialogResult.Ok(true));
+        if (report.Dat_S > report.Dat_B)
+        {
+            SnackbarService.Add("Sākuma datums nevar būt lielāks par beigu datumu", Severity.Warning, config =>
+              {
+                  config.Onclick = snackbar =>
+                  {
+                      return Task.CompletedTask;
+                  };
+              });
+        }
+        else
+        {
+            var a = reportData.CreateTrainingCycle(report);
+            if(a.Count > 0)
+            {
+                SnackbarService.Add("Treniņu cikli nedrīkst pārklāties", Severity.Warning, config =>
+                  {
+                      config.Onclick = snackbar =>
+                      {
+                          return Task.CompletedTask;
+                      };
+                  });
+            }
+            else
+            {
+                StateHasChanged();
+                MudDialog?.Close(DialogResult.Ok(true));
+            }
+           
+            
+            
+        } 
+        
     }
     void Cancel() => MudDialog?.Cancel();
 

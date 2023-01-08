@@ -142,11 +142,13 @@
     ReportModel trainingCycle = new ReportModel(); 
     ReportWeekModel trainingWeek = new ReportWeekModel();
 
+    //noklusetās sadaļu izmēru vērtības
     public int size1 { get; set; } = 12; 
     public int size2 { get; set; } = 12; 
     public int size3 { get; set; } = 12; 
     public int size4 { get; set; } = 12; 
     public int size5 { get; set; } = 12; 
+
     private Transition transition = Transition.Slide;
 
     protected async override Task OnInitializedAsync()

@@ -9,9 +9,7 @@
 <MudIconButton OnClick="@(() => Reload(1))" Color="@Color.Info" Icon="@Icons.Filled.RotateRight"></MudIconButton>
 <MudIconButton OnClick="HandleDeleteTestClick" Color="@Color.Error" Icon="@Icons.Filled.Delete" Title="Dzēst izvēlēto"></MudIconButton>
 
-
 <style>
-
     .selected {
         background-color: #1E88E5 !important;
     }
@@ -23,7 +21,6 @@
             .selected > td .mud-input {
                 color: white !important;
             }
-
 </style>
 
 <MudTable Items="@tests" T="TestsModel" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info" SortLabel="Sort By" @bind-SelectedItem="@selectedItem" RowClassFunc="@SelectedRowClassFunc">

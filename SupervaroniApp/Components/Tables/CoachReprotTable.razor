@@ -49,9 +49,7 @@
     </RowTemplate>
 
     <RowEditingTemplate>
-
         <MudTd DataLabel="Datums">@context.Dat.ToShortDateString()</MudTd>
-        @*     <MudTd DataLabel="Diena">@context.Dat.DayOfWeek.ToString()</MudTd>*@
         <MudTd DataLabel="Kilometri">
             <MudNumericField Format="N2" @bind-Value="@context.Km" Min="0" Max="1000" />
         </MudTd>

@@ -29,23 +29,18 @@
                 <MudDatePicker Label="Beigu datums" DateFormat="dd.MM.yyyy" @bind-Date="@DatB" />
             </MudItem>
         </MudGrid>
-
     </MudCardContent>
-    <MudCardActions>
 
+    <MudCardActions>
         <MudButton Variant="Variant.Filled" Disabled="@_processing" Color="Color.Primary" OnClick="HandleDateFilterClick">
-            @if (_processing)
-            {
+            @if (_processing){
                 <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                @*<MudText>Izveidot Atskaiti</MudText>*@
             }
-            else
-            {
+            else{
                 <MudText>Atlasīt Datumus</MudText>
             }
         </MudButton>
     </MudCardActions>
-
 </MudCard>
 
 
@@ -163,9 +158,8 @@
     private void BackupItem(object report)
     {
         reportBeforeEdit = new();
-
-
     }
+
     private void ItemHasBeenCommitted(object report)
     {
         AddEditionEvent("Izmaiņas saglabātas");
@@ -228,6 +222,17 @@
                   };
               });
         }
+        if (DatS.Value.Date > DatB.Value.Date)
+        {
+            SnackbarService.Add("Sākuma datums nevar būt lielāks par beigu datumu", Severity.Warning, config =>
+              {
+                  config.Onclick = snackbar =>
+                  {
+                      return Task.CompletedTask;
+                  };
+              });
+        }
+       
         else
         {
             reportList = reportData.GetRunnerReportData(runner.Id, DatS, DatB);

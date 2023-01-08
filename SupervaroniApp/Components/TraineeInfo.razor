@@ -10,7 +10,7 @@
 <MudText>Augums: @runner.Height</MudText>
 <MudText>Svars: @runner.Weight</MudText>
 <br />
-<MudDivider></MudDivider>
+<MudDivider/>
 <br />
 
 <div class="d-flex justify-space-evenly">
@@ -40,9 +40,12 @@
         if (runner.Birthdate != null)
         {
             Age = DateTime.Today.Year - runner.Birthdate.Value.Year;
+            //Pārbaude vai dzimšanas diena šogad jau bijusi
+            if (runner.Birthdate > DateTime.Today.AddYears(-Age)){
+                Age--;
+            }
         }
-        else
-        {
+        else{
             Age = 0;
         }
     }

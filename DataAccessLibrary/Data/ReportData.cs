@@ -88,7 +88,9 @@ namespace DataAccessLibrary.Data
                 p.Add("CoachId", trainingCylce.CoachId);
                 p.Add("Title", trainingCylce.Title);
                 var connstring = "DefaultConnection";
-                return _db.LoadDataSP<ReportModel, dynamic>("spCreateTrainingCycle", p, connstring);
+                var a = _db.LoadDataSP<ReportModel, dynamic>("spCreateTrainingCycle", p, connstring);
+                return a; 
+                
             }
             catch (Exception ex) { throw new ArgumentException(ex.Message, ex.InnerException); }
 

@@ -9,22 +9,6 @@
 <MudText Typo="Typo.h2" Align="Align.Center">
     Sveicināts Supervaroņu Sistēmā! 
 </MudText>
-@*<MudHidden Breakpoint="Breakpoint.SmAndDown">
-    <MudCarousel ShowArrows="true" Style="height:70vh;" Class="mt-5" ShowBullets="false" EnableSwipeGesture="false" AutoCycle="true" TData="object">
-        <MudCarouselItem Transition="transition" >
-            <MudImage ObjectFit="ObjectFit.Contain" Src="/images/slide1.jpg" Class="rounded-lg" Alt="slide1" Style="width:100%; height:fit-content; overflow:hidden; box-shadow: 2px 4px 21px -3px rgba(0,0,0,0.42);"></MudImage>
-        </MudCarouselItem>
-        <MudCarouselItem Transition="transition">
-            <MudImage ObjectFit="ObjectFit.Contain" Src="/images/slide2.jpg" Class="rounded-lg" Alt="slide2" Style="width:100%; overflow:hidden; box-shadow: 2px 4px 21px -3px rgba(0,0,0,0.42);"></MudImage>
-        </MudCarouselItem>
-        <MudCarouselItem Transition="transition">
-            <MudImage ObjectFit="ObjectFit.Contain" Src="/images/slide3.jpg" Class="rounded-lg" Alt="slide3" Style="width:100%; overflow:hidden; box-shadow: 2px 4px 21px -3px rgba(0,0,0,0.42);"></MudImage>
-        </MudCarouselItem>
-    </MudCarousel>
-</MudHidden>*@
-
-
- 
 
 @code{
     private Transition transition = Transition.Slide;
@@ -36,11 +20,6 @@
         var user = authstate.User.Identity;
         var name = user.Name; 
         runner = runnerData.GetCurrentRunner(user.Name);
-        if(runner.Firstname != null)
-        {
-            runner_name = runner.Firstname;
-        }
-       
         if (runner == null)
         {
             runner = new RunnerModel();
